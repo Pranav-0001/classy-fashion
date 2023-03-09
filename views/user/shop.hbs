@@ -1,0 +1,61 @@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3 d-none d-md-block">
+            <div class="float-start pt-2" style="height: 100%;">
+                <h4>Categories</h4>
+                <ul style="list-style: none; ">
+                    {{#each category}}
+                    <li><a class="cate-list" href="" style="opacity: .75;">{{category}}</a></li>
+                    {{/each}}
+                </ul>
+
+                <h4 class="pt-4">Brands</h4>
+                
+                <ul style="list-style: none; ">
+                    {{#each brands}}
+                    <li><a class="cate-list" href="" style="opacity: .75;">{{[]}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+        <div class="d-block d-md-none mb-4">
+            <div class="btn-group">
+                <button type="button" class="btn-c  dropdown-toggle" data-bs-toggle="dropdown"
+                    data-bs-display="static" aria-expanded="false">
+                    Categories
+                </button>
+                <ul class="dropdown-menu dropdown-menu-lg-end">
+                    {{#each category}}
+                    <li><a href="" class="dropdown-item" type="button">{{category}}</a></li>
+                    {{/each}}
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9 ">
+            <div class="row">
+
+            
+            {{#each products}}
+        <div class="col-lg-3 col-md-6 latest">
+            
+            <div class="card" style="width: 12rem;">
+                <a href="/product/{{_id}}">
+                <img id="img1"  src="/product-images/{{Images.[0]}}.jpg" class="card-img-top" alt="..." onmouseover="this.src='/product-images/{{Images.[1]}}.jpg'" onmouseout="this.src='/product-images/{{Images.[0]}}.jpg'" class="card-img-top'"></a>
+                <a class="" href="/product/{{_id}}">
+                <div class="card-body">
+                    <p class="text-secondary mb-0" style="font-size: 14px;">{{brand}}</p>
+                    <p class="mb-0">{{product}}</p>
+                    <span style="text-decoration: line-through;" class="text-secondary">₹{{price}} </span>  <span> ₹{{offerPrice}}</span>
+
+                </div></a>
+            </div>
+            
+        </div>
+       
+        {{/each}} </div>
+        </div>
+        
+    </div>
+</div>
+

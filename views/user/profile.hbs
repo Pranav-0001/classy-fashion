@@ -1,0 +1,51 @@
+<br><br>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3 border me-4 d-flex justify-content-center">
+            {{#if (eq userData.gender 'Male')}}
+            <img src="/images/maleavatar.gif" alt="">
+     
+            {{else}}
+            <img src="/images/female avatar.gif" alt="">
+
+            {{/if}}
+        </div>
+    <div class=" col-md-6 border">
+         <h3 class="text-center pt-3">Personal Information</h3>
+        <form name="editProfile" onsubmit="return userEdit()" action="/update-user-data" method="post" class="ps-5 pe-5 pt-3 pb-5">
+                        <p class="mb-0 text-secondary">Username</p>
+                        <input type="text" style="line-height: 35px; width: 100%;" name="username" id="username" value="{{userData.username}}" readonly>
+                        <p class="mb-0 pb-0 text-secondary">Email</p>
+                        <input type="text" class="" style="line-height: 35px; width: 100%;" name="email" id="email" value="{{userData.email}}" readonly>
+                        <p class="mb-0  text-secondary">Phone</p>
+                        <input type="text" class="" style="line-height: 35px; width: 100%;" name="phone" id="phone" value="{{userData.phone}}" readonly>
+                        <p class="mb-0 text-secondary">Gender</p>
+                        <input type="text" class="" style="line-height: 35px; width: 100%;"value="{{userData.gender}}" readonly>
+                        <p class="text-danger text-center" id="signupErr"></p>
+                        <div class="text-center mt-3">
+                            <a id="edt-btn" class="profile-edit-button ps-4 pe-4 pt-2 pb-2" onclick="edit()">Edit Information</a>
+                            <input onclick="return userEdit()" class="profile-edit-button ps-4 pe-4 pt-2 pb-2" type="submit" id="upt-btn"  value="Update information" hidden>
+                        </div>
+                        <script>
+                            
+                        </script>
+                        
+                        
+        </form>
+    </div>
+    <div class="col ms-2  side-pro-bg" >
+        
+    </div>
+    </div>
+</div>
+
+<script>
+    function edit(){
+        document.getElementById('edt-btn').hidden=true
+         document.getElementById('upt-btn').hidden=false
+        document.getElementById("username").readOnly = false;
+        document.getElementById("email").readOnly = false;
+        document.getElementById("phone").readOnly = false;
+
+    }
+</script>

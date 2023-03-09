@@ -1,0 +1,85 @@
+<div class="head-img d-flex" style="align-items: center; justify-content: center;">
+    <h2 class="text-center text-dark ">CHECKOUT</h2>
+</div>
+<div class="container mt-2 mb-4 pb-4">
+    <form name="myForm" onsubmit="return placeOrder()" action="/place-order" method="post">
+        <div class="row mt-5">
+            <div class="col-md-8">
+                <h4 class="pb-4">Billing Address</h4>
+                <label for="">First name</label><br>
+                <input class="plc-inp" type="text" name="fname" id="name" value="{{address.fname}}"><br>
+                <label for="">Last name</label><br>
+                <input class="plc-inp" type="text" name="lname" id="name" value="{{address.lname}}"><br>
+                <label for="">State</label><br>
+                <select class="plc-inp" name="state" id="" style="height: 30px;">
+                    <option {{#if (eq address.state 'Kerala')}} selected {{/if}}value="Kerala">Kerala</option>
+                    <option value="">Kerala</option>
+                </select><br>
+                <label for="">Address</label><br>
+                <textarea class="plc-inp" name="address" id="" cols="30" rows="5">{{address.address}}</textarea><br>
+                <label for="">Pin code</label><br>
+                <input class="plc-inp" type="number" name="pincode" id="" value="{{address.pincode}}" ><br>
+                <label for="">Town/City</label><br>
+                <input class="plc-inp" type="text" name="town" id="" value="{{address.town}}"><br>
+                <label for="">Phone Number</label><br>
+                <input class="plc-inp" type="text" name="phone" id="" value="{{address.phone}}"><br>
+                <label for="">Email Address</label><br>
+                <input class="plc-inp" type="text" name="email" id="" value="{{address.email}}"><br>
+
+                <input type="checkbox" class="mt-3" name="save" id="" style=" width:20px ;height:20px" value=true><span
+                    class="ps-2 mb-2" for="">Save this address</span>
+                    <br>
+                {{#if user.address}}
+                <a href="/place-order/select-address/{{user._id}}">Select from saved address</a>
+                {{/if}}
+            </div>
+            <div class="col-md-4 mt-3">
+
+                <div class="border" style="width: 100%;">
+                    <div class="pt-4 ps-4 pe-2">
+                        <h4>Your Order</h4>
+                        <p class="text-secondary ">The Details</p>
+                        <hr>
+                        <table class="table ">
+                            <tbody>
+                                <tr>
+                                    <td>SubTotal</td>
+                                    <td>{{totalPrice.total}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Discount</td>
+                                    <td>{{totalPrice.saving}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Shipping</td>
+                                    <td>Free</td>
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td>{{totalPrice.disTotal}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex" style="align-items: center;">
+                            <input type="radio" class="payment pt-3 me-2" name="payment" value="cash"
+                                style="width: 20px; height: 20px;" checked> Cash On Delivery
+                        </div>
+                        <div class="d-flex mt-2 mb-3" style="align-items: center;">
+                            <input type="radio" class="payment pt-3 me-2" name="payment" value="online"
+                                style="width: 20px; height: 20px;"> Online Payment
+                        </div>
+                        <p class="text-danger" id="placeOrderErr">{{Err}}</p>
+                        <div class="d-flex" style="justify-content: center;">
+                            <input type="submit" value="Place Order"
+                                style="border: none; color: white; background-color: black;width: 50%;"
+                                class="pt-2 pb-2 mb-5">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+</div>

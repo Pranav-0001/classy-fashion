@@ -1,0 +1,60 @@
+<div class="container d-none d-md-block">
+    <h1 class="text-center pt-3">Product List</h1>
+    <a href="/admin/add-product" class="float-end add-btn pt-2 pb-2 ps-4 pe-4 mb-4">Add Product</a>
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Image</th>
+      <th scope="col">Title</th>
+      <th scope="col">Brand</th>
+      <th scope="col">Category</th>
+      <th scope="col">Price</th>
+      <th scope="col">Offer Price</th>
+      <th scope="col">Stock</th>
+      <th scope="col">Options</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each products}}
+    <tr>
+      <th ><img src="/product-images/{{Images.[0]}}.jpg" alt="" width="70px"></th>
+      <td>{{product}}</td>
+      <td>{{brand}}</td>
+      <td>{{category}}</td>
+      <td>{{price}}</td>
+      <td>{{offerPrice}}</td>
+      <td>{{stock}}</td>
+      <td><a href="/admin/add-productImg/{{_id}}" class="edt-btn bg-warning pt-1 pb-1 ps-3 pe-3">Add Image </a> <a href="/admin/edit-product/{{_id}}" class="ms-2 edt-btn bg-primary pt-1 pb-1 ps-3 pe-3">Edit </a> <a href="/admin/delete-product/{{_id}}" onclick="return confirm('Do you want to Delete {{product}}?')" class="dlt-btn bg-danger pt-1 pb-1 ps-3 pe-3 ms-1">Delete </a></td>
+    </tr>
+    
+    {{/each}}
+  </tbody>
+</table>
+</div>
+
+<div class="container d-block d-md-none">
+   <h3 class="text-center pt-3">Product List</h3>
+   <a href="/admin/add-product" class="float-end add-btn pt-2 pb-2 ps-4 pe-4 mb-4">Add Product</a>
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Image</th>
+      <th scope="col">Product</th>
+      <th scope="col">Options</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each products}}
+    <tr>
+      <th ><img src="/product-images/{{Images.[0]}}.jpg" alt="" width="70px"></th>
+      <td>{{product}} <br>
+      {{brand}} <br>
+      
+      Price:{{price}} <br>
+      stock:{{stock}} <br>
+      <td><a href="/admin/add-productImg/{{_id}}" class="edt-btn bg-warning pt-1 pb-1 ps-3 pe-3 ">Add Image </a><a href="" class="edt-btn bg-primary pt-1 pb-1 ps-3 pe-3 mb-2 mt-1">Edit</a> <a href="/admin/delete-product/{{_id}}" onclick="return confirm('Do you want to Delete {{product}}?')" class="dlt-btn bg-danger pt-1 pb-1 ps-3 pe-3 ">Delete</a></td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>

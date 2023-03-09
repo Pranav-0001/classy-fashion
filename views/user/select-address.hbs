@@ -1,0 +1,25 @@
+<div class="container mt-3">
+    <div class="row">
+       
+            {{#each address}}
+            <div class="col-md-3">
+                <div class="card border select-address" style="width: 18rem;" onclick="window.location.href='/selected-address/{{index}}'">
+                <div class="card-body">
+                    <h5 class="card-title">{{name}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                    <h6 class="card-subtitle mb-2 text-muted mt-2">{{address}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">{{town}}</h6>
+            
+                    <h6 class="card-subtitle mb-2 text-muted">{{state}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">{{pincode}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">{{phone}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">{{email}}</h6>
+                    
+                </div>
+            </div>
+            </div>
+            {{/each}}
+        
+
+    </div>
+</div>

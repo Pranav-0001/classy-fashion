@@ -1,0 +1,67 @@
+<div class="container">
+    <h2 class="text-center pt-4">Edit Product</h2>
+    <form action="/admin/edit-product/{{product._id}}" method="post" class="pt-4 pb-5" enctype="multipart/form-data">
+        <input type="text" name="product" class="mb-2" style="width: 100%;line-height: 40px;" placeholder="Title" value="{{product.product}}">
+        <input type="text"  name="brand" class="mb-2" style="width: 100%;line-height: 40px;" placeholder="Brand"  value="{{product.brand}}">
+        <input type="text" name="price" class="mb-2" style="width: 100%;line-height: 40px;" placeholder="Price"  value="{{product.price}}">
+        <input type="text"  name="discount" class="mb-2" style="width: 100%;line-height: 40px;" placeholder="Discount"  value="{{product.discount}}">
+        <select id="cars" name="category" class="mb-2" style="width: 100%;line-height: 40px;height: 40px;">
+            <option value="{{product.category}}" selected >{{product.category}}</option>
+            {{#each cate}}
+            <option value="{{category}}">{{category}}</option>
+            {{/each}}
+            
+        </select>
+        <div class="d-flex mb-3">
+           
+            
+            <label for="S">S</label>
+            <input type="checkbox" name="S" id="" {{#if product.size.[0]}} checked {{/if}} style="width: 40px;">
+            <label for="M">M</label>
+            <input type="checkbox" name="M" id="" {{#if product.size.[1]}} checked {{/if}}  style="width: 40px;">
+            <label for="L">L</label>
+            <input type="checkbox" name="L" id="" {{#if product.size.[2]}} checked {{/if}}  style="width: 40px;">
+            <label for="XL">XL</label>
+            <input type="checkbox" name="XL" id="" {{#if product.size.[3]}} checked {{/if}}  style="width: 40px;">
+            <label for="XXL">XXL</label>
+            <input type="checkbox" name="XXL" id="" {{#if product.size.[4]}} checked {{/if}}  style="width: 40px;">
+             
+        </div>
+         
+        {{!-- <select id="cars" name="subcategory" class="mb-2" style="width: 100%;line-height: 40px;height: 40px;">
+            <option value="{{product.subcategory}}"  selected>{{product.subcategory}}</option>
+            <option value="topwear">Top Wear</option>
+            <option value="bottomwear">Bottom Wear</option>
+            <option value="footwear">Footwear</option>
+        
+        </select> --}}
+
+        <input type="text" name="stock" class="mb-2" style="width: 100%;line-height: 40px;" placeholder="Stocks" value="{{product.stock}}">
+        <textarea type="text" name="description" class="mb-2" style="width: 100%;line-height: 60px;" placeholder="Description" >{{product.description}}</textarea>
+        <p class="text-danger">{{delImgErr}}</p>
+        {{#each product.Images}}
+        
+      <div class="d-flex mb-2 border" style=" align-items: center; ">
+          <img src="/product-images/{{[]}}.jpg" alt="" width="100px" id="{{@index}}">
+         <input  type="file" id="files" name="{{[]}}" class="mb-2 ms-2" style="width: 100%;line-height: 40px;" placeholder="" accept="image/*" onchange="viewImage(event,{{@index}})">
+         <a onclick="return confirm('Are you sure ?')" href="/admin/delete-image/{{[]}}" class="ps-3 me-4 mt-5 ps-3 pe-3 btn btn-danger">Delete</a>
+
+      </div>
+        {{/each}}
+        
+        
+        <p class="text-center text-danger">{{err}}</p>
+        <div class="text-center">
+            <button type="submit" class="signup-btn ">Update Product</button>
+        </div>
+
+
+    </form>
+</div>
+<script>
+    function viewImage(event, id) {
+        id = id.toString()
+        console.log(id)
+        document.getElementById(id).src = URL.createObjectURL(event.target.files[0])
+    }
+</script>

@@ -1,0 +1,440 @@
+*{
+  font-family: 'Ubuntu', sans-serif;
+}
+.nav-border{
+  border-style: solid;
+  border-width: thin;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-color: #dedede;
+  
+}
+.nav-search{
+  
+  border: none;
+  line-height: 100%;
+  
+}
+.nav-search:focus{
+  outline: none;
+}
+.nav-search-box{
+ border-style: solid;
+ border-width: thin;
+ border-color: #dedede;
+ border-top-style: none;
+ border-bottom-style: none;
+ height: 50px;
+
+}
+.head{
+  border-bottom-style: solid;
+  border-width: thin;
+  border-color: #dedede;
+  height: 30px
+}
+.head-search-box{
+  border-style: solid;
+  border-width: thin;
+  border-color: #dedede;
+  border-top-style: none;
+  border-bottom-style: none;
+  height: 30px;
+ 
+ }
+.banner{
+  background-image: url('/images/banner.jpg');
+  height: 70vh;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: cover;
+}
+.banner-text{
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: bold;
+  color: #0051ff;
+}
+.banner-data{
+  position: relative;
+  top: 30%;
+  left: 20%;
+  width: 55%;
+}
+.banner-title{
+  font-weight:bolder;
+}
+.explore-button{
+  width: 100px;
+  height: 20px;
+  background-color: blue;
+  color: white;
+  text-decoration: none;
+  transition: 1s;
+  
+  
+}
+.explore-button:hover{
+  text-decoration: none;
+  color: white;
+  background-color: #dc0345;
+  
+}
+.cardHover{
+  border: none;
+  
+  height: 30vh;
+  background-position: center;
+  background-size: cover;
+  transition: 1s;
+  opacity: 0.5;
+}
+.cardHover:hover{
+  opacity: 1;
+  
+}
+.card1{
+  background-image: url('/images/clothing.jpg');
+}
+.card2{
+  background-image: url('/images/shoe.jpg');
+}
+
+.card3{
+  background-image: url('/images/Acces.jpg');
+}
+.home-banner-2{
+  background-image: url("/images/banner2.jpg");
+  height: 60vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.banner2-content{
+  position: relative;
+  top:30%;
+  left:50%;
+  width: 45vw;
+}
+.btn-globalsale{
+  width: 100px;
+  height: 20px;
+  background-color: blue;
+  text-decoration: none;
+  color: white;
+  transition: 1s;
+}
+.btn-globalsale:hover{
+  color: white;
+  background-color: #dc0345;
+}
+.card{
+  border: none;
+}
+.latest{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.f-list a{
+  list-style-type: none;
+  color: #6c757d;
+  text-decoration: none;
+}
+.f-list a:hover{
+ color: white;
+}
+.icons{
+  color: #969696;
+}
+.icons:hover{
+  color: white;
+}
+.head-img{
+  width: 100%;
+  height: 10vw;
+  background-image: url('/images/barimg.jpg');
+  background-position: center;
+  background-size: cover;
+}
+.box{
+  border-style: solid;
+  border-width: thin;
+  
+}
+.box1{
+  border-style: solid;
+  border-width: thin;
+  width: 90%;
+position: relative;
+left: 5%;
+}
+.signup-btn{
+  text-decoration: none;
+  color: white;
+  background-color: black;
+  padding-left: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 40px;
+}
+.signup-btn:hover{
+  color: white;
+}
+
+.admin-dash-head{
+  background-color: #55CAC4;
+  height: 20vh;
+}
+.admin-dash-side{
+  background-color: #55CAC4;
+  height: 60vh;
+ 
+}
+hr{
+  color: white;
+  background-color: white;
+  height: 10px;
+  width: 100%;
+}
+.add-btn{
+  background-color: #1D9A31;
+  text-decoration: none;
+  color: white;
+  
+}
+.add-btn:hover{
+  color: white;
+}
+.dlt-btn{
+  
+  color: white;
+  text-decoration: none;
+  transition: 2s;
+}
+.edt-btn{
+  
+  color: white;
+  text-decoration: none;
+  transition: 2s;
+  border: none;
+}
+.dlt-btn:hover{
+  color: white;
+}
+.edt-btn:hover{
+  color: white;
+
+}
+.cate-list{
+  text-decoration: none;
+  color: black;
+}
+.cate-list:hover{
+  color: black;
+}
+.card a{
+  text-decoration: none;
+  color: black;
+}
+.addToCart{
+  text-decoration: none;
+ 
+}
+.btn-c{
+  border: none;
+  background-color: white;
+}
+.shadow-box{
+  /* box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px; */
+
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+}
+.plc-inp{
+  line-height: 30px;
+  width: 70%;
+  border-width: thin;
+  margin-bottom: 5px;
+  border-color: rgb(172, 174, 172);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+} 
+.success-page{
+  background-image: url('/images/success.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #f2f2f2;
+}
+.order-search{
+  border: none;
+  font-size: larger;
+  background-color: white;
+ 
+  font-size: 25px;
+
+}
+.outer-box-orders:hover{
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.outer-box-orders{
+  transition: .2s;
+  border-radius: 10px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.singleOrderBorder{
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+ 
+}
+.singleOrderBorder:hover{
+  box-shadow: rgba(0, 0, 0, 0.1) -4px 9px 25px -6px;
+ 
+}
+a{
+  text-decoration: none;
+}
+a:hover{
+
+  cursor: pointer;
+}
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: #ffff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+  transition: 1s;
+}
+
+
+.sidenav a:hover {
+  color: black;
+  
+}
+.side-nav-opt{
+  transition: 2s;
+}
+.side-nav-opt:hover{
+  position: relative;
+  left: 10px;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+.profile-edit-button{
+  border: none;
+  background-color: black;
+  color: white;
+}
+.profile-edit-button:hover{
+  color: white;
+  
+}
+.side-pro-bg{
+  background-image: url('/images/gift.gif');
+  background-size:contain ;
+  background-position:center ;
+  background-repeat: no-repeat;
+}
+.pass-change-button:hover{
+  color: white;
+  
+}
+.pass-change-button{
+  color: white;
+}
+.pass-ver-btn{
+  border: none;
+  background-color: transparent;
+  color: blue;
+}
+.chng-pass{
+  border: none;
+  background-color: black;
+  color: white  ;
+}
+.bg-img-address{
+  background-image: url('/images/noaddress.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.card-hover-add{
+  transition: .2s;
+}
+.card-hover-add:hover{
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px;
+}
+.save-add-btn{
+  border: none;
+  color: white;
+  background-color: black;
+}
+
+.cancel-btn{
+  border: none;
+  background-color: black;
+  color: white;
+  padding: 5px;
+}
+.acceptBtn{
+  color: white;
+
+}
+.acceptBtn:hover{
+  color: white;
+}
+.select-address:hover{
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+.select-address{
+  transition: .5s;
+}
+::-webkit-scrollbar{
+  height: 10px;
+  width: 10px;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-track{
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: rgb(94, 93, 93);
+  border-radius: 20px;
+  transition: .5s;
+  
+}
+::-webkit-scrollbar-thumb:hover{
+  background-color: black;
+}

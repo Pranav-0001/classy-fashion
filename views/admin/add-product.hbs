@@ -1,0 +1,56 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-2">
+            <h2 class="text-center pt-4">Add Product</h2>
+    <form  name="addProduct" onsubmit="return addProductValidate()" action="/admin/add-product" method="post" class="pt-4 pb-5" enctype="multipart/form-data">
+        <input type="text" name="product" class="mb-2" style="width: 100%;line-height: 40px;" placeholder="Title" value="{{data.product}}">
+        <input type="text"  name="brand" class="mb-2" style="width: 100%;line-height: 40px;" placeholder="Brand"  value="{{data.brand}}">
+        <input type="text" name="price" class="mb-2" style="width: 100%;line-height: 40px;" placeholder="Price"  value="{{data.price}}">
+        <input type="text"  name="discount" class="mb-2" style="width: 100%;line-height: 40px;" placeholder="Discount"  value="{{data.discount}}">
+        <select id="cars" name="category" class="mb-2" style="width: 100%;line-height: 40px;height: 40px;">
+            <option value="" selected >Category</option>
+            {{#each category}}
+            <option value="{{category}}">{{category}}</option>
+            {{/each}}
+            
+            
+        </select>
+        <label for="" class="mt-1 mb-2">Choose available Sizes</label>
+        <div class="d-flex mb-3">
+
+            
+            <input type="checkbox" name="S" id=""  style="width: 40px;">
+            <label for="S">S</label>
+            <input type="checkbox" name="M" id=""  style="width: 40px;">
+            <label for="M">M</label>
+            <input type="checkbox" name="L" id=""  style="width: 40px;">
+            <label for="L">L</label>
+            <input type="checkbox" name="XL" id=""  style="width: 40px;">
+            <label for="XL">XL</label>
+            <input type="checkbox" name="XXL" id=""  style="width: 40px;">
+            <label for="XXL">XXL</label>
+           
+            
+        </div>
+        
+        {{!-- <select id="cars" name="subcategory" class="mb-2" style="width: 100%;line-height: 40px;height: 40px;">
+            <option value=""  selected>Sub-Category</option>
+            <option value="topwear">Top Wear</option>
+            <option value="bottomwear">Bottom Wear</option>
+            <option value="footwear">Footwear</option>
+        
+        </select> --}}
+
+        <input type="text" name="stock" class="mb-2" style="width: 100%;line-height: 40px;" placeholder="Stocks" value="{{data.stock}}">
+        <textarea type="text" name="description" class="mb-2" style="width: 100%;line-height: 60px;" placeholder="Description" value="{{data.description}}"></textarea>
+        <label for="images" class="pb-1">Images <span class="text-danger">(Max  5 images)</span></label>
+         <input type="file" id="files" name="images" class="mb-2" style="width: 100%;line-height: 40px;" placeholder="hsga" accept="image/*"  multiple required>
+        <p class="text-center text-danger" id="addErrId">{{err}}</p>
+        <div class="text-center">
+            <button type="submit" class="signup-btn ">Add Product</button>
+        </div>
+        
+    </form>
+        </div>
+    </div>
+</div>

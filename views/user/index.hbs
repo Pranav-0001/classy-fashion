@@ -1,0 +1,122 @@
+<section class="banner">
+    <div class="banner-data ">
+        <p class="banner-text fs-5 mb-0">assus</p>
+        <h1 class="banner-title fs-1 mb-4">New Collection</h1>
+        <a href="" class="explore-button pt-3 pb-3 ps-4 pe-4 ">Shop Now</a>
+    </div>
+</section>
+<section class="home-category mt-5">
+    <div class="container">
+        <div class="row ">
+            <div class="col-md-4 mb-3 mb-md-0 ">
+                <div class="card cardHover card1 overlay">
+                    <h4 style="color: white; position: absolute; top:60% ;left:35%" class="fs-2">Clothing</h4>
+
+                </div>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0 ">
+                <div class="card cardHover card2 overlay">
+                    <h4 style="color: white; position: absolute; top:60% ;left:35%" class="fs-2">Shoes</h4>
+
+                </div>
+            </div>
+            <div class="col-md-4 ">
+                <div class="card cardHover card3 overlay">
+                    <h4 style="color: white; position: absolute; top:60% ;left:35%" class="fs-2">Accessories</h4>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="mt-5 pt-5">
+            <div class="row g-0">
+                <div class="col-12 home-banner-2">
+                    <div class="banner2-content">
+                        <p class="fs-4 text-success">-60%</p>
+                        <p class="fs-1" style="font-weight: bolder;">Global Sale</p>
+                        <a href="" class="btn-globalsale pt-2 pb-2 ps-4 pe-4">Buy Now</a>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="pt-5" style="height: auto;">
+    <h3 class="text-center">Latest Products</h3>
+    <div class="container ">
+        
+        <div class="row ">
+            {{#each products}}
+            <div class="col-lg-3 col-md-6 latest">
+                <div class="card" style="width: 18rem;">
+                    <img src="/product-images/{{Images.[0]}}.jpg" class="card-img-top" alt="..." onmouseenter="this.src='/product-images/{{Images.[1]}}.jpg'" onmouseout="this.src='/product-images/{{Images.[0]}}.jpg'">
+                    <div class="card-body">
+                        <p class="text-secondary mb-0" style="font-size: 14px;">{{brand}}</p>
+                        <p class="mb-0">{{product}}</p>
+                        <span style="text-decoration: line-through;" class="text-secondary">{{price}}</span> <span>{{offerPrice}}</span>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</section>
+<section style="width: 100%; background-color: #dedede;">
+    <div class="container ">
+        <div class="row ">
+            <div class="col-6 col-md-4 col-lg-2  pt-5 pb-5 latest">
+                <img src="/images/mango.png" alt="">
+            </div>
+            <div class="col-6 col-md-4 col-lg-2  pt-5 pb-5 latest">
+                <img src="/images/mango.png" alt="">
+            </div>
+            <div class="col-6 col-md-4 col-lg-2  pt-5 pb-5 latest">
+                <img src="/images/mango.png" alt="">
+            </div>
+            <div class="col-6 col-md-4 col-lg-2  pt-5 pb-5 latest">
+                <img src="/images/mango.png" alt="">
+            </div>
+            <div class="col-6 col-md-4 col-lg-2  pt-5 pb-5 latest">
+                <img src="/images/mango.png" alt="">
+            </div>
+            <div class="col-6 col-md-4 col-lg-2  pt-5 pb-5 latest">
+                <img src="/images/mango.png" alt="">
+            </div>
+           
+        </div>
+    </div>
+
+</section>
+<section class="footer pb-5" style="background-color: #252525;">
+<div class="container">
+<div class="row">
+    
+    <div class="col-md-8 pt-5 f-list">
+        <img src="/images/logoWhite.png" alt="" width="100px">
+        <a style="text-decoration: none;" href="" class=" pt-3 ps-3">Shop</a>
+        <a style="text-decoration: none;" href="" class=" pt-3 ps-3">About Us</a>
+        <a style="text-decoration: none;" href="" class="pt-3 ps-3">Contact US</a>
+
+    </div>
+    <div class="col-md-4 pt-5 mt-3  ">
+        <ul class="f-list ">
+            <li><a href="">Privacy Policy</a></li>
+            <li><a href=""> Order Status</a></li>
+            <li><a href=""> Payment Options</a></li>
+        </ul>
+    </div>
+</div>
+<div class="latest pb-4">
+    <i  class="fa-brands fa-youtube  fs-4 icons"></i>
+<i class="fa-brands fa-facebook-f icons fs-4 ps-2"></i>
+<i class="fa-brands fa-twitter icons fs-4 ps-2"></i>
+<i class="fa-brands fa-instagram icons fs-4 ps-2"></i>
+</div>
+
+</div>
+<p class="text-center text-secondary">Copyright ©2023 All rights reserved By Pranav</p>
+
+
+</section>

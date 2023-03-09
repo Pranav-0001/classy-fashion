@@ -1,0 +1,33 @@
+<div class="head-img">
+    <h1 class="text-center text-dark ">Log in</h1>
+</div>
+<div class="container mt-2">
+    <div class="box1 mb-3 mt-3">
+        <form action="/sent-otp" method="post">
+            <div class="d-flex mb-3  pt-3" style="justify-content: center;">
+                <input class="ms-3 ms-md-0" style="line-height: 40px;width: 70%;" type="text"
+                    placeholder="Enter Your Email" name="email" value="{{data.email}}">
+                    {{#if otp}}
+                    {{else}}
+
+                <input type="submit" class="signup-btn ms-2" value="Sent OTP">
+                {{/if}}
+            </div>
+            <p class="text-danger text-center">{{err}}</p>
+        </form>
+        {{#if otp}}
+        <form action="/otp-login" method="post">
+            <div class="d-flex mb-3  pt-3" style="justify-content: center;">
+                <input class="ms-3 ms-md-0" style="line-height: 40px;width:70%;" type="text"
+                    placeholder="Enter Otp" name="otp" >
+                
+            </div>
+            <div class="text-center pb-4">
+                <input type="submit" class="signup-btn ms-2" value="Login">
+            </div>
+            <p class="text-danger text-center">{{invalid}}</p>
+        </form>
+        {{/if}}
+    </div>
+</div>
+

@@ -1,0 +1,137 @@
+{{#if total}}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 "> 
+            {{#each products}}
+            <div class="container p-3 bcontent mt-3">
+                <div class="card ps-3 border">
+                    <div class="row ">
+                        <div class="col-md-3 p-2">
+                            <img src="/product-images/{{product.Images.[1]}}.jpg" alt=""
+                                style="width: 200px;">
+                        </div>
+                       
+                        <div class="col-md-9 mt-2">
+
+                            <h3 class="mb-0 pb-1">{{product.product}}</h3>
+                            <p class="mb-0 pb-1 text-secondary">{{product.brand}}</p>
+                            <p class="mb-0 pb-1 text-secondary">SIZE : {{size}} </p>
+                            <p class="mb-0 pb-1 text-secondary" style="text-decoration: line-through;">{{product.price}}</p>
+                            <p class="mb-0 pb-1">₹ {{product.offerPrice}}</p>
+                            <p  id="" class="{{@index}}" value="" hidden>{{product.stock}}</p>
+                            <div class="d-flex mt-2">
+                                <button id="minusbtn" href=""
+                                    class="plus-btn text-white ps-3 pe-3 pt-1 pb-1 bg-dark me-2"
+                                    onclick="changeQuantity('{{_id}}','{{product._id}}',-1,{{@index}},'{{product.product}}')">-</button>
+                                <input type="text" name="" id="{{product._id}}"
+                                    style="width: 30px;text-align: center; border: none;" value="{{quantity}}" readonly>
+                                <button href="" class="plus-btn text-white ps-3 pe-3 pt-1 pb-1 bg-dark ms-2 " id="{{@index}}"
+                                    onclick="changeQuantity('{{_id}}','{{product._id}}',1,'{{@index}}','{{product.product}}')">+</button>
+                            </div>
+                            
+                            <div class="pt-2 mt-4">
+                                <a style="cursor: pointer;" onclick="removeProduct('{{_id}}','{{product._id}}')" class="bg-dark text-white pt-2 pb-2 ps-3 pe-3 ">Remove</a>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        <div class="col-md-4 mt-4" style="">
+            <div class="shadow-box mt-2" style="position: fixed; width: 30%;">
+                <div class="pt-3 ps-3 pe-3 pb-4">
+                    <h2>Order Summary</h2>
+                    <hr class="" style="height: 2px; background-color: black; color: black;">
+
+                    <h5 >Subtotal : ₹<span id="subT">{{total.total}}</span></h5>
+                    {{#if total.delivery}}
+                    <h5>Delivery Charge : ₹{{total.delivery}} </h5>
+                    {{else}}
+                     <h5>Delivery Charge : Free </h5>
+                    {{/if}}
+                    
+                    
+                    <h5>Discount : <span id="disc">{{total.disc}}</span>%</h5>
+                    <h5>Total : ₹<span id="disT">{{total.disTotal}}</span></h5>
+                    <p id="msg" class="text-danger"></p>
+                </div>
+                <div style="width: 100%;" class="bg-dark text-light text-center pt-1 pb-1">
+                    <a href="/place-order" style="text-decoration: none;" class="text-light fs-4">Place Order</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    
+    function changeQuantity(cart,product,count,index,productName){
+        let quantity=parseInt(document.getElementById(product).value)
+        
+        
+            let  stock=document.getElementsByClassName(index)[0].innerHTML
+            console.log(stock-quantity)
+        
+        
+
+        
+        if(count==1&&quantity>=10){
+            document.getElementById(index).style.visibility='hidden'
+            document.getElementById('msg').innerHTML="One customer can only purchase 10 quantity"
+        }else if(stock-quantity<=0 && count==1){
+            document.getElementById(index).style.visibility='hidden'
+            document.getElementById('msg').innerHTML= productName+" Stock Exceeded , “We sincerely apologize for this inconvenience. We've experienced an unusually high number of orders and have run out of inventory.” "
+        }else{
+            document.getElementById(index).style.visibility='visible'
+        document.getElementById('msg').innerHTML=""
+        $.ajax({
+            url:'/change-quantity',
+            data:{
+                
+                cartId:cart,
+                proId:product,
+                count:count,
+                quantity:quantity
+            },
+            method:'post',
+            success:(response)=>{
+                console.log(response)
+                if(response.delete){
+                    alert("Product Removed From The Cart")
+                    location.reload()
+                }else{
+                     document.getElementById(product).value = quantity + count
+                     document.getElementById('subT').innerHTML= response.total.total
+                     document.getElementById('disT').innerHTML= response.total.disTotal
+                     document.getElementById('disc').innerHTML= response.disc
+                     
+                     
+                }
+            }
+        })
+        }
+    }
+    function removeProduct(cartId,proId){
+        $.ajax({
+            url: '/remove-cart-product',
+            data: { 
+                cart: cartId,
+                product: proId,
+            },
+            method: 'post',
+            success: (response) => {
+                if (response.removeProduct) {
+                    alert("Product removed From Cart")
+                    location.reload()
+                } else {
+                    document.getElementById(proId).innerHTML = quantity + count
+                }
+            }
+        })
+    }
+</script>
+{{/if}}

@@ -1,0 +1,41 @@
+<div class="container mt-5">
+{{#if category}}
+<form action="/admin/edit-category/{{category._id}}" method="post">
+       <div class="d-flex">
+         <input type="text" name="category" style="width: 90%;" placeholder="" value="{{category.category}}">
+         <input style="border: none;" class="dlt-btn bg-primary ms-1 " type="submit" value="Edit Category">
+       </div>
+       <p class="text-danger text-center">{{err}}</p>
+    </form>
+{{else}}
+    <form action="/admin/add-category" method="post">
+       <div class="d-flex">
+         <input type="text" name="category" style="width: 90%;" placeholder="Add category" value="{{data.category}}">
+         <input style="border: none;" class="dlt-btn bg-success ms-1 " type="submit" value="Add Category">
+       </div>
+       <p class="text-danger text-center">{{err}}</p>
+    </form>
+    {{/if}}
+    <table class="table table-hover">
+  <thead>
+   
+    <tr>
+      <th scope="col">Categories</th>
+      <th scope="col">Actions</th>
+      
+    </tr>
+    
+  </thead>
+  <tbody>
+     {{#each categories}}
+    <tr>
+      <th scope="row">{{category}}</th>
+      <td>
+        <a href="/admin/edit-category/{{_id}}" class="dlt-btn bg-primary pb-2 ps-3 pt-2 pe-3">Edit</a>
+        <a href="/admin/delete-category/{{_id}}" class="dlt-btn bg-danger pb-2 ps-3 pt-2 pe-3">Delete</a></td>
+      
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>

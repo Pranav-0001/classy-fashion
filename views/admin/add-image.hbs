@@ -1,0 +1,20 @@
+<div class="container mt-5">
+    <h2 class="text-center">Add Image</h2>
+
+    <br>
+    <h4>{{product.product}}</h4>
+    <div class="d-flex pb-4">
+        {{#each product.Images}}
+        <img src="/product-images/{{[]}}.jpg" alt="" width="20%" class="me-2">
+        {{/each}}
+
+    </div>
+    <form action="/admin/add-productImg/{{product._id}}" method="post" enctype="multipart/form-data">
+    <input type="file" name="Image" id="" style="height: 40px;line-height: 30px;width: 100%;" required>
+    <div class="text-center">
+
+    <p class="text-danger">{{err}}</p>
+    <input type="submit" value="Add Image" class="edt-btn bg-success pb-2 pt-2 ps-3 pe-3">
+    </div>
+    </form>
+</div>

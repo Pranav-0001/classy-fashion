@@ -1,0 +1,71 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-white nav-border">
+    <div class="container-fluid ms-5">
+        <img src="/images/logoDark.png" alt="" width="100px">
+        <button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa-solid fa-bars text-secondary"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item ms-md-4 ">
+                    <a class="nav-link active text-secondary fs-6" aria-current="page" href="/admin/categories">Categories</a>
+                </li>
+                
+                <li class="nav-item ms-md-2">
+                    <a class="nav-link active text-secondary fs-6" href="/admin/products">Products</a>
+                </li>
+                
+                <li class="nav-item ms-md-2">
+                    <a class="nav-link active text-secondary fs-6" href="/admin/user-list">All users</a>
+                </li>
+                <li class="nav-item ms-md-2">
+                    <a class="nav-link active text-secondary fs-6" href="/admin/all-orders">all order </a>
+                </li>
+                <li class="nav-item dropdown">
+                    {{!-- <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+
+                    </a> --}}
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#"></a></li>
+                        <li><a class="dropdown-item" href="#"> </a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#"></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"></a>
+                </li>
+            </ul>
+
+        </div>
+        <div class="d-none d-lg-flex">
+            <form class="d-none d-lg-flex">
+              
+               
+                <div class="nav-search-box ps-3 pt-3 pe-4 d-flex">
+                    <i class="fa-regular fa-user fs-4"></i>
+                
+                    <p class="ms-3" style="cursor: pointer;"> </p>
+                    
+                    <p class="ms-3" style="cursor: pointer;"><a href=""
+                            style="text-decoration: none; color: black;">Admin : {{admin.username}}</a></p>
+                   
+                </div>
+                
+                
+               
+            </form>
+        </div>
+    </div>
+    <div class="d-lg-none d-flex " style="width: 100%;">
+    
+        <div class="head-search-box ps-1 pt-1 pe-4 d-flex  ">
+    
+            <i class="fa-regular fa-user fs-6 pt-1 "></i>
+            <p class="ms-3"> Admin : {{admin.username}}</p>
+        </div>
+    </div>
+</nav>
