@@ -49,7 +49,9 @@ router.get('/place-order',verifyLogin,nocache(),orderController.placeOrder)
 
 router.get('/place-order-success-page',orderController.successOrder)
 
-router.post('/place-order',orderController.placeOrderPost)
+router.post('/place-order',nocache(),orderController.placeOrderPost)
+
+router.post('/verify-payment',orderController.verifyPayment)
 
 router.get('/orders',verifyLogin,orderController.viewOrders)
 

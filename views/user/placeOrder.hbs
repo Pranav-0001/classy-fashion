@@ -2,7 +2,7 @@
     <h2 class="text-center text-dark ">CHECKOUT</h2>
 </div>
 <div class="container mt-2 mb-4 pb-4">
-    <form name="myForm" onsubmit="return placeOrder()" action="/place-order" method="post">
+    <form name="myForm" id="checkOut" onsubmit="return placeOrder()" action="">
         <div class="row mt-5">
             <div class="col-md-8">
                 <h4 class="pb-4">Billing Address</h4>
@@ -12,13 +12,13 @@
                 <input class="plc-inp" type="text" name="lname" id="name" value="{{address.lname}}"><br>
                 <label for="">State</label><br>
                 <select class="plc-inp" name="state" id="" style="height: 30px;">
-                    <option {{#if (eq address.state 'Kerala')}} selected {{/if}}value="Kerala">Kerala</option>
+                    <option {{#if (eq address.state 'Kerala' )}} selected {{/if}}value="Kerala">Kerala</option>
                     <option value="">Kerala</option>
                 </select><br>
                 <label for="">Address</label><br>
                 <textarea class="plc-inp" name="address" id="" cols="30" rows="5">{{address.address}}</textarea><br>
                 <label for="">Pin code</label><br>
-                <input class="plc-inp" type="number" name="pincode" id="" value="{{address.pincode}}" ><br>
+                <input class="plc-inp" type="number" name="pincode" id="" value="{{address.pincode}}"><br>
                 <label for="">Town/City</label><br>
                 <input class="plc-inp" type="text" name="town" id="" value="{{address.town}}"><br>
                 <label for="">Phone Number</label><br>
@@ -28,7 +28,7 @@
 
                 <input type="checkbox" class="mt-3" name="save" id="" style=" width:20px ;height:20px" value=true><span
                     class="ps-2 mb-2" for="">Save this address</span>
-                    <br>
+                <br>
                 {{#if user.address}}
                 <a href="/place-order/select-address/{{user._id}}">Select from saved address</a>
                 {{/if}}
@@ -71,7 +71,7 @@
                         </div>
                         <p class="text-danger" id="placeOrderErr">{{Err}}</p>
                         <div class="d-flex" style="justify-content: center;">
-                            <input type="submit" value="Place Order"
+                            <input onclick="return placeOrder()" type="submit" value="Place Order"
                                 style="border: none; color: white; background-color: black;width: 50%;"
                                 class="pt-2 pb-2 mb-5">
                         </div>
@@ -83,3 +83,76 @@
     </form>
 
 </div>
+
+
+
+<script>
+    $('#checkOut').submit((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/place-order',
+            method: 'post',
+            data: $('#checkOut').serialize(),
+            success: (response) => {
+
+                if (response.COD) {
+                    location.href = '/place-order-success-page'
+                } else {
+                    console.log("jhgjhfgv")
+                    razorpayPayment(response)
+                }
+            }
+        })
+    })
+
+    function razorpayPayment(order) {
+       
+       console.log(order) 
+        var options = {
+            "key": 'rzp_test_FhLOD2QMxq2NGR', // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Classy Fashion", //your business name
+            "description": "Test Transaction",
+            "image": "/images/logoDark.png",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+              //  alert(response.razorpay_payment_id);
+              //  alert(response.razorpay_order_id);
+              //  alert(response.razorpay_signature)
+                verifyPayment(response,order)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar", //your customer's name
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        }
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+
+    function verifyPayment(payment, order) {
+        $.ajax({
+            url: '/verify-payment',
+            method:'post',
+            data: {
+                payment,
+                order
+            },
+            success:(response)=>{
+                console.log(response)
+                location.href='/place-order-success-page'
+            }
+             
+        })
+    }
+
+</script>

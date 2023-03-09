@@ -7,6 +7,14 @@ const  userCollection  = require('../model/userModel')
 const uuid=require('uuid')
 const {ObjectId}=mongoose.Types
 
+const Razorpay=require('razorpay')
+
+
+var instance = new Razorpay({
+    key_id: 'rzp_test_FhLOD2QMxq2NGR',
+    key_secret: 'wkCYl3fic8fJv3nXbkRPc7qx',
+  });
+
 function getCartProducts(userId){
     return new Promise(async(resolve, reject) => {
         let cartItems=await cartCollection.aggregate([
@@ -119,6 +127,8 @@ module.exports={
         let user = await userCollection.findOne({ _id: ObjectId(userId) })
         let count = uuid.v4()
         let proCount=cartProducts.length
+        let paymentMethod=orderData.payment
+        console.log("pay",paymentMethod);
             for(i=0;i<proCount;i++){
                 let qty=-(cartProducts[i].quantity)
                 let produId=cartProducts[i].item
@@ -144,18 +154,54 @@ module.exports={
                products:cartProducts,
                subTotal:totalPrice.total,
                discTotal:totalPrice.disTotal,
-               orderStatus:"orderPlaced"
+               orderStatus:"orderPlaced",
+               paymentStatus:(paymentMethod=='cash')?"Pending":"Paid"
                
            }
            
            if(orderData?.save=='true'){
-               userCollection.updateOne({_id:ObjectId(userId)},{$push:{address:Address}})
+               userCollection.updateOne({_id:ObjectId(userId)},{$push:{address:OrderObj.Address}})
            }
-           orderCollection.insertOne(OrderObj).then((response)=>{
-               cartCollection.deleteOne({user:ObjectId(userId)}).then(()=>{
-                res.redirect('/place-order-success-page')
+           if(paymentMethod=='cash'){
+               orderCollection.insertOne(OrderObj).then((response) => {
+                   cartCollection.deleteOne({ user: ObjectId(userId) }).then(() => {
+                    res.json({COD:true})
+                   })
                })
-           })
+           }else{
+            let order_id = uuid.v4()
+            var options ={
+                amount: totalPrice.disTotal*100,
+                currency: "INR",
+                receipt:order_id,
+            };
+            orderCollection.insertOne(OrderObj).then((response) => {
+                cartCollection.deleteOne({ user: ObjectId(userId) })
+            })
+            instance.orders.create(options,function(err,order){
+                if (err) console.log(err);
+                console.log(order)
+                res.json(order)
+            })
+               
+           }
+           
+    },
+    verifyPayment:(req,res)=>{
+        console.log("aaasssssqqqwww",req.body);
+        let details=req.body
+        const crypto=require('crypto')
+        let hmac=crypto.createHmac('sha256','wkCYl3fic8fJv3nXbkRPc7qx')
+        hmac.update(details['payment[razorpay_order_id]']+'|'+details['payment[razorpay_payment_id]'])
+        hmac=hmac.digest('hex')
+        console.log(hmac);
+        if(hmac==details['payment[razorpay_signature]']){
+            console.log('order success')
+            res.json({orderSuccess:true})
+        }else{
+            console.log("payment failed");
+        }
+
     },
     successOrder:(req,res)=>{
         res.render('user/order-success',{user:req.session.user})
