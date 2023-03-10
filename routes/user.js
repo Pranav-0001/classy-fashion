@@ -84,5 +84,8 @@ router.get('/place-order/select-address/:id',verifyLogin,userController.selectUs
 
 router.get('/selected-address/:id',verifyLogin,userController.showSelectedAddress)
 
+router.post('/select-sort',productController.sortShop)
+
+router.post('/getSearchProduct',productController.productSearch)
 module.exports = router;   
  

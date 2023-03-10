@@ -42,13 +42,20 @@
                         <hr>
                         <table class="table ">
                             <tbody>
+                                
+                                {{#each cartProducts}}
+                                <tr>
+                                    <td>{{product.product}}</td>
+                                    <td>₹{{product.price}} </td>
+                                </tr>
+                                {{/each}}
                                 <tr>
                                     <td>SubTotal</td>
-                                    <td>{{totalPrice.total}}</td>
+                                    <td>₹{{totalPrice.total}}</td>
                                 </tr>
                                 <tr>
                                     <td>Discount</td>
-                                    <td>{{totalPrice.saving}}</td>
+                                    <td>₹{{totalPrice.saving}}</td>
                                 </tr>
 
                                 <tr>
@@ -57,7 +64,7 @@
                                 </tr>
                                 <tr>
                                     <td>Total</td>
-                                    <td>{{totalPrice.disTotal}}</td>
+                                    <td>₹{{totalPrice.disTotal}}</td>
                                 </tr>
                             </tbody>
                         </table>

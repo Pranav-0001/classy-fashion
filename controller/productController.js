@@ -27,11 +27,19 @@ module.exports={
             let userId = user._id
              cartCount = await CartCount(userId)
         }
+        let sort= req.session.sort
         let products=await productCollection.find().toArray()
+        if(sort=='low'){
+            console.log("/shop",sort);
+            products=await productCollection.find().sort({offerPrice:1}).toArray()
+        }else if(sort=='high'){
+            products=await productCollection.find().sort({offerPrice:-1}).toArray()
+        }
+        
         let category=await categoryCollection.find().toArray()
         let brands=await productCollection.distinct("brand")
     
-        res.render('user/shop', { products, user, category, brands, cartCount })
+        res.render('user/shop', { products, user, category, brands, cartCount ,sort })
     },
     singleProduct: async(req,res)=>{
         let user=req.session.user
@@ -301,6 +309,20 @@ module.exports={
     adminLogout:(req,res)=>{
         req.session.admin=null
         res.redirect('/admin/login')
+    },
+    sortShop:(req,res)=>{
+        console.log(req.body);
+        req.session.sort=req.body.sortOption
+        res.json({status:true})
+    },
+    productSearch:async(req,res)=>{
+       
+        let payload=req.body.payload.trim();
+        console.log(payload);
+        let search = await productCollection.find({product: {$regex: new RegExp(''+payload+'.*','i' )}}).toArray()
+        console.log(search);
+        search=search.slice(0,10)
+        res.send({payload:search})
     }
 
 }

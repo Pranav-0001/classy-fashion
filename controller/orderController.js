@@ -110,10 +110,10 @@ module.exports={
         let totalPrice =await getTotalAmount(req.session.user._id)
         totalPrice.saving = totalPrice.total - totalPrice.disTotal
         let address = req.session.address
-        
+        let cartProducts = await getCartProducts(req.session.user._id)
         
 
-        res.render('user/placeOrder', { totalPrice, user, Err, address ,cartCount })
+        res.render('user/placeOrder', { totalPrice, user, Err, address ,cartCount ,cartProducts })
         req.session.placeOrderErr = null
         req.session.address = null
     },

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-white nav-border" style="position: fixed;width: 100%; z-index: 1;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-white nav-border" style="position: fixed;width: 100%; z-index: 2;">
     <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <div class="nav-search-box ps-3 pt-3 pe-4 d-flex mb-4">
@@ -71,8 +71,9 @@ function closeNav() {
         <div class="d-none d-lg-flex">
             <form class="d-none d-lg-flex">
                 <div class="nav-search-box ps-3 pt-3">
-                    <input class="nav-search" type="text" placeholder="Search">
+                    <input class="nav-search" type="text" placeholder="Search" id="search-box" onkeyup="sendData(this)">
                 </div>
+                <section name="" ></section>
                 {{#if user}}
                 <div class="nav-search-box ps-4 pt-3 pe-4 ">
                     <i class="fa-regular fa-heart fs-4"></i>
@@ -121,4 +122,8 @@ function closeNav() {
 </div>
 </nav>
 <br><br>
+
+<div  class="search-item mt-4" id="searchResults">
+    
+</div>
 
