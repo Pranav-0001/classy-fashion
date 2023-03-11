@@ -1,48 +1,194 @@
-<div class="container-fluid">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 
-    <div class="row">
-        <div class="col-lg-3 admin-dash-head border text-center">
-            <i style="font-size: 80px;"
-                class="fa-regular fa-hourglass-half text-white  align-bottom pt-4"><span>100</span></i>
-            <p class="fs-4 text-white">Pending Orders</p>
+<section class="bg-light pt-4" style="width: 100%; height: 90vh; ">
 
+    <div class="container px-3">
+        <div class="row gx-4">
+            <div class="col-md-3 ">
+                <div class="p-3  bg-white  dash-top-div d-flex" style="height: 100px; width: 100%;">
+                    <div class="icon-dash  d-flex align-items-center justify-content-center fs-3 text-white icon-dash"
+                        style="width: 30%;height: 100%; background-color: #57b05b;">
+                        <i class="fa-solid fa-shop"></i>
+                    </div>
+                    <div class="ps-2">
+                        <h5>Revenue</h5>
+                        <h5 class="">₹<span id="count1">{{revenue}}</span></h5>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3  bg-white  dash-top-div d-flex" style="height: 100px;">
+                    <div class="icon-dash  d-flex align-items-center justify-content-center fs-3 text-white icon-dash"
+                        style="width: 30%;height: 100%; background-color: #318aec;">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div class="ps-2">
+                        <h5>Users</h5>
+                        <h4 id="count2" class="">{{userCount}}</h4>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3  bg-white  dash-top-div   d-flex" style="height: 100px;">
+                    <div class="icon-dash  d-flex align-items-center justify-content-center fs-3 text-white icon-dash"
+                        style="width: 30%;height: 100%; background-color: #e93a75;">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <div class="ps-2">
+                        <h5>Orders</h5>
+                        <h4 id="count3" class="">{{ordersCount}}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3  bg-white  dash-top-div  d-flex" style="height: 100px;">
+                    <div class="icon-dash bg-danger  d-flex align-items-center justify-content-center fs-3 text-white icon-dash"
+                        style="width: 30%;height: 100%; background-color:;">
+                        <i class="fa-solid fa-trash"></i>
+                    </div>
+                    <div class="ps-2">
+                        <h5>Cancelled Orders</h5>
+                        <h4 id="count4" class="">{{cancelCount}}</h4>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-3 admin-dash-head border text-center">
-            <i style="font-size: 80px;"
-                class="fa-solid fa-truck-fast text-white  align-bottom pt-4"><span>100</span></i>
-            <p class="fs-4 text-white">Total Orders</p>
-        </div>
-        <div class="col-lg-3 admin-dash-head border text-center">
-            <i style="font-size: 80px;" class="fa-solid fa-ban text-white  align-bottom pt-4"><span>100</span></i>
-            <p class="fs-4 text-white">Canceled Products</p>
-        </div>
-        <div class="col-lg-3 admin-dash-head border text-center">
-            <i style="font-size: 80px;"
-                class="fa-solid fa-cart-shopping text-white  align-bottom pt-4"><span>100</span></i>
-            <p class="fs-4 text-white">Total Products</p>
+        <div class="row mt-4 gx-1 ">
+
+            <div class="col-md-4 bg-white pt-4 dash-py">
+                <div class="container">
+                    <div class="chart-container ">
+                    <canvas id="myChart"></canvas>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 ps-4  ">
+                <div class=" dash-py ">
+                    <div id="chartContainer">
+                    <canvas id="barGraph"></canvas>
+                </div>
+                </div>
+            </div>
+            <style>
+                #chartContainer {
+                    width: 100%;
+                    height: 424px;
+                }
+
+                #barGraph {
+                    width: 100%;
+                    height: 100%;
+                }
+            </style>
+            <script>
+                // Data
+                let rev = parseInt(document.getElementById('count1').innerHTML)
+                const barData = [
+                    { label: 'Jan', value: 0 },
+                    { label: 'Feb', value: 0 },
+                    { label: 'Mar', value: rev },
+                    { label: 'Apr', value: 0 },
+                    { label: 'May', value: 0 }
+                ];
+
+                // Chart creation
+                const chartCanvas = document.getElementById('barGraph');
+
+                new Chart(chartCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: barData.map(data => data.label),
+                        datasets: [{
+                            label: 'Revenue',
+                            data: barData.map(data => data.value),
+                            backgroundColor: '#57b05b'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+            </script>
+
+
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-3 border admin-dash-side" >
-            <div style="height: 33.33%;">
-                <i style="font-size: 80px;" class="fa-solid fa-users text-white pt-3"><span> 100</span><span class="fs-6">Users</span></i><br>
-                <hr>
-            </div>
-            <div style="height: 33.33%;">
-                <i style="font-size: 80px;" class="fa-solid fa-signal text-white  pt-3"><span> 100</span><span class="fs-6">Revenue</span></i><br>
-                <hr>
-            </div>
-            <div style="height: 33.33%;">
-                <i style="font-size: 80px;" class="fa-solid fa-coins text-white  pt-3"><span> 100</span><span class="fs-6">Users</span></i>
-               
-            </div>
-        </div>
-        <div class="col-lg-5 border admin-dash-side">
 
-        </div>
-        <div class="col-lg-4 border admin-dash-side">
+</section>
 
-        </div>
-    </div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        function counter(id, start, end, duration) {
+            let obj = document.getElementById(id),
+                current = start,
+                range = end - start,
+                increment = end > start ? 1 : -1,
+                step = Math.abs(Math.floor(duration / range)),
+                timer = setInterval(() => {
+                    current += increment;
+                    obj.textContent = current;
+                    if (current == end) {
+                        clearInterval(timer);
+                    }
+                }, step);
+        }
+        let rev = parseInt(document.getElementById('count1').innerHTML)
+        let user = parseInt(document.getElementById('count2').innerHTML)
+        let ord = parseInt(document.getElementById('count3').innerHTML)
+        let canc = parseInt(document.getElementById('count4').innerHTML)
+        counter("count1", rev - 400, rev, 1);
+        counter("count2", 0, user, 2500);
+        counter("count3", 0, ord, 1000);
+        if (canc > 0) {
+            counter("count4", 0, canc, 1000);
+        }
 
-</div>
+    });
+
+
+    // Data for the chart
+    let canc = parseInt(document.getElementById('count4').innerHTML)
+    let ord = parseInt(document.getElementById('count3').innerHTML) - canc
+
+    var data = {
+        labels: ["Cancelled Orders", "Successful Orders"],
+        datasets: [{
+            data: [canc, ord],
+            backgroundColor: ["#dc3545", "#36A2EB", "#FFCE56"]
+        }]
+    };
+
+    // Options for the chart
+    var options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+            position: 'bottom',
+            labels: {
+                fontColor: 'black',
+                fontSize: 16
+            }
+        }
+    };
+
+    // Get the canvas element
+    var ctx = document.getElementById("myChart").getContext("2d");
+
+    // Create the chart
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: data,
+        options: options
+    });
+
+</script>

@@ -3,6 +3,7 @@ const cart = require('../model/cartModel')
 const productCollection = require('../model/productModel')
 const categoryCollection = require('../model/categoryModel')
 const adminCollection = require('../model/adminModel')
+const orderCollection =require('../model/orderModel')
 const mongoose = require('mongoose')
 const uuid=require('uuid')
 const bcrypt = require('bcrypt')
@@ -11,9 +12,23 @@ const userCollection  = require('../model/userModel')
 const { ObjectId } = mongoose.Types
 
 module.exports = {
-    adminHome: (req, res) => {
+    adminHome:async (req, res) => {
         let admin = req.session.admin
-        res.render('admin/home',{admin})
+        let revenue = await orderCollection.aggregate([
+            {
+                $match:{orderStatus:"Delivered"}
+            },
+            {
+                $group:{_id:null,revenue:{$sum:{$convert:{input:'$discTotal',to:'int'}}}}
+            }
+        ]).toArray()
+
+        revenue=revenue[0].revenue
+        let userCount=await userCollection.find({status:true}).count()
+        let ordersCount=await orderCollection.find().count()
+        let cancelCount=await orderCollection.find({orderStatus:'adminAcceptCancel'}).count()
+        console.log(cancelCount);
+        res.render('admin/home',{admin,revenue,userCount,ordersCount,cancelCount})
     },
     adminLogin: (req, res) => {
         let admin = req.session.admin

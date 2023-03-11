@@ -456,7 +456,17 @@ a:hover{
   visibility: hidden;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
-
+.search-item-user{
+  background-color: white;
+  width: 335px;
+  z-index: 1;
+  position: absolute;
+  right: 15%;
+  max-height: 50vh;
+  overflow-y: scroll;
+  visibility: hidden;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
 #loadAnimation {
  position: fixed;
  left: 0px;
@@ -465,4 +475,36 @@ a:hover{
  height: 100%;
  z-index: 9999;
  background: url(/images/success.gif) center no-repeat #fff;
+}
+
+.icon-dash{
+  border-radius: 10px;
+  transition: .4s;
+  
+}
+
+.dash-top-div{
+  border-radius: 10px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.dash-top-div:hover .icon-dash{
+  transform: scale(105%);
+}
+
+.chart-container {
+  position: relative;
+  margin: auto;
+  height: 400px;
+  width: 400px;
+}
+
+#myChart {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.dash-py{
+  border-radius: 10px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; 
 }
