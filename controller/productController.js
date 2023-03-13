@@ -5,6 +5,7 @@ const mongoose=require('mongoose')
 const {ObjectId}=mongoose.Types
 const fs=require('fs');
 const uuid=require('uuid')
+const sharp=require('sharp')
 
 function CartCount(userId){
     return new Promise(async(resolve, reject) => {
@@ -178,11 +179,21 @@ module.exports={
                   for(i=0;i<count;i++){
                     imgId=Object.keys(Obj)[i]
                     img=Object.values(Obj)[i]
-                    img.mv('./public/product-images/'+imgId+'.jpg').then((err)=>{
-                      if(err){
-                        console.log(err);
-                      }
+
+                    console.log("image : ",img);
+
+                    await sharp(img.tempFilePath)
+                    .resize({width:540,height:720})
+                    .jpeg({
+                        quality:100
                     })
+                    .toFile(`public/product-images/${imgId}.jpg`)
+
+                    // img.mv('./public/product-images/'+imgId+'.jpg').then((err)=>{
+                    //   if(err){
+                    //     console.log(err);
+                    //   }
+                    // })
                   }
                   res.redirect('/admin/products') 
                 }else{
@@ -282,11 +293,22 @@ module.exports={
             }else{
             let imgId=uuid.v4()
             productCollection.updateOne({_id:ObjectId(proId)},{$push:{Images:imgId}})
-            Image.mv('./public/product-images/'+imgId+'.jpg',(err)=>{
-                if(err){
-                    console.log(err);
-                }
+            console.log("imgd",Image);
+            
+
+            // Image.mv('./public/product-images/'+imgId+'.jpg',(err)=>{
+            //     if(err){
+            //         console.log(err);
+            //     }
+            // })
+            
+            await sharp(req.files.Image.tempFilePath)
+            .resize({width:540,height:720})
+            .jpeg({
+                quality:100
             })
+            .toFile(`public/product-images/${imgId}.jpg`)
+ 
             response.status=true
             res.redirect('/admin/products')
             } 

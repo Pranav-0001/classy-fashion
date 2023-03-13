@@ -71,5 +71,7 @@ router.post('/update-order-status/:id',verifyLogin,orderController.changeOrderSt
 
 router.get('/submit-order-request/:set/:id',verifyLogin,orderController.orderCancelRequest)
 
+router.get('/sales-report',verifyLogin,adminController.salesReport)
+
 module.exports = router;
   

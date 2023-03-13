@@ -130,11 +130,18 @@ module.exports={
         let paymentMethod=orderData.payment
         console.log("pay",paymentMethod);
             for(i=0;i<proCount;i++){
-                let qty=-(cartProducts[i].quantity)
                 let produId=cartProducts[i].item
+                let sale=(cartProducts[i].quantity)
+                productCollection.updateOne({_id:produId},{$inc:{sales:sale}})
+                
+                let qty=-(cartProducts[i].quantity)
                 console.log(produId,qty);
                 let product=await productCollection.findOne({_id:produId})
                 productCollection.updateOne({_id:produId},{$inc:{stock:qty}})
+                let sales=product.sales
+                let offerPrice=product.offerPrice   
+                let reven=sales*offerPrice
+                productCollection.updateOne({_id:produId},{$set:{rev:reven}})
             }
             let OrderObj={
                 Address:{

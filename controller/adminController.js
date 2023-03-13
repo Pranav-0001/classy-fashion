@@ -10,6 +10,7 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const userCollection  = require('../model/userModel')
 const { ObjectId } = mongoose.Types
+const sharp=require('sharp')
 
 module.exports = {
     adminHome:async (req, res) => {
@@ -89,7 +90,7 @@ module.exports = {
         req.session.addProductErr = null
         req.session.addData = null
     },
-    adminAddProductPost:(req,res)=>{
+    adminAddProductPost:async(req,res)=>{
         let Images = req.files.images
         req.session.addData = req.body
         let productData=req.body
@@ -116,17 +117,21 @@ module.exports = {
 
             if (count) {
                 for (i = 0; i < count; i++) {
-                    imgId[i] = uuid.v4()
-                    Images[i].mv('./public/product-images/' + imgId[i] + '.jpg', (err, done) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                    })
-                }
 
+                    imgId[i] = uuid.v4()
+                    
+                    console.log(Images);
+                    let path=""+Images[i].tempFilePath
+                    console.log(path);
+                    await sharp(path)
+                        .rotate()
+                        .resize(540, 720)
+                        .jpeg({ mozjpeg: true })
+                        .toFile(`./public/product-images/${imgId[i]}.jpg`)
+                }
                 productData.price = parseInt(productData.price)
                 productData.discount = parseInt(productData.discount)
-                productData.stock = parseInt(productData.stock)
+                productData.stock = parseInt(productData.stock) 
 
                 let offer = (productData.price * productData.discount) / 100
                 let offerPrice = productData.price - offer
@@ -167,6 +172,13 @@ module.exports = {
         let userId=req.params.id
         userCollection.deleteOne({ _id: ObjectId(userId) })
         res.redirect('/admin/user-list')
+    },
+    salesReport:async(req,res)=>{
+        let Products=await productCollection.find().toArray()
+        
+        let salesData=await orderCollection.find({orderStatus:"Delivered"}).toArray()
+       
+        res.render('admin/sales-report',{salesData})
     }
 
 }
