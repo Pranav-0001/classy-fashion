@@ -23,11 +23,13 @@ module.exports = {
                 $group:{_id:null,revenue:{$sum:{$convert:{input:'$discTotal',to:'int'}}}}
             }
         ]).toArray()
-
-        revenue=revenue[0].revenue
-        let userCount=await userCollection.find({status:true}).count()
-        let ordersCount=await orderCollection.find().count()
-        let cancelCount=await orderCollection.find({orderStatus:'adminAcceptCancel'}).count()
+        console.log(revenue);
+        if(revenue.length>=0) revenue=revenue[0].revenue;
+        else revenue=0
+       
+        let userCount=await userCollection.countDocuments({status:true})
+        let ordersCount=await orderCollection.countDocuments()
+        let cancelCount=await orderCollection.countDocuments({orderStatus:'adminAcceptCancel'})
         console.log(cancelCount);
         res.render('admin/home',{admin,revenue,userCount,ordersCount,cancelCount})
     },
@@ -177,8 +179,17 @@ module.exports = {
         let Products=await productCollection.find().toArray()
         
         let salesData=await orderCollection.find({orderStatus:"Delivered"}).toArray()
-       
-        res.render('admin/sales-report',{salesData})
+        let revenue = await orderCollection.aggregate([
+            {
+                $match:{orderStatus:"Delivered"}
+            },
+            {
+                $group:{_id:null,revenue:{$sum:{$convert:{input:'$discTotal',to:'int'}}}}
+            }
+        ]).toArray()
+        if(revenue.length>0)  revenue=revenue[0].revenue;
+        else revenue=0
+        res.render('admin/sales-report',{salesData,admin:req.session.admin,revenue})
     }
 
 }

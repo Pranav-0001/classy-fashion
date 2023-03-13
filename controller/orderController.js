@@ -44,7 +44,7 @@ function getCartProducts(userId){
                 }
             }
         ]).toArray()
-        
+        cartItems[0].proTotal=cartItems[0].quantity*cartItems[0].product.offerPrice
         console.log(cartItems);
         resolve(cartItems)
 
@@ -123,7 +123,7 @@ module.exports={
         let cartProducts = await getCartProducts(userId)
         let totalPrice = await getTotalAmount(userId)
         let orderData=req.body
-        let orderDate = new Date()
+        let d = new Date()
         let user = await userCollection.findOne({ _id: ObjectId(userId) })
         let count = uuid.v4()
         let proCount=cartProducts.length
@@ -152,7 +152,7 @@ module.exports={
                    state:orderData.state,
                    phone:orderData.phone,
                    email:orderData.email,
-                   date:orderDate,
+                   date:`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`,
                    payment:orderData.payment,
                    index:count
                },

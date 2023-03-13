@@ -1,0 +1,86 @@
+<div class="head-img d-flex align-items-center justify-content-center mb-4">
+    <h1 class=" text-white " style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Sales Report</h1>
+</div>
+
+<div class="container">
+
+    <button onclick="exportReportToExcel()" class="generate-btn pt-2 pb-2 ps-3 pe-3 mb-3"><i class="fa-regular fa-file-excel"></i> Generate Excel</button>
+
+
+
+    <table id="table" class="table table-hover">
+  <thead>
+    <tr>
+    <th scope="col">Date</th>
+    <th scope="col">Username</th>
+    <th scope="col">Product</th>
+    <th scope="col">Size</th>
+    <th scope="col">Price</th>
+    <th scope="col">Qty</th>
+    <th scope="col">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each salesData}}
+    {{#each products}}
+    <tr>
+      <td>{{../Address.date}}</td>
+      <td>{{../username}}</td>
+      <td>{{product.product}}</td>
+      <td>{{size}}</td>
+      <td>₹{{product.offerPrice}}</td>
+      <td>{{quantity}}</td>
+      <td>₹{{proTotal}}</td>
+    </tr>
+    {{/each}}
+    {{/each}}
+    
+    
+  </tbody>
+</table>
+
+<div class="revenue d-flex justify-content-end align-items-center ">
+    <h6 class="pe-5 me-5">Revenue :₹ {{revenue}}</h6>
+</div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
+<script type="text/javascript">
+
+function exportReportToExcel(){
+    // Include the SheetJS library
+
+
+// Get the table element
+const table = document.getElementById("table");
+
+// Convert the table to a workbook
+const workbook = XLSX.utils.table_to_book(table);
+
+// Convert the workbook to a binary Excel file
+const excelBinary = XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
+
+// Create a Blob object and download the file
+const blob = new Blob([s2ab(excelBinary)], { type: "application/octet-stream" });
+const url = URL.createObjectURL(blob);
+const link = document.createElement("a");
+link.href = url;
+link.download = "salesReport.xlsx";
+link.click();
+
+// Utility function to convert a string to an ArrayBuffer
+function s2ab(s) {
+  const buf = new ArrayBuffer(s.length);
+  const view = new Uint8Array(buf);
+  for (let i = 0; i < s.length; i++) {
+    view[i] = s.charCodeAt(i) & 0xff;
+  }
+  return buf;
+}
+
+}
+
+
+</script>
+
