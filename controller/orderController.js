@@ -162,7 +162,8 @@ module.exports={
                subTotal:totalPrice.total,
                discTotal:totalPrice.disTotal,
                orderStatus:"orderPlaced",
-               paymentStatus:(paymentMethod=='cash')?"Pending":"Paid"
+               paymentStatus:(paymentMethod=='cash')?"Pending":"Paid",
+               timeStamp:d.getTime()
                
            }
            
@@ -261,6 +262,9 @@ module.exports={
     changeOrderStatus:(req,res)=>{
         let orderId=req.params.id
         let status=req.body
+        if(status.status=='Delivered'){
+            orderCollection.updateOne({_id:ObjectId(orderId)},{$set:{paymentStatus:"Paid"}})
+        }
         orderCollection.updateOne({_id:ObjectId(orderId)},{$set:{orderStatus:status.status}})
         res.redirect('/admin/orderdetails/'+req.params.id)
     },

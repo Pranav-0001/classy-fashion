@@ -17,14 +17,14 @@ module.exports = {
         let admin = req.session.admin
         let revenue = await orderCollection.aggregate([
             {
-                $match:{orderStatus:"Delivered"}
+                $match:{paymentStatus:"Paid"}
             },
             {
                 $group:{_id:null,revenue:{$sum:{$convert:{input:'$discTotal',to:'int'}}}}
             }
         ]).toArray()
         console.log(revenue);
-        if(revenue.length>=0) revenue=revenue[0].revenue;
+        if(revenue.length>=0) revenue=revenue[0]?.revenue;
         else revenue=0
        
         let userCount=await userCollection.countDocuments({status:true})
@@ -177,8 +177,45 @@ module.exports = {
     },
     salesReport:async(req,res)=>{
         let Products=await productCollection.find().toArray()
+        let sale=req.session.salesReport
         
-        let salesData=await orderCollection.find({orderStatus:"Delivered"}).toArray()
+        let salesData=await orderCollection.find({paymentStatus:"Paid"}).sort({timeStamp:-1}).toArray()
+        if(sale=='today'){
+             let d=new Date()
+             let newDate=`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`
+             salesData=await orderCollection.find({'Address.date':newDate,paymentStatus:"Paid"}).toArray()
+        }else if(sale=='month'){
+            let sales=await orderCollection.find({paymentStatus:"Paid"}).toArray()
+            salesData=sales.map((order)=>{
+                let d=new Date()
+                let date=order.Address.date
+                let mnth=date.split('/')
+                console.log(d.getMonth()+1,mnth[1]);
+                if(d.getMonth()+1==mnth[1]){
+                    return order
+                }
+                 
+            })
+            console.log(salesData);
+        }else if(sale=='year'){
+            let sales=await orderCollection.find({paymentStatus:"Paid"}).toArray()
+            salesData=sales.map((order)=>{
+                let d=new Date()
+                let date=order.Address.date
+                let mnth=date.split('/')
+                console.log(d.getFullYear,mnth[2]);
+                if(d.getFullYear()==mnth[2]){
+                    return order
+                }
+                 
+            })
+        }else if(sale=='new'){
+            console.log(sale);
+            salesData=await orderCollection.find({paymentStatus:"Paid"}).sort({timeStamp:-1}).toArray()
+        }else if(sale=='old'){
+            console.log(sale);
+            salesData=await orderCollection.find({paymentStatus:"Paid"}).sort({timeStamp:1}).toArray()
+        }
         let revenue = await orderCollection.aggregate([
             {
                 $match:{orderStatus:"Delivered"}
@@ -189,7 +226,12 @@ module.exports = {
         ]).toArray()
         if(revenue.length>0)  revenue=revenue[0].revenue;
         else revenue=0
-        res.render('admin/sales-report',{salesData,admin:req.session.admin,revenue})
+        res.render('admin/sales-report',{salesData,admin:req.session.admin,revenue,sale})
+        req.session.salesReport=null
+    },
+    salesReportPost:(req,res)=>{
+        req.session.salesReport=req.body.opt
+        res.json({status:true})
     }
 
 }

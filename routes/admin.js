@@ -73,5 +73,7 @@ router.get('/submit-order-request/:set/:id',verifyLogin,orderController.orderCan
 
 router.get('/sales-report',verifyLogin,adminController.salesReport)
 
+router.post('/sales-report',verifyLogin,adminController.salesReportPost)
+
 module.exports = router;
   

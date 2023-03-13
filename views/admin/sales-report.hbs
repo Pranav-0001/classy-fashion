@@ -3,7 +3,19 @@
 </div>
 
 <div class="container">
-
+   
+     <label for="">Sort by</label> 
+     <select  oninput="salesRep(this.value)" name="" id="" class="fs-5"  style="border: none;">
+        <option value="new" {{#if (eq sale 'new')}} selected {{/if}} >New </option>
+        <option value="old" {{#if (eq sale 'old')}} selected {{/if}} >Old </option>
+     </select>
+    <select  oninput="salesRep(this.value)" name="" id="" class="generate-btn pt-2 pb-2 ps-3 pe-3 mb-3 ms-2" >
+        <option value="">All</option>
+        <option value="today" {{#if (eq sale 'today')}} selected {{/if}}>Today</option>
+        <option  value="month" {{#if (eq sale 'month')}} selected {{/if}}>This Month</option>
+        <option value="year" {{#if (eq sale 'year')}} selected {{/if}}>This Year</option>
+    </select>
+<button class="generate-btn pt-2 pb-2 ps-3 pe-3 mb-3 ms-2" onclick="printTable()"><i class="fa-solid fa-print"></i> Print Table</button>
     <button onclick="exportReportToExcel()" class="generate-btn pt-2 pb-2 ps-3 pe-3 mb-3"><i class="fa-regular fa-file-excel"></i> Generate Excel</button>
 
 
@@ -81,6 +93,28 @@ function s2ab(s) {
 
 }
 
+
+function printTable() {
+			var table = document.getElementById("table");
+			var newWin = window.open('', 'Print-Window');
+			newWin.document.open();
+			newWin.document.write('<html><body onload="window.print()">' + table.outerHTML + '</html>');
+			newWin.document.close();
+			setTimeout(function () { newWin.close(); }, 10);
+		}
+
+function salesRep(opt){
+    console.log(opt)
+    $.ajax({
+        url:'/admin/sales-report',
+        data:{opt},
+        method:'POST',
+        success:(response)=>{
+            location.href='/admin/sales-report'
+        }
+        
+    })
+}
 
 </script>
 

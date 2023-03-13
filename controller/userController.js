@@ -2,6 +2,7 @@ const user=require('../model/userModel')
 const cart=require('../model/cartModel')
 const productCollection=require('../model/productModel')
 const categoryCollection=require('../model/categoryModel')
+const wishListCollection=require('../model/wishlistModel')
 const mongoose=require('mongoose')
 const bcrypt=require('bcrypt')
 const nodemailer=require('nodemailer')
@@ -362,5 +363,36 @@ module.exports={
         }
         req.session.address=address
         res.redirect('/place-order')
+    },
+    wishList:(req,res)=>{
+
+        res.render('user/wishlist',{user:req.session.user})
+    },
+    addToWishlist:async(req,res)=>{
+        console.log(req.params.id);
+        let userId=req.session.user._id
+        let ProId=req.params.id
+
+        let product=ObjectId(ProId)
+        let checkWishlist=await wishListCollection.findOne({userId:ObjectId(userId)})
+
+        if(checkWishlist){
+            let proExist=checkWishlist.products.findIndex(product=>product==ProId)
+            console.log(proExist);
+            if(proExist!=-1){
+
+            }else{
+               wishListCollection.updateOne({userId:ObjectId(userId)},{
+                $push:{products:product}
+            }) 
+            }
+            
+        }else{
+            let wishListObj={
+                userId:ObjectId(userId),
+                products:[product]
+            }
+            wishListCollection.insertOne(wishListObj)
+        }
     }
 }

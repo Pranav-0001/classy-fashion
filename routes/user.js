@@ -87,5 +87,9 @@ router.get('/selected-address/:id',verifyLogin,userController.showSelectedAddres
 router.post('/select-sort',productController.sortShop)
 
 router.post('/getSearchProduct',productController.productSearch)
+
+router.get('/wishlist',verifyLogin,userController.wishList)
+
+router.post('/add-to-wishList/:id',verifyLogin,userController.addToWishlist)
+
 module.exports = router;   
- 

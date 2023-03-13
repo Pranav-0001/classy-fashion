@@ -117,7 +117,7 @@ module.exports={
         }
         let userCart=await cartCollection.findOne({user:ObjectId(userId)})
         if(userCart){
-            let proExist=userCart.products.findIndex(product=>product.item==proId)
+            let proExist=userCart.products.findIndex(product=>product.item==proId && product.size==size)
             console.log(proExist);
             
             if(proExist!=-1 ){
@@ -143,13 +143,14 @@ module.exports={
     changeProductQuantity:async(req,res)=>{
 
         let details = req.body
-        
+        console.log("size",details.size);
         details.count = parseInt(details.count)
         details.quantity = parseInt(details.quantity)
         if(details.count==-1&&details.quantity==1){
             cartCollection.updateOne({_id:ObjectId(details.cartId)},{
-                    $pull:{products:{item:ObjectId(details.proId)}}
+                    $pull:{products:{item:ObjectId(details.proId),size:details.size}}
             }).then((response)=>{
+                console.log(response);
                 response.delete=true
                 res.json(response)
             })
@@ -157,7 +158,7 @@ module.exports={
 
         }else{
             
-            cartCollection.updateOne({_id:ObjectId(details.cartId),'products.item':ObjectId(details.proId)},
+            cartCollection.updateOne({_id:ObjectId(details.cartId),'products.item':ObjectId(details.proId),'products.size':details.size},
             {
                 $inc:{'products.$.quantity':details.count}
             }).then(async()=>{
@@ -177,7 +178,7 @@ module.exports={
         let details=req.body
         cartCollection.updateOne({_id:ObjectId(details.cart)},
             {
-                $pull:{products:{item:ObjectId(details.product)}}
+                $pull:{products:{item:ObjectId(details.product),size:details.size}}
             }).then((response)=>{
                 res.json({removeProduct:true})
             })
