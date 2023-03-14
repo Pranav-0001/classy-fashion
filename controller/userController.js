@@ -364,15 +364,38 @@ module.exports={
         req.session.address=address
         res.redirect('/place-order')
     },
-    wishList:(req,res)=>{
-
-        res.render('user/wishlist',{user:req.session.user})
+    wishList:async(req,res)=>{
+        let userId=req.session.user._id
+        let product=await wishListCollection.aggregate([
+            {
+                $match:{userId:ObjectId(userId)}
+            },
+            {
+                $unwind:"$products"
+            },
+            {
+                $project:{_id:0}
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'products',
+                    foreignField: '_id',
+                    as: "result"
+                }
+            },
+            {
+                $project:{product: { $arrayElemAt: ['$result', 0] }}
+            }
+        ]).toArray()
+        console.log(product);
+        res.render('user/wishlist',{user:req.session.user,product})
     },
     addToWishlist:async(req,res)=>{
         console.log(req.params.id);
         let userId=req.session.user._id
         let ProId=req.params.id
-
+        let resp={}
         let product=ObjectId(ProId)
         let checkWishlist=await wishListCollection.findOne({userId:ObjectId(userId)})
 
@@ -380,11 +403,13 @@ module.exports={
             let proExist=checkWishlist.products.findIndex(product=>product==ProId)
             console.log(proExist);
             if(proExist!=-1){
-
+                resp.exist=true
             }else{
                wishListCollection.updateOne({userId:ObjectId(userId)},{
                 $push:{products:product}
+                
             }) 
+            resp.status=true
             }
             
         }else{
@@ -394,5 +419,6 @@ module.exports={
             }
             wishListCollection.insertOne(wishListObj)
         }
+        res.json(resp)
     }
 }

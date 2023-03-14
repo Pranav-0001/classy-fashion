@@ -183,9 +183,8 @@ module.exports={
                 currency: "INR",
                 receipt:order_id,
             };
-            orderCollection.insertOne(OrderObj).then((response) => {
-                cartCollection.deleteOne({ user: ObjectId(userId) })
-            })
+            req.session.deliveryDetails=orderData
+            
             instance.orders.create(options,function(err,order){
                 if (err) console.log(err);
                 console.log(order)
@@ -195,7 +194,7 @@ module.exports={
            }
            
     },
-    verifyPayment:(req,res)=>{
+    verifyPayment:async(req,res)=>{
         console.log("aaasssssqqqwww",req.body);
         let details=req.body
         const crypto=require('crypto')
@@ -204,9 +203,45 @@ module.exports={
         hmac=hmac.digest('hex')
         console.log(hmac);
         if(hmac==details['payment[razorpay_signature]']){
-            console.log('order success')
+            console.log('order success',req.session.orderObject)
+            let userId = req.session.user._id
+            let username = req.session.user.username
+            let cartProducts = await getCartProducts(userId)
+            let totalPrice = await getTotalAmount(userId)
+            let d = new Date()
+            let user = await userCollection.findOne({ _id: ObjectId(userId) })
+            let count = uuid.v4()
+            let proCount = cartProducts.length
+            let orderData=req.session.deliveryDetails
+            let paymentMethod = orderData.payment
+            let OrderObj={
+                Address:{
+                   name:orderData.fname+' '+orderData.lname,
+                   address:orderData.address,
+                   town:orderData.town,
+                   pincode:orderData.pincode,
+                   state:orderData.state,
+                   phone:orderData.phone,
+                   email:orderData.email,
+                   date:`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`,
+                   payment:orderData.payment,
+                   index:count
+               },
+               userId:ObjectId(userId),
+               username:username,
+               products:cartProducts,
+               subTotal:totalPrice.total,
+               discTotal:totalPrice.disTotal,
+               orderStatus:"orderPlaced",
+               paymentStatus:(paymentMethod=='cash')?"Pending":"Paid",
+               timeStamp:d.getTime()
+               
+           }
+            orderCollection.insertOne(OrderObj).then((response) => {
+                cartCollection.deleteOne({ user: ObjectId(userId) })
+            })
             res.json({orderSuccess:true})
-        }else{
+        }else{  
             console.log("payment failed");
         }
 
