@@ -6,13 +6,14 @@ const mongoose=require('mongoose')
 const  userCollection  = require('../model/userModel')
 const uuid=require('uuid')
 const {ObjectId}=mongoose.Types
+require('dotenv').config()
 
 const Razorpay=require('razorpay')
 
 
 var instance = new Razorpay({
-    key_id: 'rzp_test_FhLOD2QMxq2NGR',
-    key_secret: 'wkCYl3fic8fJv3nXbkRPc7qx',
+    key_id: process.env.KEY_ID,
+    key_secret: process.env.KEY_SECRET,
   });
 
 function getCartProducts(userId){
