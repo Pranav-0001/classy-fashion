@@ -92,4 +92,6 @@ router.get('/wishlist',verifyLogin,userController.wishList)
 
 router.post('/add-to-wishList/:id',verifyLogin,userController.addToWishlist)
 
+router.get('/remove-from-wishlist/:id',verifyLogin,userController.removeWishlistProduct)
+
 module.exports = router;   

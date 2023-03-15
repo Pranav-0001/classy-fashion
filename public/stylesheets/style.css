@@ -554,8 +554,8 @@ a:hover{
 .profile-card-2 .profile-name {
   position: absolute;
   left: 10px;
-  top: 27px;
-  font-size: 25px;
+  bottom: 57px;
+  font-size: 16px;
   color: #FFF;
   text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
   font-weight: bold;
@@ -572,10 +572,10 @@ a:hover{
 
 .profile-card-2 .profile-username {
   position: absolute;
-  top: 15px;
+  bottom: 40px;
   left: 10px;
   color: #FFF;
-  font-size: 15px;
+  font-size: 12px;
   transition: all linear 0.25s;
 }
 
@@ -589,9 +589,28 @@ a:hover{
 }
 
 .profile-card-2:hover .profile-name {
-  bottom: 80px;
+  bottom: 70px;
 }
 
 .profile-card-2:hover .profile-username {
-  bottom: 60px;
+  bottom: 50px;
+}
+
+.add-from-wish{
+  
+  position: absolute;
+  bottom: 10px;
+  left: 30px;
+  transition: all linear 0.25s;
+  
+}
+.profile-card-2:hover .add-from-wish {
+  
+  bottom: 20px;
+  
+  transition: all linear 0.25s;
+}
+.wish-add-btn{
+  background-color: #000;
+  border-radius: 10px;
 }

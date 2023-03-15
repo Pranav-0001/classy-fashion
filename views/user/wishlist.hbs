@@ -1,19 +1,82 @@
-<br><br>
+<br>
+{{#if product}}
+<div class="head-img d-flex align-items-center justify-content-center mb-4">
+    <h1 class="fs-1 text-white mt-2 mt-md-0" style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Wishlist</h1>
+</div>
 <div class="container">
     <div class="row">
         {{#each product}}
         <div class="col-6 col-md-4 col-lg-2">
             <div class="profile-card-2"
-                style="background-image:linear-gradient(to top, rgba(245, 246, 252, 0.16), rgba(0, 0, 0, 0.73)), url('/product-images/072eee7a-5d84-407d-8ad2-994f1912d8cb.jpg');background-size: cover;">
+                style="background-image:linear-gradient(to bottom, rgba(245, 246, 252, 0.16), rgba(0, 0, 0, 0.73)), url('/product-images/{{product.Images.[1]}}.jpg');background-size: cover;">
                 <img src="">
-                <div class="profile-name">Product</div>
-                <div class="profile-username">Brand | Size : M</div>
-                <div class="profile-icons"><a href=""></a><a href=""><i class="fa-solid fa-trash text-danger"></i></a>
+                <div onclick="window.location.href='/product/{{product._id}}'" class="profile-name">{{product.product}}</div>
+                <div class="profile-username">{{product.brand}} | Size : <span id="size">{{size}}</span></div>
+                <div class="profile-icons"><a onclick="removeWish('{{product._id}}','{{product.product}}')"><i
+                            class="fs-5 fa-solid fa-trash text-danger"></i></a>
+
                 </div>
-                <div class="add-to-cart-btn"><a href="" class="btn btn-warning">Add to cart</a></div>
+                <div class="add-from-wish "><a onclick="addToCartWish('{{product._id}}')"
+                        class="wish-add-btn  text-white px-4 py-1 bg-warning">Add to cart</a></div>
             </div>
         </div>
         {{/each}}
     </div>
+    {{else}}
+    <div class="head-img d-flex align-items-center justify-content-center mb-4">
+        <h1 class="fs-1 text-white mt-2 mt-md-0" style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Wishlist</h1>
+    </div>
+    <div class="d-flex justify-content-center align-items-end"
+        style="width: 100%;height: 70vh; background-image: url('/images/emwish.jpg'); background-position: center; background-repeat: no-repeat; background-size: cover;">
 
-   
+        <h3 style="position: relative; bottom: 100px;">Your wishlist is empty</h3>
+
+
+    </div>
+    {{/if}}
+
+    <script>
+
+        function removeWish(id, pro) {
+            Swal.fire({
+                title: `Do you want remove ${pro} from wishlist?`,
+                showDenyButton: true,
+                confirmButtonText: 'Yes',
+                denyButtonText: `No`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    Swal.fire('Removed!', '', 'success')
+
+                    $.ajax({
+                        url: "/remove-from-wishlist/" + id,
+                        success: () => {
+                            location.reload()
+                        }
+                    })
+                } else if (result.isDenied) {
+
+                }
+            })
+        }
+
+        function addToCartWish(id) {
+            let size = document.getElementById('size').innerHTML
+            $.ajax({
+                url: '/add-to-cart/' + id,
+                method: 'POST',
+                data: { Size: size },
+                success: () => {
+                    Swal.fire({
+                       
+                        icon: 'success',
+                        title: 'Item added to cart',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+        }
+
+
+    </script>

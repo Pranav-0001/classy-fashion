@@ -374,33 +374,36 @@ module.exports={
                 $unwind:"$products"
             },
             {
-                $project:{_id:0}
+                $project:{_id:0,
+                product:'$products.product',
+                size:'$products.size'}
             },
             {
                 $lookup: {
                     from: 'products',
-                    localField: 'products',
+                    localField: 'product',
                     foreignField: '_id',
                     as: "result"
                 }
             },
             {
-                $project:{product: { $arrayElemAt: ['$result', 0] }}
+                $project:{product: { $arrayElemAt: ['$result', 0] } ,size:1}
             }
         ]).toArray()
         console.log(product);
-        res.render('user/wishlist',{user:req.session.user,product})
+        let cartCount=await cartCout(userId)
+        res.render('user/wishlist',{user:req.session.user,product,cartCount})
     },
     addToWishlist:async(req,res)=>{
-        console.log(req.params.id);
+        console.log(req.body);
         let userId=req.session.user._id
         let ProId=req.params.id
         let resp={}
-        let product=ObjectId(ProId)
+        let product={product:ObjectId(ProId),size:req.body.size}
         let checkWishlist=await wishListCollection.findOne({userId:ObjectId(userId)})
 
         if(checkWishlist){
-            let proExist=checkWishlist.products.findIndex(product=>product==ProId)
+            let proExist=checkWishlist.products.findIndex(product=>product.product==ProId)
             console.log(proExist);
             if(proExist!=-1){
                 resp.exist=true
@@ -420,5 +423,11 @@ module.exports={
             wishListCollection.insertOne(wishListObj)
         }
         res.json(resp)
+    },
+    removeWishlistProduct:(req,res)=>{
+        let proId=req.params.id
+        let userId=req.session.user._id
+        wishListCollection.updateOne({userId:ObjectId(userId)},{$pull:{products:{product:ObjectId(proId)}}})
+        res.redirect('/wishlist')
     }
 }
