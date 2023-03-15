@@ -10,6 +10,7 @@ const adminController=require('../controller/adminController')
 const productController=require('../controller/productController');
 
 const orderController = require('../controller/orderController');
+const { adminAddProduct } = require('../controller/adminController');
 
 
 /* GET users listing. */
@@ -72,8 +73,12 @@ router.post('/update-order-status/:id',verifyLogin,orderController.changeOrderSt
 router.get('/submit-order-request/:set/:id',verifyLogin,orderController.orderCancelRequest)
 
 router.get('/sales-report',verifyLogin,adminController.salesReport)
-
 router.post('/sales-report',verifyLogin,adminController.salesReportPost)
+
+router.get('/coupons',verifyLogin,adminController.couponsGet)
+
+router.get('/add-coupon',verifyLogin,adminController.addCoupon)
+router.post('/add-coupon',verifyLogin,adminController.addCouponPost)
 
 module.exports = router;
   

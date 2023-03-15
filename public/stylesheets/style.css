@@ -614,3 +614,7 @@ a:hover{
   background-color: #000;
   border-radius: 10px;
 }
+
+.add-coup-btn{
+  background-color: black;
+}

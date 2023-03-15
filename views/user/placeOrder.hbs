@@ -34,7 +34,16 @@
                 {{/if}}
             </div>
             <div class="col-md-4 mt-3">
-
+                <div class="border  mb-3">
+                    <h5 class="ms-3 mt-3 pb-2">Coupon</h5>
+                    <div class="d-flex mt-2 justify-content-center pb-2">
+                        <input type="text" class=" plc-inp" style="" id="coup">
+                        <a onclick="couponApply()"  class="pb-2 px-2 text-white" style="height: 33px; border: none;background-color: black;">Apply</a>
+                    </div>
+                    <p class="text-danger ms-4" id="coupErr"></p>
+                    <a class="ms-3 pb-3" href="">Available Coupons</a>
+                    
+                </div>
                 <div class="border" style="width: 100%;">
                     <div class="pt-4 ps-4 pe-2">
                         <h4>Your Order</h4>
@@ -43,7 +52,7 @@
                         <table class="table ">
                             <tbody>
                                 
-                                {{#each cartProducts}}
+                                {{#each cartProducts}} 
                                 <tr>
                                     <td>{{product.product}}</td>
                                     <td>₹{{product.price}} </td>
@@ -138,7 +147,7 @@
                 "address": "Razorpay Corporate Office"
             },
             "theme": {
-                "color": "#3399cc"
+                "color": "#3399cc" 
             }
         }
         var rzp1 = new Razorpay(options);
@@ -161,5 +170,20 @@
              
         })
     } 
+
+    function couponApply(){
+        let coupon=document.getElementById('coup').value
+        console.log(coupon)
+        if(coupon==''){
+            document.getElementById('coupErr').innerHTML="Coupon field Empty"
+
+        }else{
+            $.ajax({
+                url:'/coupon-apply',
+                method:'post',
+                data:{code:coupon},
+            })
+        }
+    }
 
 </script> 

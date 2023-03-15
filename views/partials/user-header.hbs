@@ -1,33 +1,33 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-white nav-border" style="position: fixed;width: 100%; z-index: 2;">
     <div id="mySidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <div class="nav-search-box ps-3 pt-3 pe-4 d-flex mb-4">
-                    {{!-- <i class="fa-regular fa-user fs-4"></i> --}}
-                    <img src="/images/avatar.jpg" alt="" style="border-radius: 5px;">
-                    {{#if user}}
-                    <p class="ms-3 fs-4" onclick="" style="cursor: pointer;"> {{user.username}}</p>
-                    {{else}}
-                    <p class="ms-3" style="cursor: pointer;"><a href="/login"
-                            style="text-decoration: none; color: black;"> Login</a></p>
-                    {{/if}}
-                </div>
-  <a class="side-nav-opt" href="/profile">Profile</a>
-  <a class="side-nav-opt" href="/Change-password">Change Password</a>
-  <a class="side-nav-opt" href="/address-manage">Address Management</a>
-  <a class="side-nav-opt" href="#">Contact</a>
-  <a class="side-nav-opt" href="/logout">Logout</a>
-</div>
-<script>
-function openNav() {
-  document.getElementById("mySidenav").style.width = "250px";
-}
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div class="nav-search-box ps-3 pt-3 pe-4 d-flex mb-4">
+            {{!-- <i class="fa-regular fa-user fs-4"></i> --}}
+            <img src="/images/avatar.jpg" alt="" style="border-radius: 5px;">
+            {{#if user}}
+            <p class="ms-3 fs-4" onclick="" style="cursor: pointer;"> {{user.username}}</p>
+            {{else}}
+            <p class="ms-3" style="cursor: pointer;"><a href="/login" style="text-decoration: none; color: black;">
+                    Login</a></p>
+            {{/if}}
+        </div>
+        <a class="side-nav-opt" href="/profile">Profile</a>
+        <a class="side-nav-opt" href="/Change-password">Change Password</a>
+        <a class="side-nav-opt" href="/address-manage">Address Management</a>
+        <a class="side-nav-opt" href="#">Contact</a>
+        <a class="side-nav-opt" href="/logout">Logout</a>
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
 
-function closeNav() {
-  document.getElementById("mySidenav").style.width = "0";
-}
-</script>
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
     <div class="container-fluid ms-5"><a href="/">
-        <img src="/images/logoDark.png" alt="" width="100px"></a>
+            <img src="/images/logoDark.png" alt="" width="100px"></a>
         <button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fa-solid fa-bars text-secondary"></i>
@@ -73,7 +73,7 @@ function closeNav() {
                 <div class="nav-search-box ps-3 pt-3">
                     <input class="nav-search" type="text" placeholder="Search" id="search-box" onkeyup="sendData(this)">
                 </div>
-                <section name="" ></section>
+                <section name=""></section>
                 {{#if user}}
                 <div onclick="window.location.href='/wishlist'" class="nav-search-box ps-4 pt-3 pe-4 ">
                     <i class="fa-regular fa-heart fs-4"></i>
@@ -92,38 +92,38 @@ function closeNav() {
                 <div class="nav-search-box ps-3 pt-3 pe-4" style="border-right-style: none;">
 
                     <a href="/cart"><i class="fa-solid fa-cart-shopping fs-4 text-dark"></i></a>
-                     <span class="badge rounded-pill bg-warning text-dark" style="position: relative; bottom: 50%;">{{cartCount}}</span>
+                    <span class="badge rounded-pill bg-warning text-dark"
+                        style="position: relative; bottom: 50%;">{{cartCount}}</span>
                 </div>
                 {{/if}}
             </form>
         </div>
     </div>
     <div class="d-lg-none d-flex float-end " style="width: 100%;">
-    <div class="head-search-box ps-2 pt-1">
+        <div class="head-search-box ps-2 pt-1">
 
-        <input class="nav-search" type="text" placeholder="Search" onkeyup="sendData(this)" style="width: 100px;">
-    </div>
-    <div class="head-search-box ps-2 pt-1 pe-4 ">
+            <input class="nav-search" type="text" placeholder="Search" onkeyup="sendData(this)" style="width: 100px;">
+        </div>
+        <div class="head-search-box ps-2 pt-1 pe-4 ">
 
-        <i class="fa-regular fa-heart fs-6"></i>
-    </div>
-    <div class="head-search-box ps-1 pt-1 pe-4 d-flex">
-        {{#if user}}
-                    <p class="ms-3" onclick="openNav()" style="cursor: pointer;"> {{user.username}}</p>
-                    {{else}}
-        <i class="fa-regular fa-user fs-6 pt-1"></i>
-        <p class="ms-3"> Login</p>
-        {{/if}}
-    </div>
-    <div class="head-search-box ps-3 pt-1 " style="border-right-style: none;">
+            <i class="fa-regular fa-heart fs-6"></i>
+        </div>
+        <div class="head-search-box ps-1 pt-1 pe-4 d-flex">
+            {{#if user}}
+            <p class="ms-3" onclick="openNav()" style="cursor: pointer;"> {{user.username}}</p>
+            {{else}}
+            <i class="fa-regular fa-user fs-6 pt-1"></i>
+            <p class="ms-3"> Login</p>
+            {{/if}}
+        </div>
+        <div class="head-search-box ps-3 pt-1 " style="border-right-style: none;">
 
-        <i class="fa-solid fa-cart-shopping fs-6"></i>
+            <i class="fa-solid fa-cart-shopping fs-6"></i>
+        </div>
     </div>
-</div>
 </nav>
 <br><br>
 
 <div {{#if user}} class="search-item-user mt-4" {{else}}class="search-item mt-4" {{/if}} id="searchResults">
-    
-</div>
 
+</div>

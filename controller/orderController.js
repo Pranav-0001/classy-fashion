@@ -2,6 +2,7 @@ const productCollection=require('../model/productModel')
 const categoryCollection=require('../model/categoryModel')
 const cartCollection=require('../model/cartModel')
 const orderCollection=require('../model/orderModel')
+const couponCollection=require('../model/couponModel')
 const mongoose=require('mongoose')
 const  userCollection  = require('../model/userModel')
 const uuid=require('uuid')
@@ -317,6 +318,16 @@ module.exports={
             res.redirect('/admin/all-orders')
           })
       }
+    },
+    applyCoupon:async(req,res)=>{
+        let code=req.body.code
+        let coupon=await couponCollection.findOne({coupon:code})
+        if(coupon){
+            console.log('valid');
+        }else{
+            console.log('invalid');
+        }
+        
     }
 }
 

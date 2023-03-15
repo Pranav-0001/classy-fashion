@@ -172,6 +172,7 @@ module.exports={
             response.status=true
             response.pro=product
             let Obj=req.files
+            console.log(Obj);
             if(Obj){
                 count=Object.keys(Obj).length
                 console.log(count);

@@ -4,6 +4,7 @@ const productCollection = require('../model/productModel')
 const categoryCollection = require('../model/categoryModel')
 const adminCollection = require('../model/adminModel')
 const orderCollection =require('../model/orderModel')
+const couponCollection=require('../model/couponModel')
 const mongoose = require('mongoose')
 const uuid=require('uuid')
 const bcrypt = require('bcrypt')
@@ -232,6 +233,63 @@ module.exports = {
     salesReportPost:(req,res)=>{
         req.session.salesReport=req.body.opt
         res.json({status:true})
+    },
+    couponsGet:async(req,res)=>{
+        let coupons=await couponCollection.find().toArray()
+        res.render('admin/coupons',{admin:req.session.admin,coupons})
+    },
+    addCoupon:(req,res)=>{
+        let Err=req.session.couponErr
+        let couponData=req.session.couponData
+        res.render('admin/add-coupon',{admin:req.session.admin,Err,couponData})
+    },
+    addCouponPost:(req,res)=>{
+        let couponData=req.body
+        req.session.couponData=couponData
+        let coupon=couponData.coupon
+        let coupREgx=/^([A-Za-z0-9]){3,10}$/gm
+        let amount=/^([0-9]){1,4}$/gm
+        let disregx=/^([0-9]){1,4}$/gm
+        if(couponData.coupon==''){
+            req.session.couponErr="Coupon field required"
+            res.redirect('/admin/add-coupon')
+        }else if(couponData.expiry==''){
+            req.session.couponErr="Expiry date field required"
+            res.redirect('/admin/add-coupon')
+        }else if(couponData.discount==''){
+            req.session.couponErr="Discount field required"
+            res.redirect('/admin/add-coupon')
+        }else if(couponData.minAmount==''){
+            req.session.couponErr="min amount field required"
+            res.redirect('/admin/add-coupon')
+        }else if(coupREgx.test(coupon)==false){
+            req.session.couponErr="Coupon only allows A-Z and 0-9"
+            res.redirect('/admin/add-coupon')
+        }else if(amount.test(couponData.minAmount)==false){
+            req.session.couponErr="Amount field only allows numbers"
+            res.redirect('/admin/add-coupon')
+        }else if(disregx.test(couponData.discount)==false){
+            req.session.couponErr="Discount field only allows numbers"
+            res.redirect('/admin/add-coupon')
+        }else if(couponData.disType=='percentage'&&couponData.discount>=100){
+            req.session.couponErr="Percentage can only set up to 100%"
+            res.redirect('/admin/add-coupon')
+        }else{
+            let today=new Date()
+            let coupon={
+                coupon:couponData.coupon,
+                expiry:couponData.expiry,
+                minItems:parseInt(couponData.minItems),
+                minAmount:parseInt(couponData.minAmount),
+                disType:couponData.disType,
+                discount:couponData.discount,
+                timeStamp:Math.floor(today.getTime()/1000)
+            }
+            couponCollection.insertOne(coupon).then(()=>{
+                res.redirect('/admin/coupons')
+            })
+            
+        }
     }
 
 }

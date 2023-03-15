@@ -1,0 +1,69 @@
+<div class="head-img d-flex align-items-center justify-content-center mb-4">
+    <h1 class=" text-white " style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Add Coupon</h1>
+</div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4 offset-4">
+            <form class="row g-3" action="/admin/add-coupon" method="post">
+  <div class="col-md-6">
+    <label for="inputEmail4" class="form-label">Coupon</label>
+    <input type="text" name="coupon" id="myInput" class="form-control" id="inputEmail4" value="{{couponData.coupon}}">
+  </div>
+
+  <div class="col-6">
+    <label for="inputAddress" class="form-label">Expire</label>
+    <input type="date" name="expiry" id="myDate" class="form-control" id="inputAddress" placeholder="1234 Main St" value="{{couponData.expiry}}">
+  </div>
+  <div class="col-6">
+    <label for="inputAddress2" class="form-label">Minimum Items</label>
+    <select class="form-select"  name="minItems" id="">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="5+">More than 5</option>
+    </select>
+  </div>
+  <div class="col-md-6">
+    <label for="inputCity" class="form-label">Minimum Amount</label>
+    <input type="number" class="form-control" id="inputCity" name="minAmount" value="{{couponData.minAmount}}">
+  </div>
+  <div class="col-md-12">
+    <p>Discount In</p>
+    <input class="form-check-input" type="radio" name="disType" id="gridRadios1" value="percentage" checked>
+        <label class="form-check-label" for="gridRadios1">
+          Percentage
+        </label>
+        <input class="form-check-input" type="radio" name="disType" id="gridRadios1" value="fixedAmt" >
+        <label class="form-check-label" for="gridRadios1">
+          Fixed Amount
+        </label>
+  </div>
+ 
+  <div class="col-md-12">
+    <label for="inputZip" class="form-label">Discount</label>
+    <input type="number" name="discount" class="form-control" id="inputZip" value="{{couponData.discount}}">
+  </div>
+  <p class="text-danger">{{Err}}</p>
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Sign in</button>
+  </div>
+</form>
+        </div>
+    </div>
+</div>
+
+<script>
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById("myDate").setAttribute("min", today);
+
+  const myInput = document.getElementById("myInput");
+
+myInput.addEventListener("input", function(event) {
+    
+  const inputText = event.target.value;
+  event.target.value = inputText.toUpperCase();
+});
+</script>
+

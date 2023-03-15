@@ -50,7 +50,7 @@
                 
                     <p class="ms-3" style="cursor: pointer;"> </p>
                     
-                    <p class="ms-3" style="cursor: pointer;"><a href=""
+                    <p onclick="openNav()" class="ms-3" style="cursor: pointer;"><a
                             style="text-decoration: none; color: black;">Admin : {{admin.username}}</a></p>
                    
                 </div>
@@ -69,3 +69,28 @@
         </div>
     </div>
 </nav>
+<div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div class="nav-search-box ps-3 pt-3 pe-4 d-flex mb-4">
+            {{!-- <i class="fa-regular fa-user fs-4"></i> --}}
+            <img src="/images/admin.png" alt="" style="border-radius: 5px;">
+            
+            <p class="ms-3 fs-4" onclick="" style="cursor: pointer;"> {{admin.username}}</p>
+           
+          
+        </div>
+        <a class="side-nav-opt" href="/admin/coupons">Coupons</a>
+        <a class="side-nav-opt" href="/Change-password">Change Password</a>
+        <a class="side-nav-opt" href="/address-manage">Address Management</a>
+        <a class="side-nav-opt" href="#">Contact</a>
+        <a class="side-nav-opt" href="/admin/logout">Logout</a>
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
