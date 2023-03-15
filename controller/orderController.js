@@ -322,6 +322,8 @@ module.exports={
     applyCoupon:async(req,res)=>{
         let code=req.body.code
         let coupon=await couponCollection.findOne({coupon:code})
+        let totalPrice=getTotalAmount(req.session.user._id)
+        
         if(coupon){
             console.log('valid');
         }else{
