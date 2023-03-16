@@ -233,7 +233,6 @@ module.exports={
         let userId=req.session.user._id
         user.updateOne({_id:ObjectId(userId)},{$set:{
             username:userData.username,
-            email:userData.email,
             phone:userData.phone
         }})
         res.redirect('/profile')

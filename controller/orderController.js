@@ -113,11 +113,32 @@ module.exports={
         totalPrice.saving = totalPrice.total - totalPrice.disTotal
         let address = req.session.address
         let cartProducts = await getCartProducts(req.session.user._id)
-        
+        let coupons= await couponCollection.find().toArray()
+        let coupApply=req.session.coupApply
+        let coupValidErr=req.session.coupNotValid
+        let appliedCoupon={}
+        if(coupApply){
+            totalPrice.disTotal=coupApply.coupDisTotal
+            appliedCoupon.name=coupApply.couponName,
+            appliedCoupon.coupSave=coupApply.coupDiscount
+        }
 
-        res.render('user/placeOrder', { totalPrice, user, Err, address ,cartCount ,cartProducts })
+        console.log('coupon applied',coupApply);
+        coupons.forEach((coup)=>{
+            let exp=new Date(coup.expiry)
+            let today=new Date()
+            if(Math.round((exp-today)/(1000*60*60*24))>0){
+                coup.status="Valid"
+            }else{
+                coup.status="Invalid"
+            }
+        })
+        console.log(coupons);
+        res.render('user/placeOrder', { totalPrice, user, Err, address ,cartCount ,cartProducts,coupons,appliedCoupon,coupValidErr })
+        req.session.coupApply=null
         req.session.placeOrderErr = null
-        req.session.address = null
+        
+        req.session.coupNotValid=null
     },
     placeOrderPost:async(req,res)=>{
         let userId = req.session.user._id
@@ -130,6 +151,13 @@ module.exports={
         let count = uuid.v4()
         let proCount=cartProducts.length
         let paymentMethod=orderData.payment
+        let coupApply=req.session.coupApply
+        let appliedCoupon={}
+        if(coupApply){
+            totalPrice.disTotal=coupApply.coupDisTotal
+            appliedCoupon.name=coupApply.couponName,
+            appliedCoupon.coupSave=coupApply.coupDiscount
+        }
         console.log("pay",paymentMethod);
             for(i=0;i<proCount;i++){
                 let produId=cartProducts[i].item
@@ -163,6 +191,8 @@ module.exports={
                products:cartProducts,
                subTotal:totalPrice.total,
                discTotal:totalPrice.disTotal,
+               coupon:appliedCoupon.name,
+               coupDiscount:appliedCoupon.coupSave,
                orderStatus:"orderPlaced",
                paymentStatus:(paymentMethod=='cash')?"Pending":"Paid",
                timeStamp:d.getTime()
@@ -194,7 +224,7 @@ module.exports={
             })
                
            }
-           
+           req.session.address = null
     },
     verifyPayment:async(req,res)=>{
         console.log("aaasssssqqqwww",req.body);
@@ -216,6 +246,13 @@ module.exports={
             let proCount = cartProducts.length
             let orderData=req.session.deliveryDetails
             let paymentMethod = orderData.payment
+            let coupApply=req.session.coupApply
+            let appliedCoupon = {}
+            if (coupApply) {
+                totalPrice.disTotal = coupApply.coupDisTotal
+                appliedCoupon.name = coupApply.couponName,
+                appliedCoupon.coupSave = coupApply.coupDiscount
+            }
             let OrderObj={
                 Address:{
                    name:orderData.fname+' '+orderData.lname,
@@ -234,6 +271,8 @@ module.exports={
                products:cartProducts,
                subTotal:totalPrice.total,
                discTotal:totalPrice.disTotal,
+               coupon:appliedCoupon.name,
+               coupDiscount:appliedCoupon.coupSave,
                orderStatus:"orderPlaced",
                paymentStatus:(paymentMethod=='cash')?"Pending":"Paid",
                timeStamp:d.getTime()
@@ -322,12 +361,53 @@ module.exports={
     applyCoupon:async(req,res)=>{
         let code=req.body.code
         let coupon=await couponCollection.findOne({coupon:code})
-        let totalPrice=getTotalAmount(req.session.user._id)
-        
+        let totalPrice=await getTotalAmount(req.session.user._id)
+        let cartCount=await CartCount(req.session.user._id)
         if(coupon){
-            console.log('valid');
+            console.log(coupon);
+            let items=coupon.minItems
+            let minAmt=coupon.minAmount
+            let discount=parseInt(coupon.discount)
+            let total=totalPrice.disTotal
+            let expiry=new Date(coupon.expiry)
+            let today=new Date()
+            let exp=(expiry-today)/1000*60*60*24
+            console.log(exp);
+            console.log(totalPrice);
+            if(cartCount>=items && total>=minAmt && exp>0 ){
+                console.log('applicable');
+                if(coupon.disType=='percentage'){
+                    let disAmt=(total*discount)/100
+                    total=total-disAmt
+                    total=Math.floor(total)
+                    let coupData={
+                        coupDiscount:disAmt,
+                        coupDisTotal:total,
+                        couponName:coupon.coupon
+                    }
+                    req.session.coupApply=coupData
+                }else{
+                    let disAmt=discount
+                    total-=disAmt
+                    total=Math.floor(total)
+                    let coupData={
+                        coupDiscount:disAmt,
+                        coupDisTotal:total,
+                        couponName:coupon.coupon
+                    }
+                    req.session.coupApply=coupData
+                }
+                res.json({apply:true})
+            }else{
+                console.log("Not applicable");
+                req.session.coupNotValid="Coupon not applicable on this order"
+                res.json({apply:false})
+            }
+
         }else{
             console.log('invalid');
+            req.session.coupNotValid="Invalid Coupon"
+            res.json({invalid:true})
         }
         
     }

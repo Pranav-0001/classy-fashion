@@ -282,7 +282,7 @@ module.exports = {
                 minItems:parseInt(couponData.minItems),
                 minAmount:parseInt(couponData.minAmount),
                 disType:couponData.disType,
-                discount:couponData.discount,
+                discount:parseInt(couponData.discount),
                 timeStamp:Math.floor(today.getTime()/1000)
             }
             couponCollection.insertOne(coupon).then(()=>{
