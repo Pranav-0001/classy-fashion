@@ -6,7 +6,7 @@ const wishlistSchema=new mongoose.Schema({
         required:true
     },
     products:{
-        typeof:Array
+        type:Array
     }
 })
 

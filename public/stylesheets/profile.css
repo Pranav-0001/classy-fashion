@@ -50,10 +50,7 @@ hr{
     background-color: black;
     opacity: .1;
 }
-input{
-    border: none;
-   
-}
+
 .round{
     font-size: 5vw;
     position: absolute;

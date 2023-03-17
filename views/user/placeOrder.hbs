@@ -1,19 +1,21 @@
 <div class="head-img d-flex" style="align-items: center; justify-content: center;">
     <h2 class="text-center text-dark ">CHECKOUT</h2>
 </div>
-<div class="container mt-2 mb-4 pb-4">
-    <form name="myForm" id="checkOut" onsubmit="return placeOrder()" action="">
-        <div class="row mt-5">
+<div class="container mt-2 mb-4 pb-4 ">
+    <div class="mx-md-0 ">
+        <form name="myForm" id="checkOut" onsubmit="return placeOrder()" action="" class="">
+        <div class="row mt-5 mx-auto">
             <div class="col-md-8">
                 <h4 class="pb-4">Billing Address</h4>
-                <label for="">First name</label><br>
+                <label class="text-start" for="">First name</label><br>
                 <input class="plc-inp" type="text" name="fname" id="name" value="{{address.fname}}"><br>
                 <label for="">Last name</label><br>
                 <input class="plc-inp" type="text" name="lname" id="name" value="{{address.lname}}"><br>
                 <label for="">State</label><br>
                 <select class="plc-inp" name="state" id="" style="height: 30px;">
+                     <option value="">Select State</option>
                     <option {{#if (eq address.state 'Kerala' )}} selected {{/if}}value="Kerala">Kerala</option>
-                    <option value="">Kerala</option>
+                   
                 </select><br>
                 <label for="">Address</label><br>
                 <textarea class="plc-inp" name="address" id="" cols="30" rows="5">{{address.address}}</textarea><br>
@@ -103,6 +105,7 @@
             </div>
         </div>
     </form>
+    </div>
 
 </div>
 <div id="cop-overlay" onclick="closeCouponOverlay()" class="coupon-overlay">

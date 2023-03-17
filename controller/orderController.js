@@ -135,7 +135,7 @@ module.exports={
         })
         console.log(coupons);
         res.render('user/placeOrder', { totalPrice, user, Err, address ,cartCount ,cartProducts,coupons,appliedCoupon,coupValidErr })
-        req.session.coupApply=null
+        
         req.session.placeOrderErr = null
         
         req.session.coupNotValid=null
@@ -151,9 +151,12 @@ module.exports={
         let count = uuid.v4()
         let proCount=cartProducts.length
         let paymentMethod=orderData.payment
+        console.log(req.session.coupApply);
         let coupApply=req.session.coupApply
         let appliedCoupon={}
+        console.log("out",coupApply);
         if(coupApply){
+            console.log("in",coupApply);
             totalPrice.disTotal=coupApply.coupDisTotal
             appliedCoupon.name=coupApply.couponName,
             appliedCoupon.coupSave=coupApply.coupDiscount
@@ -208,6 +211,7 @@ module.exports={
                     res.json({COD:true})
                    })
                })
+               
            }else{
             let order_id = uuid.v4()
             var options ={
@@ -225,6 +229,7 @@ module.exports={
                
            }
            req.session.address = null
+           
     },
     verifyPayment:async(req,res)=>{
         console.log("aaasssssqqqwww",req.body);
@@ -248,7 +253,9 @@ module.exports={
             let paymentMethod = orderData.payment
             let coupApply=req.session.coupApply
             let appliedCoupon = {}
+            console.log("outer",coupApply);
             if (coupApply) {
+                console.log("in",coupApply);
                 totalPrice.disTotal = coupApply.coupDisTotal
                 appliedCoupon.name = coupApply.couponName,
                 appliedCoupon.coupSave = coupApply.coupDiscount
@@ -285,7 +292,7 @@ module.exports={
         }else{  
             console.log("payment failed");
         }
-
+        req.session.coupApply=null
     },
     successOrder:(req,res)=>{
         res.render('user/order-success',{user:req.session.user})
@@ -297,17 +304,13 @@ module.exports={
         res.render('user/orders',{orderData,user:req.session.user})
     },
     singleOrder:async(req,res)=>{
-        let orderId = req.params.orderId
-        let proId = req.params.proId
-        let index = req.params.index
+        let orderId = req.params.id
+        
+        
         let order=await orderCollection.findOne({_id:ObjectId(orderId)})
         let cartCount=await CartCount(req.session.user._id)
-            let singleOrder={
-                productData:order.products[index],
-                address:order.Address,
-                status:order.orderStatus
-            }
-            res.render('user/singleOrder',{singleOrder,user:req.session.user,cartCount})
+            
+        res.render('user/singleOrder',{order,user:req.session.user,cartCount})
     },
     cancelOrderProducts:async(req,res)=>{
         let id=req.params.id

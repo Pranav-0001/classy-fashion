@@ -55,7 +55,7 @@ router.post('/verify-payment',orderController.verifyPayment)
 
 router.get('/orders',verifyLogin,orderController.viewOrders)
 
-router.get('/orderItem/:orderId/:proId/:index',verifyLogin,orderController.singleOrder)
+router.get('/order/:id',verifyLogin,orderController.singleOrder)
 
 router.get('/profile',verifyLogin,userController.userProfile)
 

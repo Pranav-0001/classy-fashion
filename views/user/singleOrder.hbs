@@ -1,16 +1,24 @@
-<div class="container">
-    <div class="row singleOrderBorder mt-3">
-        <div class="col-md-2">
-            <img src="/product-images/{{singleOrder.productData.product.Images.[0]}}.jpg" alt="" width="100%" class="mt-2 mb-2">
-        </div>
-        <div class="col-md-4 mt-2">
-            <h3>{{singleOrder.productData.product.product}}</h3>
-            <h5 class="text-secondary">{{singleOrder.productData.product.brand}}</h5>
-            <h5><span style="text-decoration: line-through;" class="text-secondary pe-2">₹{{singleOrder.productData.product.price}}</span>₹{{singleOrder.productData.product.offerPrice}}</h5>
-            <h6 class="text-success">{{singleOrder.productData.product.discount}}%</h6>
-            <h5 class="text-secondary">SIZE : {{singleOrder.productData.size}}</h5>
-            <h5 class="text-secondary">Quantity : {{singleOrder.productData.quantity}}</h5>
-               <h6 class="text-secondary">Payment Method : {{singleOrder.address.payment}}</h6>
+<div class="container mt-3">
+    <div class="row singleOrderBorder mt-5" >
+        <div class="pb-3 " >
+            
+           
+                {{#each order.products}}
+                <div class="row">
+                    <div class="col-md-2 pt-2">
+                        <img src="/product-images/{{product.Images.[0]}}.jpg" alt="" width="90%">
+                    </div>
+                    <div class="col-md-5 pt-2">
+                       <h4> {{product.product}}</h4>
+                       <h5 class="text-secondary"> {{product.brand}}</h5>
+                       <h5 >₹{{product.offerPrice}}<span style="text-decoration: line-through;" class="text-secondary ps-2">₹{{product.price}}</span></h5>
+                        <h6>Size : {{size}}</h6>
+                        <h6>Quantity : {{quantity}}</h6>
+                    </div>
+                </div>
+                {{/each}}
+            
+        
         </div>
         <div class="col-md-4">
             
@@ -27,22 +35,22 @@
         </div>
     </div>
     <div class="row singleOrderBorder mt-3">
-        <div class="col-md-4 ms-2 pb-2">
+        <div class="col-md-4 ps-2 pb-2">
             <h4 class=" mt-2">Delivery Address</h4>
-            <h6>{{singleOrder.address.name}}</h6>
-            <p class="text-secondary mb-0">{{singleOrder.address.address}}</p>
-            <p class="text-secondary mb-0">{{singleOrder.address.town}}</p>
-            <p class="text-secondary mb-0">{{singleOrder.address.state}}</p>
-            <p class="text-secondary mb-0">{{singleOrder.address.pincode}}</p>
-            <p class="text-secondary mb-0">{{singleOrder.address.phone}}</p>
-            <p class="text-secondary mb-0">{{singleOrder.address.email}}</p>
+            <h6>{{order.Address.name}}</h6>
+            <p class="text-secondary mb-0">{{order.Address.address}}</p>
+            <p class="text-secondary mb-0">{{order.Address.town}}</p>
+            <p class="text-secondary mb-0">{{order.Address.state}}</p>
+            <p class="text-secondary mb-0">{{order.Address.pincode}}</p>
+            <p class="text-secondary mb-0">{{order.Address.phone}}</p>
+            <p class="text-secondary mb-0">{{order.Address.email}}</p>
          
         </div>
         <div class=" col-md-4 ">
             <h5 class="text-secondary mb-5 mt-3">More Actions</h5>
             <a href="" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
         </div>
-        <div class="col-md-3 d-flex " style="align-items: center;">
+        <div class="col-md-3 d-flex mt-5  mt-md-0" style="align-items: center;">
             <p class="text-secondary">Need Help ? <span class="text-dark"><a href="">Contact us</a></span></p>
         </div>
     </div>

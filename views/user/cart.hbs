@@ -1,76 +1,110 @@
 {{#if total}}
-<div class="container">
+
+
+<link rel="stylesheet" href="/stylesheets/cart.css">
+
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-8 "> 
-            {{#each products}}
-            <div class="container p-3 bcontent mt-3">
-                <div class="card ps-3 border">
-                    <div class="row ">
-                        <div class="col-md-3 p-2">
-                            <img src="/product-images/{{product.Images.[1]}}.jpg" alt=""
-                                style="width: 200px;">
-                        </div>
-                       
-                        <div class="col-md-9 mt-2">
+        <div class="col-md-10 col-11 mx-auto">
+            <div class="row mt-5 gx-3">
+                
 
-                            <h3 class="mb-0 pb-1">{{product.product}}</h3>
-                            <p class="mb-0 pb-1 text-secondary">{{product.brand}}</p>
-                            <p class="mb-0 pb-1 text-secondary">SIZE : {{size}} </p>
-                            <p class="mb-0 pb-1 text-secondary" style="text-decoration: line-through;">{{product.price}}</p>
-                            <p class="mb-0 pb-1">₹ {{product.offerPrice}}</p>
-                            <p  id="" class="{{@index}}" value="" hidden>{{product.stock}}</p>
-                            <div class="d-flex mt-2">
-                                <button id="minusbtn" href=""
-                                    class="plus-btn text-white ps-3 pe-3 pt-1 pb-1 bg-dark me-2"
-                                    onclick="changeQuantity('{{_id}}','{{product._id}}',-1,{{@index}},'{{product.product}}','{{size}}')">-</button>
-                                <input type="text" name="" id="{{product._id}}{{size}}"
-                                    style="width: 30px;text-align: center; border: none;" value="{{quantity}}" readonly>
-                                <button href="" class="plus-btn text-white ps-3 pe-3 pt-1 pb-1 bg-dark ms-2 " id="{{@index}}"
-                                    onclick="changeQuantity('{{_id}}','{{product._id}}',1,'{{@index}}','{{product.product}}','{{size}}')">+</button>
+                <div class="col-md-12 col-lg-8 col-11 mx-auto mb-lg-0 mb-5">
+                    {{#each products}}
+                    <div class="card p-4 border">
+                        
+                        <div class="row">
+                            <div class="col-md-5 col-11 mx-auto bg-light d-flex justify-content-center align-items-center shadow product_img">
+                                <img src="/product-images/{{product.Images.[1]}}.jpg" alt="" class="img-fluid" width="50%">
                             </div>
-                            
-                            <div class="pt-2 mt-4">
-                                <a style="cursor: pointer;" onclick="removeProduct('{{_id}}','{{product._id}}','{{size}}')" class="bg-dark text-white pt-2 pb-2 ps-3 pe-3 ">Remove</a>
+                            {{!-- product data --}}
+                            <div class="col-md-7 col-11 mx-auto px-4 mt-2 ">
+                                <div class="row">
+                                    <div class="col-6 cart-title">
+                                        <h4 class="mb-4 product_name">{{product.product}}</h4>
+                                        <p class="mb-2">Brand : {{product.brand}} </p>
+                                        <p class="mb-2">Size :{{size}} </p>
+                                        {{!-- <p class="mb-2">Price : </p> --}}
+                                    </div>
+                                    <div class="col-6">
+                                       
+                                            <ul class="pagination justify-content-end set_quantity">
+                                               <p  id="" class="{{@index}}" value="" hidden>{{product.stock}}</p>
+                                                <li class="page-item">  
+                                                    <button class="page-link" id="" onclick="changeQuantity('{{_id}}','{{product._id}}',-1,'{{@index}}','{{product.product}}','{{size}}')"><i class="fa-solid fa-minus"></i></button>
+                                                </li>
+                                                <li class="page-item">
+                                                    <button class="page-link"  id="{{product._id}}{{size}}" >{{quantity}}</button>
+                                                </li>
+                                                <li class="page-item">
+                                                    <button id="{{@index}}" onclick="changeQuantity('{{_id}}','{{product._id}}',1,'{{@index}}','{{product.product}}','{{size}}')" class="page-link" ><i class="fa-solid fa-plus"></i></button>
+                                                </li>
+                                               
+                                            </ul>
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div onclick="removeProduct('{{_id}}','{{product._id}}','{{size}}')" class="col-8 d-flex justify-content-between remove-wish">
+                                        <p><i class="fa-solid fa-trash-can"></i> Remove from cart</p>
+                                    </div>
+                                    <div class="col-4 d-flex justify-content-end price_money">
+                                    <h3>₹{{product.offerPrice}}</h3>
+                                    </div>
+                                </div>
                             </div>
-
-
                         </div>
+
                     </div>
-                </div>
-            </div>
-            {{/each}}
-        </div>
-        <div class=" col-md-4 mt-4" style="">
-            <div class="shadow-box mt-2" style="position: fixed; width: 30%;">
-                <div class="pt-3 ps-3 pe-3 pb-4">
-                    <h2>Order Summary</h2>
-                    <hr class="" style="height: 2px; background-color: black; color: black;">
+                     {{/each}}
 
-                    <h5 >Subtotal : ₹<span id="subT">{{total.total}}</span></h5>
-                    {{#if total.delivery}}
-                    <h5>Delivery Charge : ₹{{total.delivery}} </h5>
-                    {{else}}
-                     <h5>Delivery Charge : Free </h5>
-                    {{/if}}
-                    
-                    
-                    <h5>Discount : <span id="disc">{{total.disc}}</span>%</h5>
-                    <h5>Total : ₹<span id="disT">{{total.disTotal}}</span></h5>
-                    <p id="msg" class="text-danger"></p>
                 </div>
-                <div style="width: 100%;" class="bg-dark text-light text-center pt-1 pb-1">
+                <div class="col-md-12 col-lg-4 col-11 mt-lg-0 mt-md-5 mx-auto">
+                        <div class="right-side p-3 shadow bg-white">
+                            <h2 class="product_name mb-5 ">Order Summary</h2>
+                        
+                       
+                       
+                        <div class="total-amt d-flex justify-content-between font-weight-bold">
+                            <p>Sub Total : </p>
+                            <p>₹<span id="subT">{{total.total}}</p>
+                        
+                        </div>
+                        <div class="total-amt d-flex justify-content-between font-weight-bold">
+                            <p>Discount : </p>
+                            <p><span id="disc">{{total.disc}}</span>%</p>
+                        
+                        </div>
+                        <div class="total-amt d-flex justify-content-between font-weight-bold">
+                            <p>Total : </p>
+                           
+                        <p>₹<span id="disT">{{total.disTotal}}</span></p>
+                        </div>
+                        <p id="msg" class="text-danger"></p>
+                        <div style="width: 100%;" class="bg-dark text-light text-center pt-1 pb-1">
                     <a href="/place-order" style="text-decoration: none;" class="text-light fs-4">Place Order</a>
                 </div>
+                        </div>
+                    </div>
+
             </div>
         </div>
     </div>
 </div>
+<style>
+    .pagination .page-link:focus{
+        box-shadow: none;
+        outline: none;
+    }
+</style>
+
 
 <script>
     
     
     function changeQuantity(cart,product,count,index,productName,size){
-        let quantity=parseInt(document.getElementById(product+size).value)
+        
+        let quantity=parseInt(document.getElementById(product+size).innerHTML)
         
        
             let  stock=document.getElementsByClassName(index)[0].innerHTML
@@ -105,7 +139,7 @@
                     alert("Product Removed From The Cart")
                     location.reload()
                 }else{
-                     document.getElementById(product+size).value = quantity + count
+                     document.getElementById(product+size).innerHTML = quantity + count
                      document.getElementById('subT').innerHTML= response.total.total
                      document.getElementById('disT').innerHTML= response.total.disTotal
                      document.getElementById('disc').innerHTML= response.disc
@@ -136,4 +170,9 @@
         })
     }
 </script>
+{{else}}
+<section class="no-cart d-flex justify-content-center align-items-end" style="width: 100%; height: 70vh;">
+<h3 class="text-danger">Oops! Your cart is empty!</h3>
+
+</section>
 {{/if}}

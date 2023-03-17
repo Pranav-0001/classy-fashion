@@ -55,14 +55,16 @@ module.exports={
                 email:userData.email,
                 gender:userData.gender,
                 password:userData.password,
-                status:true
+                status:true,
+                wallet:parseInt(0)
             }
             user.insertOne(userData).then((d)=>{
-                console.log(d);
+                req.session.user = req.body
+                req.session.user._id=d.insertedId
+            res.redirect('/')
             })
            
-            req.session.user = req.body
-            res.redirect('/')
+            
 
         }
     },
@@ -221,13 +223,14 @@ module.exports={
             cartCount=await cartCout(req.session.user._id) 
         }
         res.render('user/index', { user:req.session.user, products, cartCount });
-
     },
+
     userProfile:async(req,res)=>{
         let userId=req.session.user._id
         let userData=await user.findOne({_id:ObjectId(userId)})
         res.render('user/profile', { user: req.session.user ,userData })
     },
+
     updateUserData:async(req,res)=>{
         let userData=req.body
         let userId=req.session.user._id
@@ -237,6 +240,7 @@ module.exports={
         }})
         res.redirect('/profile')
     },
+
     changePassword:(req,res)=>{
         let upass=req.session.pass
         let response=req.session.res

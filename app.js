@@ -9,6 +9,7 @@ var adminRouter = require('./routes/admin');
 var db=require('./config/connection')
 var session=require('express-session')
 const fileUpload=require('express-fileupload')
+const nocache=require('nocache')
 
 var app = express();
 
@@ -22,6 +23,7 @@ app.use(fileUpload({
   useTempFiles:true,
   tempFileDir:'/temp/'
 }))
+app.use(nocache())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

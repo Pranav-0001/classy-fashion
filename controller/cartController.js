@@ -105,6 +105,8 @@ module.exports={
         ]).toArray()
 
         res.render('user/cart', { user: req.session.user, products, cartCount,total })
+        req.session.address = null
+        req.session.coupApply = null
     },
     addToCart:async(req,res)=>{
         let proId = req.params.id

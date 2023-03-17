@@ -655,3 +655,10 @@ a:hover{
   border-radius: 15px;
   
 }
+.no-cart{
+  background-image: url(/images/empty.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 50vh;
+  
+}

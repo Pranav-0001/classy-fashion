@@ -1,49 +1,35 @@
+<br>
+<div class="head-img d-flex align-items-center justify-content-center ">
+    <h1 class=" text-white " style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Orders</h1>
+</div>
 <section>
-    <div class="container mt-3 " >
-    <div class="row pt-4 pb-4">
-        <div class="col-md-12">
-            {{#each orderData}}
-             {{#each products}}
-            <div class="row outer-box-orders mb-3" onclick="window.location.href='/orderItem/{{../_id}}/{{product._id}}/{{@index}}'">
-                <div class="col-md-2">
-                    <img src="/product-images/{{product.Images.[1]}}.jpg" alt="" width="85%">
-                </div>
-                <div class="col-md-10">
-                    {{#if (eq ../orderStatus "userCancelPending")}}
-                    <b class="text-success fs-5"><i class="fa-solid fa-hourglass-start  text-warning"></i>Processing Cancel </b>
-                    {{else}}
-                    {{#if (eq ../orderStatus "adminAcceptCancel")}}
-                    <b class="text-danger fs-5"><i class="fa-solid fa-ban  me-1  text-danger "></i>Order Cancelled</b>
-                    {{else}}
-                    <b class="text-success fs-5">Arriving today </b>
-                    {{/if}}
-                    {{/if}}
-                   
-                    <h3>{{product.product}}</h3>
-                    <h5 class="text-secondary">{{product.brand}}</h5>
-                    <h6 class="text-secondary">Size : {{size}}</h6>
-                    <div class="d-flex">
-                      <h6 class="text-secondary pe-3" style="text-decoration: line-through;">₹{{product.price}}</h6>
-                    <h6>₹{{product.offerPrice}}</h6>  
-                    
+    <div class="container mt-3 ">
+        <div class="row pt-4 pb-4">
+            <div class="col-md-12">
+                {{#each orderData}}
+                <div class="card border mb-3 ">
+                    <div class="row">
+                        <h6 class="ms-2 pt-2 text-success">Arriving Today</h6>
+                        <div class="col-md-4">
+                            {{#each products}}
+                            <div class="ps-2 pb-2">
+                                <img class="pb-1 pt-1 pe-2" src="/product-images/{{product.Images.[0]}}.jpg" alt="" width="70px">{{product.product}} ({{quantity}})
+                            </div>
+                            {{/each}}
+                        </div>
+                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                            Amount : ₹{{discTotal}}
+                        </div>
+                        <div class="col-md-4 d-flex align-items-center justify-content-center">
+                            Date : {{Address.date}}
+                        </div>
+                        <div class="col-md-2 pb-3 pb-md-0 d-flex align-items-center justify-content-center">
+                            <a href="/order/{{_id}}" class="btn btn-primary text-white">View Details</a>
+                        </div>
+
                     </div>
                     
-                    {{#if (eq ../orderStatus "userCancelPending")}}
-                   
-                    {{else}}
-                     {{#if (eq ../orderStatus "adminAcceptCancel")}}
-                     
-                     {{else}}
-                    
-                    <a href="/cancel-order/{{../_id}}" class="btn btn-danger float-end mb-4">Cancel Order</a>
-                    {{/if}}
-                    {{/if}} 
-                </div>
+                </div>{{/each}}
             </div>
-            {{/each}}
-            {{/each}}
-       
         </div>
-    </div>
-</div>
 </section>

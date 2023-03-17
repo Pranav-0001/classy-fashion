@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300&family=Ubuntu:wght@300;400&display=swap');
+hr{
+    background-color: black;
+}
+*{
+    font-family: 'Mulish', sans-serif;
+}
+:root{
+    --text-clr:#4f4f4f
+}
+p{
+    color: #6c757d;
+}
+a{
+    text-decoration: none;
+    color: var(--text-clr);
+}
+a:hover{
+    text-decoration: none;
+    color: var(--text-clr);
+}
+h2{
+    color: var(--text-clr);
+    font-size: 1.5rem; 
+}
+
+.main-cart{
+    background: #fff;
+}
