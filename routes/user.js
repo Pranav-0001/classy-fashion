@@ -96,4 +96,8 @@ router.get('/remove-from-wishlist/:id',verifyLogin,userController.removeWishlist
 
 router.post('/coupon-apply',verifyLogin,orderController.applyCoupon)
 
+router.post('/use-wallet',verifyLogin,orderController.useWallet)
+
+router.post('/disable-wallet',verifyLogin,orderController.disableWallet)
+
 module.exports = router;   

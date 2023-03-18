@@ -290,6 +290,9 @@ module.exports = {
             })
             
         }
+    },
+    bannerImage:async(req,res)=>{
+        res.render('admin/banner',{admin:req.session.admin}) 
     }
 
 }

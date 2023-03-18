@@ -80,5 +80,7 @@ router.get('/coupons',verifyLogin,adminController.couponsGet)
 router.get('/add-coupon',verifyLogin,adminController.addCoupon)
 router.post('/add-coupon',verifyLogin,adminController.addCouponPost)
 
+router.get('/banner-image',verifyLogin,adminController.bannerImage)
+
 module.exports = router;
   

@@ -116,14 +116,18 @@ module.exports={
         let coupons= await couponCollection.find().toArray()
         let coupApply=req.session.coupApply
         let coupValidErr=req.session.coupNotValid
+        let userData= await userCollection.findOne({_id:ObjectId(user._id)})
         let appliedCoupon={}
         if(coupApply){
             totalPrice.disTotal=coupApply.coupDisTotal
             appliedCoupon.name=coupApply.couponName,
             appliedCoupon.coupSave=coupApply.coupDiscount
         }
-
-        console.log('coupon applied',coupApply);
+        let walletAmt=req.session.walletAmt
+        if(walletAmt){
+            totalPrice.disTotal= (totalPrice.disTotal)-parseInt(walletAmt)
+        }
+        
         coupons.forEach((coup)=>{
             let exp=new Date(coup.expiry)
             let today=new Date()
@@ -134,7 +138,7 @@ module.exports={
             }
         })
         console.log(coupons);
-        res.render('user/placeOrder', { totalPrice, user, Err, address ,cartCount ,cartProducts,coupons,appliedCoupon,coupValidErr })
+        res.render('user/placeOrder', { totalPrice, user, Err, address ,cartCount ,cartProducts,coupons,appliedCoupon,coupValidErr,userData,walletAmt })
         
         req.session.placeOrderErr = null
         
@@ -161,6 +165,7 @@ module.exports={
             appliedCoupon.name=coupApply.couponName,
             appliedCoupon.coupSave=coupApply.coupDiscount
         }
+        
         console.log("pay",paymentMethod);
             for(i=0;i<proCount;i++){
                 let produId=cartProducts[i].item
@@ -208,11 +213,31 @@ module.exports={
            if(paymentMethod=='cash'){
                orderCollection.insertOne(OrderObj).then((response) => {
                    cartCollection.deleteOne({ user: ObjectId(userId) }).then(() => {
+                       let walletAmt = req.session.walletAmt
+                       if (walletAmt) {
+                           userCollection.updateOne({ _id: ObjectId(userId) }, { $set: { wallet: 0 } })
+                       }
                     res.json({COD:true})
+
                    })
                })
                
-           }else{
+           }
+           else if (paymentMethod == 'wallet') {
+            let amt=-(totalPrice.disTotal)
+            userCollection.updateOne({_id:ObjectId(userId)},{$inc:{wallet:amt}})
+            orderCollection.insertOne(OrderObj).then((response) => {
+                cartCollection.deleteOne({ user: ObjectId(userId) }).then(() => {
+                 res.json({COD:true})
+                })
+            })
+           }
+           
+           else{
+            let walletAmt = req.session.walletAmt
+            if (walletAmt) {
+                totalPrice.disTotal = (totalPrice.disTotal) - parseInt(walletAmt)
+            }
             let order_id = uuid.v4()
             var options ={
                 amount: totalPrice.disTotal*100,
@@ -260,6 +285,11 @@ module.exports={
                 appliedCoupon.name = coupApply.couponName,
                 appliedCoupon.coupSave = coupApply.coupDiscount
             }
+            let walletAmt = req.session.walletAmt
+            if (walletAmt) {
+                userCollection.updateOne({_id:ObjectId(userId)},{$set:{wallet:0}})
+            }
+            
             let OrderObj={
                 Address:{
                    name:orderData.fname+' '+orderData.lname,
@@ -421,6 +451,19 @@ module.exports={
             res.json({invalid:true})
         }
         
+    },
+    useWallet:async(req,res)=>{
+        console.log("calll");
+        let userId=req.session.user._id
+        let user=await userCollection.findOne({_id:ObjectId(userId)})
+        let walletAmt=user.wallet
+        req.session.walletAmt=walletAmt
+        
+        res.json({})
+    },
+    disableWallet:(req,res)=>{
+        req.session.walletAmt=null
+        res.json({})
     }
 }
 

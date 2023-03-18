@@ -85,6 +85,16 @@
                                 </tr>
                             </tbody>
                         </table>
+
+                        {{#if (gt totalPrice.disTotal userData.wallet)}} 
+                        {{#if (gt userData.wallet 0)}}
+                        <div class="py-2 d-flex align-items-center j">
+                            <label for="">Use Wallet (Balance : ₹{{userData.wallet}})</label> <input class="ms-3" id="usewallet" style=" width: 25px; height: 25px;" onclick="useWallet()" type="checkbox" name="" id="" {{#if walletAmt}} checked {{/if}}>
+                        </div>
+                        {{/if}}
+                        {{/if}}
+                        
+                        
                         <div class="d-flex" style="align-items: center;">
                             <input type="radio" class="payment pt-3 me-2" name="payment" value="cash"
                                 style="width: 20px; height: 20px;" checked> Cash On Delivery
@@ -92,6 +102,11 @@
                         <div class="d-flex mt-2 mb-3" style="align-items: center;">
                             <input type="radio" class="payment pt-3 me-2" name="payment" value="online"
                                 style="width: 20px; height: 20px;"> Online Payment
+                        </div>
+                        <div class="d-flex mt-2 mb-3" style="align-items: center;">
+
+                            <input type="radio" class="payment pt-3 me-2" name="payment" value="wallet" {{#if (gt totalPrice.disTotal userData.wallet)}} disabled{{/if}}
+                                style="width: 20px; height: 20px;"> Wallet payment   {{#if (gt totalPrice.disTotal userData.wallet)}} <span class="text-danger ps-2"> (Insufficiant Balance)</span> {{else}} (Balance : ₹{{userData.wallet}}) {{/if}}
                         </div>
                         <p class="text-danger" id="placeOrderErr">{{Err}}</p>
                         <div class="d-flex" style="justify-content: center;">
@@ -143,7 +158,7 @@
                     <div class="info m-3 d-flex align-items-center">
                         <div class="w-100 d-flex align-items-center">
                            {{#if (eq status 'Valid')}}
-                            <a  onclick="copy('{{coupon}}')"  class="btn btn-sm btn-outline-primary btn-block">
+                            <a id="{{coupon}}"  onclick="copy('{{coupon}}')"  class="btn btn-sm btn-outline-primary btn-block">
                                 copy
                             </a>
                               {{else}}
@@ -258,19 +273,36 @@
         document.getElementById('cop-box').style.display='none'
     }
     function copy(cop){
-
+        document.getElementById(cop).innerHTML="Copied"
         console.log(cop)
         navigator.clipboard.writeText(cop);
-        Swal.fire({
-  
-  
-  title: 'Code copied',
-  showConfirmButton: false,
-  timer: 500
-})
-        document.getElementById('cop-overlay').style.display='none'
-        document.getElementById('cop-box').style.display='none'
 
+       
+
+    }
+
+    function useWallet(){
+        let wallet=document.getElementById('usewallet')
+        
+        if(wallet.checked==true){
+            
+            $.ajax({
+                url:'/use-wallet',
+                method:'POST',
+                success:(response)=>{
+                        location.reload()
+                }
+            })
+        }else{
+            console.log('false')
+            $.ajax({
+                url:'/disable-wallet',
+                method:'POST',
+                success:(response)=>{
+                        location.reload()
+                }
+            })
+        }
     }
 
 </script> 
