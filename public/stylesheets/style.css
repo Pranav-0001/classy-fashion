@@ -637,7 +637,7 @@ a:hover{
   top: 45%;
   left: 50%;
   transform: translate(-50%,-50%);
-  width: 30vw;
+  min-width: 30vw;
   max-height: 50vh;
   z-index: 1;
   background-color: #dedede;

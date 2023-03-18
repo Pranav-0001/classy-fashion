@@ -81,6 +81,8 @@ function userSignUp(){
     let passwordRegx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/gm
     let usernameRegx = /^([A-Za-z_]){4,12}$/gm
     let phoneRegx = /^([0-9]){10}$/gm
+
+    console.log(email);
     if(username==''){
         document.getElementById('signupErr').innerHTML="Username field required"
         return false

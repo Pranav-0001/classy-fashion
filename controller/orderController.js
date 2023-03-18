@@ -336,7 +336,7 @@ module.exports={
         let orderId = req.params.id
         orderId = ObjectId(orderId)
         let order = await orderCollection.findOne({ _id: orderId })
-        res.render('admin/order-details',{order})
+        res.render('admin/order-details',{order,admin:req.session.admin})
     },
     changeOrderStatus:(req,res)=>{
         let orderId=req.params.id
@@ -347,11 +347,19 @@ module.exports={
         orderCollection.updateOne({_id:ObjectId(orderId)},{$set:{orderStatus:status.status}})
         res.redirect('/admin/orderdetails/'+req.params.id)
     },
-    orderCancelRequest:(req,res)=>{
+    orderCancelRequest:async(req,res)=>{
         let status=req.params.set
 
         let id=req.params.id
         if(status=='true'){
+            let orderData=await orderCollection.findOne({_id:ObjectId(id)})
+            let userId=orderData.userId
+            let amount=parseInt(orderData.discTotal)
+            console.log(userId,amount);
+            if(orderData.paymentStatus=="Paid"){
+                userCollection.updateOne({_id:userId},{$set:{wallet:amount}})
+                userCollection.updateOne({_id:userId},{$set:{paymentStatus:"refunded"}})
+            }
           orderCollection.updateOne({_id:ObjectId(id)},{$set:{orderStatus:"adminAcceptCancel"}}).then(()=>{
             res.redirect('/admin/all-orders')
           })

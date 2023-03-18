@@ -1,4 +1,4 @@
-<div class="head-img d-flex align-items-center justify-content-center">
+{{!-- <div class="head-img d-flex align-items-center justify-content-center">
     <h1 class="text-center text-white ">Admin Login</h1>
 </div>
 <div class="container mt-2 mt-5 pt-5">
@@ -21,5 +21,42 @@
 
             </div>
         </form>
+    </div>
+</div> --}}
+
+<link rel="stylesheet" href="/stylesheets/login.css">
+<div>
+    <div class="wrapper">
+        <div class="container main">
+            <div class="row">
+                <div class="col-md-6 side-image">
+
+
+                    <div class="text">
+                        <p class="d-none d-md-block">"Style is a way to say who you are without having to speak." <i> — Rachel Zoe</i></p>
+                    </div>
+                </div>
+                <div class="col-md-6 right">
+                    <div class="input-box">
+                        <header>Admin Login</header>
+                        <form action="/admin/login" method="post" class="p-3">
+                        <div class="input-field">
+                            <input type="text" class="input" name="email" id="email" required autocomplete="off">
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="password" class="input" name="password" id="password" required>
+                            <label for="password">Password</label>
+                        </div>
+                        <p class="text-danger">{{err}}</p>
+                        <div class="input-field">
+                            <input type="submit" class="submit" value="Sign In ">
+
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

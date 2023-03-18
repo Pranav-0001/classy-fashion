@@ -1,4 +1,4 @@
-<div class="head-img">
+{{!-- <div class="head-img">
     <h1 class="text-center text-dark ">Log in</h1>
 </div>
 <div class="container mt-2">
@@ -28,6 +28,62 @@
             <p class="text-danger text-center">{{invalid}}</p>
         </form>
         {{/if}}
+    </div>
+</div> --}}
+
+
+<link rel="stylesheet" href="/stylesheets/login.css">
+<div>
+    <div class="wrapper">
+        <div class="container main">
+            <div class="row">
+                <div class="col-md-6 side-image">
+
+
+                    <div class="text">
+                        <p class="d-none d-md-block">"Style is a way to say who you are without having to speak." <i> — Rachel Zoe</i></p>
+                    </div>
+                </div>
+                <div class="col-md-6 right">
+                    <div class="input-box">
+                        <header>Login</header>
+                       
+                        <form action="/sent-otp" method="post">
+                        <div class="input-field">
+                            <input type="text" class="input" name="email" id="email" required autocomplete="off" value="{{data.email}}">
+                            <label for="email">Email</label>
+                            {{#if otp}}{{else}}
+                            <div class="input-field">
+                            <input type="submit" class="submit" value="Sent OTP">
+                        </div>
+                            {{/if}}
+                        </div>
+                        </form>
+                        <p class="text-danger text-center">{{err}}</p>
+                        {{#if otp}}
+                        <form action="/otp-login" method="post">
+                        <div class="input-field">
+                            <input type="number" class="input" name="otp" id="email" required autocomplete="off">
+                            <label for="email">One Time Password</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="submit" class="submit" value="Sign in">
+                        </div>
+                        </form>
+                        {{/if}}
+                     
+                        
+                        <div class="signin">
+                           
+                            
+                            <span>Don't have an account? <a href="/signup">Sign up here</a></span><br>
+                            <a href="/" class="text-center">Home</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

@@ -34,7 +34,7 @@ module.exports={
         if (user) {
             res.redirect('/')
           } else {
-            res.render('user/signup', { Err, signData })
+            res.render('user/signup', { Err, signData ,login:true })
             req.session.signupErr = null
             req.session.signupData = null
           }
@@ -75,7 +75,7 @@ module.exports={
        if (userExist) {
         res.redirect('/')
       } else {
-        res.render('user/login', { Err, data })
+        res.render('user/login', { Err, data,login:true })
         req.session.loginErr = null
         req.session.loginData = null
       }
@@ -137,7 +137,7 @@ module.exports={
             data = req.session.otpData
             err = req.session.otpErr
             invalid = req.session.InvalidOtp
-            res.render('user/otp-login', { otp, data, err, invalid })
+            res.render('user/otp-login', { otp, data, err, invalid ,login:true })
             req.session.otpErr = null
         }
     },

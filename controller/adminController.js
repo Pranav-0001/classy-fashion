@@ -40,7 +40,7 @@ module.exports = {
             res.redirect('/admin')
         } else {
             err = req.session.adminLoginErr
-            res.render('admin/login', { err })
+            res.render('admin/login', { err ,login:true})
             req.session.adminLoginErr = null
         }
     },

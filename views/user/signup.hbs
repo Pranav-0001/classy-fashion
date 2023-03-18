@@ -1,4 +1,4 @@
-<div class="head-img">
+{{!-- <div class="head-img">
     <h1 class="text-center text-dark pt-5">Sign Up</h1>
 </div>
 <div class="container mt-2">
@@ -48,4 +48,69 @@
             </form>
         </div>
     </div>
-</div>
+</div> --}}
+
+
+{{!-- new --}}
+
+
+<link rel="stylesheet" href="/stylesheets/signUp.css">
+
+    <div class="wrapper ">
+        <div class="container main">
+            <div class="row mt-3 mt-md-0">
+                <div class="col-md-6 d-none d-md-block side-image">
+                    <!-------Image-------->
+                    <img src="images/white.png" alt="">
+                    <div class="text">
+                        <p class="d-none d-md-block">"Style is a way to say who you are without having to speak." <i> — Rachel Zoe</i></p>
+                    </div>
+                </div>
+                <div class="col-md-6 right " > 
+                     <div class="input-box">
+                        <header>Create account</header>
+                        <form name="signup" onsubmit="return userSignUp()" action="/signup" method="post">
+                        <div class="input-field">
+                            <input type="text" class="input" name="username"  autocomplete="off">
+                            <label for="username">Username</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" class="input" name="email"  autocomplete="off">
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="number" class="input" name="phone"  autocomplete="off">
+                            <label for="email">Phone</label>
+                        </div>
+                        <div class="input-field pb-4">
+                            <select name="gender" style="border: none;" id="">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div class="input-field">
+                            <input type="password" class="input" name="password" >
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="password" class="input" name="repassword" >
+                            <label for="password">Confirm Password</label>
+                        </div>
+                        <p class="text-danger" id="signupErr">{{Err}}</p>
+                        <div class="input-field">
+                            <input type="submit" class="submit" value="Sign Up">
+                            
+                        </div>
+                        </form>
+                        <div class="signin">
+                            <span>Already have an account? <a href="/login">Log in here</a></span><br>
+                            <a href="/" class="text-center">Home</a>
+                            
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
