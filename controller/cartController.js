@@ -59,7 +59,7 @@ function getCartTotal(userId){
 
 module.exports={
     cart: async (req, res) => {
-        
+        req.session.walletAmt=null
         let user = req.session.user
         let userId=req.session.user._id
         let cartCount = await CartCount(userId)

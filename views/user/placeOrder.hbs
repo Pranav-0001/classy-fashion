@@ -40,10 +40,14 @@
                     <h5 class="ms-3 mt-3 pb-2">Coupon</h5>
                     <div class="d-flex mt-2 justify-content-center pb-2">
                         <input type="text" class=" plc-inp" style="" id="coup" value="{{appliedCoupon.name}}">
+                        {{#if appliedCoupon.name}}
+                        <a href="/remove-coupon" class="pb-2 px-2 text-white" style="height: 33px; border: none;background-color: black;">Remove</a>
+                        {{else}}
                         <a onclick="couponApply()"  class="pb-2 px-2 text-white" style="height: 33px; border: none;background-color: black;">Apply</a>
+                        {{/if}}
                     </div>
                     <p class="text-danger ms-4" id="coupErr">{{coupValidErr}}</p>
-                    <a class="ms-3 pb-3" onclick="couponOverlay()">Available Coupons</a>
+                    <a class="ms-3 pb-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Available Coupons</a>
                     
                 </div>
                 <div class="border" style="width: 100%;">
@@ -87,11 +91,11 @@
                         </table>
 
                         {{#if (gt totalPrice.disTotal userData.wallet)}} 
-                        {{#if (gt userData.wallet 0)}}
+                        
                         <div class="py-2 d-flex align-items-center j">
                             <label for="">Use Wallet (Balance : ₹{{userData.wallet}})</label> <input class="ms-3" id="usewallet" style=" width: 25px; height: 25px;" onclick="useWallet()" type="checkbox" name="" id="" {{#if walletAmt}} checked {{/if}}>
                         </div>
-                        {{/if}}
+                        
                         {{/if}}
                         
                         
@@ -121,11 +125,92 @@
         </div>
     </form>
     </div>
+    
 
 </div>
 <div id="cop-overlay" onclick="closeCouponOverlay()" class="coupon-overlay">
 
 </div>
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Coupons</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body " style="background-color: #dedede;">
+       {{#each coupons}}
+       {{#if (eq status 'Valid')}}
+      
+    <div class="row ">
+        <div class="col-md-12">
+            <div class="coupon bg-white rounded mb-3 d-flex justify-content-between">
+                <div class="kiri p-3">
+                    
+                </div>
+                
+                <div class="tengah py-3 d-flex w-100 justify-content-start">
+                    
+                    <div>
+                      <h5 class="mb-0">{{coupon}}</h5>
+                      {{#if (eq disType "percentage")}}
+                      <p class="mb-0">{{discount}}% Off</p>
+                      {{else}}
+                      <p class="pb-0 mb-0">₹{{discount}} instant discount</p>
+                      {{/if}}
+                      {{#if (eq status 'Valid')}}
+                       <p class="pt-0 mt-0 pb-0 mb-0">Valid till : {{expiry}}</p>
+                       {{else}}
+                       <p class="pt-0 mt-0 text-danger">Invalid</p>
+                       {{/if}}
+                       <p class="text-danger pb-0 mb-0">Minimum requiments</p>
+                       <div class="d-flex justify-content-between">
+                        <small class="">Minimum Items : {{minItems}} </small>
+                         <small class="ms-2">Minimum Amount : {{minAmount}} </small>
+                       </div>
+                       
+                    </div>
+                </div>
+                <div class="kanan">
+                    <div class="info m-3 d-flex align-items-center">
+                        <div class="w-100 d-flex align-items-center">
+                           {{#if (eq status 'Valid')}}
+                            <a id="{{coupon}}"  onclick="copy('{{coupon}}')"  class="btn btn-sm btn-outline-primary btn-block">
+                                copy
+                            </a>
+                              {{else}}
+                              <p class="pt-0 mt-0 text-danger">Expired</p>
+                       {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    {{/if}}
+    {{/each}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
 <div id="cop-box" class="coupons-box">
 <div class="container ">
     <p  onclick="closeCouponOverlay()" ><i class="fa-solid fa-xmark float-end  fs-4 pe-2"></i></p>

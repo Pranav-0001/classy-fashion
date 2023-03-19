@@ -9,7 +9,15 @@
                 {{#each orderData}}
                 <div class="card border mb-3 ">
                     <div class="row">
-                        <h6 class="ms-2 pt-2 text-success">Arriving Today</h6>
+                        {{#if (eq orderStatus "adminAcceptCancel")}}
+                        <h6 class="ms-2 pt-2 text-danger">Order Cancelled</h6>
+                        {{else}}{{#if (eq orderStatus "userCancelPending")}}
+                        <h6 class="ms-2 pt-2 text-warning">Processing Cancel</h6>
+                        {{else}}
+                        <h6 class="ms-2 pt-2 text-success">{{orderStatus}}</h6>
+                        {{/if}}
+                        {{/if}}
+                        
                         <div class="col-md-4">
                             {{#each products}}
                             <div class="ps-2 pb-2">

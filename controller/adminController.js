@@ -293,6 +293,28 @@ module.exports = {
     },
     bannerImage:async(req,res)=>{
         res.render('admin/banner',{admin:req.session.admin}) 
+    },
+    bannerUpdate:async(req,res)=>{
+        console.log(req.files);
+        if(req.files.mainBanner){
+            let path=req.files.mainBanner.tempFilePath
+            await sharp(path)
+                .rotate()
+                .resize(1920, 720)
+                .jpeg({ mozjpeg: true })
+                .toFile(`./public/Banner-images/banner.jpg`)
+        }
+
+        if(req.files.subBanner){
+            let path=req.files.subBanner.tempFilePath
+            await sharp(path)
+                .rotate()
+                .resize(1148, 568)
+                .jpeg({ mozjpeg: true })
+                .toFile(`./public/Banner-images/banner2.jpg`)
+        }
+
+        res.redirect('/admin/banner-image')
     }
 
 }

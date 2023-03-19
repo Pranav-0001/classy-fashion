@@ -1,83 +1,113 @@
 <div class="container mt-5">
     <div class="row">
-        <div class="col-md-3 d-none d-md-block">
+        <div class="col-md-2 d-none d-md-block border mt-4 mb-4">
             <div class="float-start pt-2" style="height: 100%;">
-                <h4>Categories</h4>
-                <ul style="list-style: none; ">
+                <h4>Filter</h4>
+                {{#if option}}
+                <div class=" d-flex justify-content-start align-items-center">
+                    <p  class="mb-0 mx-0 px-0" id="opt">{{option}} <span ><a href="/disable-filter"><i class="fa-solid fa-xmark text-dark"></i></a></span></p>
+                </div>
+                {{/if}}
+                <div class="ps-3">
+                    <h5>
+                        Categories
+                    </h5>
                     {{#each category}}
-                    <li><a class="cate-list" href="" style="opacity: .75;">{{category}}</a></li>
+                    <a class="cate-list text-secondary" id="{{[]}}" href="/filter/category/{{[]}}" >{{[]}}</a><br>
                     {{/each}}
-                </ul>
+                    <h5 class="pt-4">Brands</h5>
 
-                <h4 class="pt-4">Brands</h4>
-                
-                <ul style="list-style: none; ">
+
                     {{#each brands}}
-                    <li><a class="cate-list" href="" style="opacity: .75;">{{[]}}</a></li>
+                    <a class="cate-list text-secondary" id="{{[]}}" href="/filter/brand/{{[]}}" >{{[]}}</a><br>
                     {{/each}}
-                </ul>
+
+                    <h5 class="pt-4">Brands</h5>
+                   <a class="cate-list text-secondary" id="1000" href="/filter/price/1000">less than 1000</a><br>
+                   <a class="cate-list text-secondary" id="1000-2000" href="/filter/price/1000-2000">1000 - 2000</a><br>
+                   <a class="cate-list text-secondary" id="2000-3000" href="/filter/price/2000-3000">2000 - 3000</a><br>
+                   <a class="cate-list text-secondary" id="3000-4000" href="/filter/price/3000-4000">2000 - 3000</a><br>
+                   <a class="cate-list text-secondary" id="4000-5000" href="/filter/price/4000-5000">2000 - 3000</a><br>
+                   <a class="cate-list text-secondary" id="5000" href="/filter/price/5000">Above 5000</a><br>
+                </div>
+
+
+
+
             </div>
         </div>
         <div class="d-block d-md-none mb-4">
             <div class="btn-group">
-                <button type="button" class="btn-c  dropdown-toggle" data-bs-toggle="dropdown"
-                    data-bs-display="static" aria-expanded="false">
+                <button type="button" class="btn-c  dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static"
+                    aria-expanded="false">
                     Categories
                 </button>
                 <ul class="dropdown-menu dropdown-menu-lg-end">
                     {{#each category}}
-                    <li><a href="" class="dropdown-item" type="button">{{category}}</a></li>
+                    <li><a href="" class="dropdown-item" type="button">{{[]}}</a></li>
                     {{/each}}
-                    
+
                 </ul>
             </div>
         </div>
-        <div class="col-md-9 ">
-            
+        <div class="col-md-10 ">
+
             <div class="row">
 
-            <div class="col-md-12 mb-2">
-                <span  class="float-end">Sort by: <select oninput="sort()" name="" id="sortOption" class="sort-select ">
-                <option value="">Relevance</option>
-                <option value="low" {{#if (eq sort 'low')}} selected {{/if}}>Price low-high</option>
-                <option value="high" {{#if (eq sort 'high')}} selected {{/if}}>Price high-low</option>
-            </select></span>
-            </div>
-            {{#each products}}
-        <div class="col-lg-3 col-6  latest">
-            
-            <div class="card" style="width: 12rem;">
-                <a href="/product/{{_id}}">
-                <img id="img1"  src="/product-images/{{Images.[0]}}.jpg" class="card-img-top" alt="..." onmouseover="this.src='/product-images/{{Images.[1]}}.jpg'" onmouseout="this.src='/product-images/{{Images.[0]}}.jpg'" class="card-img-top'"></a>
-                <a class="" href="/product/{{_id}}">
-                <div class="card-body">
-                    <p class="text-secondary mb-0" style="font-size: 14px;">{{brand}}</p>
-                    <p class="mb-0">{{product}}</p>
-                    <span style="text-decoration: line-through;" class="text-secondary">₹{{price}} </span>  <span> ₹{{offerPrice}}</span>
+                <div class="col-md-12 mb-2">
+                    <span class="float-end">Sort by: <select oninput="sort()" name="" id="sortOption"
+                            class="sort-select ">
+                            <option value="">Relevance</option>
+                            <option value="low" {{#if (eq sort 'low' )}} selected {{/if}}>Price low-high</option>
+                            <option value="high" {{#if (eq sort 'high' )}} selected {{/if}}>Price high-low</option>
+                        </select></span>
+                </div>
+                {{#if products}}
+                {{#each products}}
+                <div class="col-lg-3 col-6  latest">
 
-                </div></a>
+                    <div class="card" style="width: 13rem;">
+                        <a href="/product/{{_id}}">
+                            <img id="img1" src="/product-images/{{Images.[0]}}.jpg" class="card-img-top" alt="..."
+                                onmouseover="this.src='/product-images/{{Images.[1]}}.jpg'"
+                                onmouseout="this.src='/product-images/{{Images.[0]}}.jpg'" class="card-img-top'"></a>
+                        <a class="" href="/product/{{_id}}">
+                            <div class="card-body">
+                                <p class="text-secondary mb-0" style="font-size: 14px;">{{brand}}</p>
+                                <p class="mb-0">{{product}}</p>
+                                <span style="text-decoration: line-through;" class="text-secondary">₹{{price}} </span>
+                                <span> ₹{{offerPrice}}</span>
+
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+
+                {{/each}}
+                {{else}}
+                <h3 class="text-center">No Results Found</h3>
+                {{/if}}
             </div>
-            
         </div>
-       
-        {{/each}} </div>
-        </div>
-        
+
     </div>
 </div>
 
 <script>
-    function sort(){
-        let option=document.getElementById('sortOption').value 
+    function sort() {
+        let option = document.getElementById('sortOption').value
         $.ajax({
-            url:'/select-sort',
-            data:{sortOption:option},
-            method:'post',
-            success:(response)=>{
-                location.href='/shop'
+            url: '/select-sort',
+            data: { sortOption: option },
+            method: 'post',
+            success: (response) => {
+                location.href = '/shop'
             }
 
         })
         console.log(option)
     }
+    let opt=document.getElementById('opt').innerHTML
+    document.getElementById('opt').style.color='black'
 </script>

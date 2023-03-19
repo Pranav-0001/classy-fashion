@@ -82,5 +82,7 @@ router.post('/add-coupon',verifyLogin,adminController.addCouponPost)
 
 router.get('/banner-image',verifyLogin,adminController.bannerImage)
 
+router.post('/update-banner',verifyLogin,adminController.bannerUpdate)
+
 module.exports = router;
   

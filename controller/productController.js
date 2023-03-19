@@ -29,24 +29,101 @@ module.exports={
              cartCount = await CartCount(userId)
         }
         let sort= req.session.sort
+        let filter=req.session.filter
         let products=await productCollection.find().toArray()
-        if(sort=='low'){
+        if(sort && filter){
+            if(sort=='low' && filter?.selection=='category'){
+                let option=filter.option
+                products=await productCollection.find({category:option}).sort({offerPrice:1}).toArray()
+            }else if(sort=='high' && filter?.selection=='category'){
+                let option=filter.option
+                products=await productCollection.find({category:option}).sort({offerPrice:-1}).toArray()
+            }else if(sort=='low' && filter?.selection=='brand'){
+                let option=filter.option
+                products=await productCollection.find({brand:option}).sort({offerPrice:1}).toArray()
+            }else if(sort=='high' && filter?.selection=='brand'){
+                let option=filter.option
+                products=await productCollection.find({brand:option}).sort({offerPrice:-1}).toArray()
+            }else if(sort=='low' && filter?.selection=='price'){
+                let option=filter.option
+                if(option=='1000'){
+                    products=await productCollection.find({offerPrice:{$lt:1000}}).toArray()
+                }else if(option=='1000-2000'){
+                    products=await productCollection.find({$and:[{offerPrice:{$gt:1000}},{offerPrice:{$lt:2000}}]}).sort({offerPrice:1}).toArray()
+                }else if(option=='2000-3000'){
+                    products=await productCollection.find({$and:[{offerPrice:{$gt:2000}},{offerPrice:{$lt:3000}}]}).sort({offerPrice:1}).toArray()
+                }else if(option=='3000-4000'){
+                    products=await productCollection.find({$and:[{offerPrice:{$gt:3000}},{offerPrice:{$lt:4000}}]}).sort({offerPrice:1}).toArray()
+                }else if(option=='4000-5000'){
+                    products=await productCollection.find({$and:[{offerPrice:{$gt:4000}},{offerPrice:{$lt:5000}}]}).sort({offerPrice:1}).toArray()
+                }else if(option=='5000'){
+                    products=await productCollection.find({offerPrice:{$gt:5000}}).sort({offerPrice:1}).toArray()
+                }
+            }else if(sort=='high' && filter?.selection=='price'){
+                let option=filter.option
+                if(option=='1000'){
+                    products=await productCollection.find({offerPrice:{$lt:1000}}).toArray()
+                }else if(option=='1000-2000'){
+                    products=await productCollection.find({$and:[{offerPrice:{$gt:1000}},{offerPrice:{$lt:2000}}]}).sort({offerPrice:-1}).toArray()
+                }else if(option=='2000-3000'){
+                    products=await productCollection.find({$and:[{offerPrice:{$gt:2000}},{offerPrice:{$lt:3000}}]}).sort({offerPrice:-1}).toArray()
+                }else if(option=='3000-4000'){
+                    products=await productCollection.find({$and:[{offerPrice:{$gt:3000}},{offerPrice:{$lt:4000}}]}).sort({offerPrice:-1}).toArray()
+                }else if(option=='4000-5000'){
+                    products=await productCollection.find({$and:[{offerPrice:{$gt:4000}},{offerPrice:{$lt:5000}}]}).sort({offerPrice:-1}).toArray()
+                }else if(option=='5000'){
+                    products=await productCollection.find({offerPrice:{$gt:5000}}).sort({offerPrice:1}).toArray()
+                }
+            }
+
+        }
+        else if(sort=='low'){
             console.log("/shop",sort);
             products=await productCollection.find().sort({offerPrice:1}).toArray()
         }else if(sort=='high'){
             products=await productCollection.find().sort({offerPrice:-1}).toArray()
+        }else if(filter?.selection=='category'){
+            let option=filter.option
+            products=await productCollection.find({category:option}).toArray()
+            
+        }else if(filter?.selection=='brand'){
+            let option=filter.option
+            products=await productCollection.find({brand:option}).toArray()
+        }else if(filter?.selection=='price'){
+            let option=filter.option
+            console.log(option);
+            if(option=='1000'){
+                products=await productCollection.find({offerPrice:{$lt:1000}}).toArray()
+            }else if(option=='1000-2000'){
+                products=await productCollection.find({$and:[{offerPrice:{$gt:1000}},{offerPrice:{$lt:2000}}]}).toArray()
+            }else if(option=='2000-3000'){
+                products=await productCollection.find({$and:[{offerPrice:{$gt:2000}},{offerPrice:{$lt:3000}}]}).toArray()
+            }else if(option=='3000-4000'){
+                products=await productCollection.find({$and:[{offerPrice:{$gt:3000}},{offerPrice:{$lt:4000}}]}).toArray()
+            }else if(option=='4000-5000'){
+                products=await productCollection.find({$and:[{offerPrice:{$gt:4000}},{offerPrice:{$lt:5000}}]}).toArray()
+            }else if(option=='5000'){
+                products=await productCollection.find({offerPrice:{$gt:5000}}).toArray()
+            } 
+            
         }
         
-        let category=await categoryCollection.find().toArray()
+        let category=await productCollection.distinct("category")
         let brands=await productCollection.distinct("brand")
+        let option;
+        if(filter){
+            option=filter.option
+        }
+        
     
-        res.render('user/shop', { products, user, category, brands, cartCount ,sort })
-    },
+        res.render('user/shop', { products, user, category, brands, cartCount ,sort,option })
+       
+    }, 
     singleProduct: async(req,res)=>{
         let user=req.session.user
         let cartCount
         let proId=req.params.id
-        if(user){
+        if(user){ 
             cartCount=await CartCount(user._id)
         }
         let product= await productCollection.findOne({_id:ObjectId(proId)})
@@ -346,6 +423,21 @@ module.exports={
         console.log(search);
         search=search.slice(0,10)
         res.send({payload:search})
+    },
+    filter:(req,res)=>{
+        let selection=req.params.selection
+        let option=req.params.option
+        console.log(selection,option)
+        let filObj={
+            selection:selection,
+            option:option
+        }
+        req.session.filter=filObj
+        res.redirect('/shop')
+    },
+    disableFilter:(req,res)=>{
+        req.session.filter=null
+        res.redirect('/shop')
     }
 
 }

@@ -43,7 +43,7 @@ hb.handlebars.registerHelper('eq', function (a,b) {
  });
 
  hb.handlebars.registerHelper('gt',function(a,b){
-  return a>b;
+  return a>=b;
  })
 // error handler
 app.use(function(err, req, res, next) {

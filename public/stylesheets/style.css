@@ -44,7 +44,7 @@
  
  }
 .banner{
-  background-image: url('/images/banner.jpg');
+  background-image: url('/Banner-images/banner.jpg');
   height: 70vh;
   width: 100%;
   background-repeat: no-repeat;
@@ -105,7 +105,7 @@
   background-image: url('/images/Acces.jpg');
 }
 .home-banner-2{
-  background-image: url("/images/banner2.jpg");
+  background-image: url("/Banner-images/banner2.jpg");
   height: 60vh;
   background-repeat: no-repeat;
   background-size: cover;
@@ -229,7 +229,7 @@ hr{
 }
 .cate-list{
   text-decoration: none;
-  color: black;
+  text-transform: uppercase;
 }
 .cate-list:hover{
   color: black;
@@ -661,4 +661,16 @@ a:hover{
   background-repeat: no-repeat;
   background-size: 50vh;
   
+}
+.track-dot{
+  height: 20px; 
+  width: 20px; 
+  background-color: rgb(255, 149, 0); 
+  border-radius: 15px;
+}
+.track-line{
+  height: 4px; 
+  width: 150px; 
+  background-color: rgb(255, 149, 0); 
+
 }

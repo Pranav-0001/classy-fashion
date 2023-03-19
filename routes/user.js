@@ -100,4 +100,11 @@ router.post('/use-wallet',verifyLogin,orderController.useWallet)
 
 router.post('/disable-wallet',verifyLogin,orderController.disableWallet)
 
+router.get('/filter/:selection/:option',productController.filter)
+
+router.get('/disable-filter',productController.disableFilter)
+router.get('/remove-coupon',verifyLogin,orderController.removeCoupon)
+
+router.get('/edit-address/:id',verifyLogin,userController.editAddress)
+
 module.exports = router;   

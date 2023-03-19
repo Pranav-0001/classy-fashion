@@ -432,5 +432,25 @@ module.exports={
         let userId=req.session.user._id
         wishListCollection.updateOne({userId:ObjectId(userId)},{$pull:{products:{product:ObjectId(proId)}}})
         res.redirect('/wishlist')
+    },
+    editAddress:async(req,res)=>{
+        let addId=req.params.id
+        let userId=req.session.user._id
+        let address=await user.aggregate([
+            {
+                $match:{_id:ObjectId(userId)}
+            },
+            {
+                $unwind:"$address"
+            },
+            {
+                $match:{'address.index':addId}
+            }
+        ]).toArray()
+        let Address=address[0].address
+        let arr=Address.name.split(' ')
+        Address.fname=arr[0]
+        Address.lname=arr[1]
+        res.render('user/edit-address',{Address})
     }
 }

@@ -126,6 +126,7 @@ module.exports={
         let walletAmt=req.session.walletAmt
         if(walletAmt){
             totalPrice.disTotal= (totalPrice.disTotal)-parseInt(walletAmt)
+            userData.wallet=0
         }
         
         coupons.forEach((coup)=>{
@@ -464,6 +465,11 @@ module.exports={
     disableWallet:(req,res)=>{
         req.session.walletAmt=null
         res.json({})
+    },
+    removeCoupon:(req,res)=>{
+        req.session.coupApply=null
+        res.redirect('/place-order')
     }
+    
 }
 
