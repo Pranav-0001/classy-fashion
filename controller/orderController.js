@@ -388,8 +388,8 @@ module.exports={
             let amount=parseInt(orderData.discTotal)
             console.log(userId,amount);
             if(orderData.paymentStatus=="Paid"){
-                userCollection.updateOne({_id:userId},{$set:{wallet:amount}})
-                userCollection.updateOne({_id:userId},{$set:{paymentStatus:"refunded"}})
+                userCollection.updateOne({_id:userId},{$inc:{wallet:amount}})
+                orderCollection.updateOne({_id:userId},{$set:{paymentStatus:"refunded"}})
             }
           orderCollection.updateOne({_id:ObjectId(id)},{$set:{orderStatus:"adminAcceptCancel"}}).then(()=>{
             res.redirect('/admin/all-orders')

@@ -11,6 +11,8 @@ const productController=require('../controller/productController');
 
 const orderController = require('../controller/orderController');
 const { adminAddProduct } = require('../controller/adminController');
+const userController = require('../controller/userController');
+const coupon = require('../model/couponModel');
 
 
 /* GET users listing. */
@@ -80,9 +82,16 @@ router.get('/coupons',verifyLogin,adminController.couponsGet)
 router.get('/add-coupon',verifyLogin,adminController.addCoupon)
 router.post('/add-coupon',verifyLogin,adminController.addCouponPost)
 
+router.get('/edit-coupon/:id',verifyLogin,adminController.editCoupon)
+router.post('/edit-coupon/:id',verifyLogin,adminController.couponUpdate)
+
 router.get('/banner-image',verifyLogin,adminController.bannerImage)
 
 router.post('/update-banner',verifyLogin,adminController.bannerUpdate)
+
+router.get('/delete-coupon/:id',verifyLogin,adminController.deleteCoupon)
+
+
 
 module.exports = router;
   

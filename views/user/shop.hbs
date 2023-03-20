@@ -1,12 +1,14 @@
 <div class="container mt-5">
     <div class="row">
-        <div class="col-md-2 d-none d-md-block border mt-4 mb-4">
+        <div class="col-md-3 col-lg-2 d-none d-md-block border mt-4 mb-4" style="height: 85vh;">
             <div class="float-start pt-2" style="height: 100%;">
                 <h4>Filter</h4>
                 {{#if option}}
                 <div class=" d-flex justify-content-start align-items-center">
                     <p  class="mb-0 mx-0 px-0" id="opt">{{option}} <span ><a href="/disable-filter"><i class="fa-solid fa-xmark text-dark"></i></a></span></p>
                 </div>
+                {{else}}
+                <p id="opt"></p>
                 {{/if}}
                 <div class="ps-3">
                     <h5>
@@ -50,7 +52,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-md-10 ">
+        <div class="col-md-9 col-lg-10 ">
 
             <div class="row">
 

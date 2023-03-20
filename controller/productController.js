@@ -1,7 +1,9 @@
 const productCollection=require('../model/productModel')
 const categoryCollection=require('../model/categoryModel')
 const cartCollection=require('../model/cartModel')
+const orderCollection=require('../model/orderModel')
 const mongoose=require('mongoose')
+const reviewCollection=require('../model/reviewModel')
 const {ObjectId}=mongoose.Types
 const fs=require('fs');
 const uuid=require('uuid')
@@ -126,9 +128,31 @@ module.exports={
         if(user){ 
             cartCount=await CartCount(user._id)
         }
+        let reviews=await reviewCollection.findOne({product:ObjectId(proId)})
+        let review=[]
+        if(reviews?.review.length>0){
+            for(i=4;i>0;i--){
+                console.log(reviews.review[i]);
+                review.push(reviews.review[i])
+            }
+            console.log("arr",review);
+        }
+        let rating=await reviewCollection.aggregate([
+            {
+                $match:{product:ObjectId(proId)}
+            },
+            {
+                $unwind:'$review'
+            },
+            {
+                $group:{_id:"$product",avg:{$avg:"$review.rating"},count:{$sum:1}}
+            }
+        ]).toArray()
+        console.log("rate:",rating[0]);
+        let ratingData=rating[0]
         let product= await productCollection.findOne({_id:ObjectId(proId)})
         
-        res.render('user/single-product', { product, user, cartCount })
+        res.render('user/single-product', { product, user, cartCount,review,ratingData })
     },
     deleteProduct:async(req,res)=>{
         let proId=req.params.id
@@ -438,6 +462,52 @@ module.exports={
     disableFilter:(req,res)=>{
         req.session.filter=null
         res.redirect('/shop')
+    },
+    getReview:async(req,res)=>{
+        let proId=req.params.id
+        let userId=req.session.user._id
+        let product=await productCollection.findOne({_id:ObjectId(proId)})
+        let buy=await orderCollection.aggregate([
+            {
+                $match:{userId:ObjectId(userId)}
+            },
+            {
+                $unwind:'$products'
+            },
+            {
+                $match:{"products.item":ObjectId(proId)}
+            }
+        ]).toArray()
+        let itemVali;
+        if(buy.length>0){
+            itemVali=true
+        }else{
+            itemVali=false
+        }
+        console.log(buy);
+        res.render('user/add-review',{product,itemVali,user:req.session.user})
+    },
+    submitReviw:async(req,res)=>{
+        console.log(req.body)
+        proId=req.params.id
+        let reviewObj={
+            rating:parseInt(req.body.rate),
+            title:req.body.title,
+            description:req.body.description,
+            userId:req.session.user._id,
+            username:req.session.user.username
+        }
+        let review=await reviewCollection.findOne({product:ObjectId(proId)})
+        if(review){
+            reviewCollection.updateOne({product:ObjectId(proId)},{$push:{review:reviewObj}})
+        }else{
+            let obj={
+                product:ObjectId(proId),
+                review:[reviewObj]
+            }
+            reviewCollection.insertOne(obj)
+        }
+        res.redirect('/product/'+req.params.id)
     }
 
 }

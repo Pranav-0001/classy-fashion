@@ -106,5 +106,14 @@ router.get('/disable-filter',productController.disableFilter)
 router.get('/remove-coupon',verifyLogin,orderController.removeCoupon)
 
 router.get('/edit-address/:id',verifyLogin,userController.editAddress)
+router.post('/edit-address/:id',verifyLogin,userController.updateAddress)
+
+router.get('/add-review/:id',verifyLogin,productController.getReview)
+router.post('/submit-review/:id',verifyLogin,productController.submitReviw)
+
+router.get('/forgot-password',userController.forgotPass)
+router.post('/forgot-verify',userController.forgotVerify)
+router.post('/verifyForgotOTP',userController.verifyForgotOtp)
+router.post('/reset-password',userController.resetPassword)
 
 module.exports = router;   

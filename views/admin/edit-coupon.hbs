@@ -1,10 +1,10 @@
 <div class="head-img d-flex align-items-center justify-content-center mb-4">
-    <h1 class=" text-white " style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Add Coupon</h1>
+    <h1 class=" text-white " style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Edit Coupon</h1>
 </div>
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-4 offset-4 shadow px-5 py-5">
-            <form class="row g-3" action="/admin/add-coupon" method="post">
+            <form class="row g-3" action="/admin/edit-coupon/{{couponData._id}}" method="post">
   <div class="col-md-6">
     <label for="inputEmail4" class="form-label">Coupon</label>
     <input type="text" name="coupon" id="myInput" class="form-control" id="inputEmail4" value="{{couponData.coupon}}">
@@ -47,7 +47,7 @@
   </div>
   <p class="text-danger">{{Err}}</p>
   <div class="col-12">
-    <button type="submit" class="btn btn-primary">Add Coupon</button>
+    <button type="submit" class="btn btn-primary">Update Coupon</button>
   </div>
 </form>
         </div>
@@ -66,4 +66,3 @@ myInput.addEventListener("input", function(event) {
   event.target.value = inputText.toUpperCase();
 });
 </script>
-

@@ -1,0 +1,64 @@
+<div class="container mt-5">
+    <div class="row border">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Ratings & Reviews</h2>
+            <div class="d-flex align-items-center">
+                <h5 class="pe-3">{{product.product}}</h5>
+                <img src="/product-images/{{product.Images.[0]}}.jpg" width="80px" alt="">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4 border  py-4 px-2">
+            <h4>How to review a product?</h4>
+            <p class="fs-5">Your review should include facts. An honest opinion is always appreciated. If you have an
+                issue with the product or service please contact us from the help centre.</p>
+
+            <h4>Why review a product?</h4>
+            <p class="fs-5">
+                Your valuable feedback will help fellow shoppers decide!</p>
+        </div>
+        <div class="col-md-8 border">
+            {{#if itemVali}}
+            <form name="ratingform" onsubmit="return review()" action="/submit-review/{{product._id}}" method="post">
+                <h3 class="ps-3 pt-3">Rate This Product</h3>
+                <div class="rate ps-3">
+                    <input type="radio" id="star5" name="rate" value="5" />
+                    <label for="star5" title="text">5 stars</label>
+                    <input type="radio" id="star4" name="rate" value="4" />
+                    <label for="star4" title="text">4 stars</label>
+                    <input type="radio" id="star3" name="rate" value="3" />
+                    <label for="star3" title="text">3 stars</label>
+                    <input type="radio" id="star2" name="rate" value="2" />
+                    <label for="star2" title="text">2 stars</label>
+                    <input type="radio" id="star1" name="rate" value="1" />
+                    <label for="star1" title="text">1 star</label>
+                </div>
+                <div class="mb-3 ">
+                    
+                    <input type="text" name="title" class="form-control" id="exampleFormControlInput1"
+                        placeholder="Title">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                    <textarea name="description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+                <p class="text-danger" id="reErr"></p>
+                <button type="submit" class="btn-primary btn mb-3">Submit Review</button>
+            </form>
+            {{else}}
+            <div class="pt-4 text-center">
+                <div>
+                    <img src="/images/noreview.png" alt="">
+                    <h3>Haven't purchased this product?</h3>
+                    <h6 class="text-secondary">Sorry! You are not allowed to review this product since you haven't bought it on Classy Fashion.</h6>
+
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+
+</div>

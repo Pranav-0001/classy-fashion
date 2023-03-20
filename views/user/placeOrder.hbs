@@ -31,7 +31,7 @@
                 <input type="checkbox" class="mt-3" name="save" id="" style=" width:20px ;height:20px" value=true><span
                     class="ps-2 mb-2" for="">Save this address</span>
                 <br>
-                {{#if user.address}}
+                {{#if userData.address}}
                 <a href="/place-order/select-address/{{user._id}}">Select from saved address</a>
                 {{/if}}
             </div>

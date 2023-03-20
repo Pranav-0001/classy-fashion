@@ -300,3 +300,31 @@ function addAddressVali(){
 
     return true
 }
+
+function review(){
+    let title=document.ratingform.title.value
+    let description=document.ratingform.description.value
+    let rate=document.ratingform.rate.value
+    let Error=document.getElementById('reErr')
+    let titleRegx=/^(\w)([A-Za-z ]){1,20}$/gm
+    let desRegx=/^(\w)([A-Za-z ]){3,}$/gm
+    console.log(title)
+    if (!rate) {
+        Error.innerHTML = "Rate the product"
+        return false
+    } else if (title=='') {
+        Error.innerHTML = "Title field required"
+        return false
+    }else if (description=='') {
+        Error.innerHTML = "description field required"
+        return false
+    }else if(titleRegx.test(title)==false){
+        Error.innerHTML = "Title Invalid"
+        return false
+    }else if(desRegx.test(description)==flase){
+        Error.innerHTML = " Invalid Description"
+        return false
+    }
+    return true
+    
+}

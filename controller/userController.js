@@ -9,6 +9,8 @@ const nodemailer=require('nodemailer')
 const category = require('../model/categoryModel')
 const {ObjectId}=mongoose.Types
 const uuid=require('uuid')
+const { response } = require('../app')
+
 require('dotenv').config()
 
 
@@ -228,7 +230,11 @@ module.exports={
     userProfile:async(req,res)=>{
         let userId=req.session.user._id
         let userData=await user.findOne({_id:ObjectId(userId)})
-        res.render('user/profile', { user: req.session.user ,userData })
+        let cartCount=0
+        if(req.session?.user){
+            cartCount=await cartCout(req.session.user._id)
+        }
+        res.render('user/profile', { user: req.session.user ,userData ,cartCount})
     },
 
     updateUserData:async(req,res)=>{
@@ -241,11 +247,15 @@ module.exports={
         res.redirect('/profile')
     },
 
-    changePassword:(req,res)=>{
+    changePassword:async(req,res)=>{
         let upass=req.session.pass
         let response=req.session.res
         let Err=req.session.verifyErr
-        res.render('user/change-password',{user:req.session.user,upass,response,Err})
+        let cartCount=0
+        if(req.session?.user){
+            cartCount=await cartCout(req.session.user._id)
+        }
+        res.render('user/change-password',{user:req.session.user,upass,response,Err,cartCount})
         req.session.pass=null
         req.session.res=null
         req.session.verifyErr=null
@@ -452,5 +462,105 @@ module.exports={
         Address.fname=arr[0]
         Address.lname=arr[1]
         res.render('user/edit-address',{Address})
+    },
+    updateAddress:(req,res)=>{
+        console.log(req.body);
+        let address=req.body
+        let userId=req.session.user._id
+        let index=req.params.id
+        user.updateMany({_id:ObjectId(userId),'address.index':index},{
+            $set:{
+                "address.$.name":address.fname + ' '+address.lname,
+                "address.$.address":address.address,
+                "address.$.town":address.town,
+                "address.$.pincode":address.pincode,
+                "address.$.state":address.state,
+                "address.$.phone":address.phone,
+                "address.$.email":address.email
+            }
+        })
+        res.redirect('/address-manage')
+    },
+    forgotPass:(req,res)=>{
+        let err=req.session.forgotErr
+        let email=req.session.otpForEmail
+        console.log("sent", req.session.forgotOTP);
+        let OTP=req.session.forgotOTP
+        let success=req.session.forgotSuccess
+        res.render('user/forgot-password',{login:true,err,OTP,email,success})
+        req.session.forgotErr=null
+    },
+    forgotVerify:async(req,res)=>{
+        let email=req.body.email
+        let userExist=await user.findOne({email:email})
+        let response={}
+        if (userExist) {
+            if (userExist.status) {
+                otpEmail = userExist.email
+                req.session.otpForEmail=otpEmail
+                response.otp = OTP()
+
+                let otp = response.otp
+                let mailTransporter = nodemailer.createTransport({
+                    service: "gmail",
+                    auth: {
+                        user: process.env.EMAIL,
+                        pass: process.env.PASSWORD
+                    }
+                })
+
+
+                let details = {
+                    from: "classyfashionclub123@gmail.com",
+                    to: otpEmail,
+                    subject: "Classy Fashion Club",
+                    text: otp + " is your Classy Fashion Club verification code for reset password. Do not share OTP with anyone "
+                }
+
+                mailTransporter.sendMail(details, (err) => {
+                    if (err) {
+                        console.log("otpp-error" + err);
+                    } else {
+                        console.log("OTP Send Successfully ");
+                    }
+                })
+
+
+                function OTP() {
+                    let OTP = Math.random() * 1000000
+                    OTP = Math.floor(OTP)
+                    return OTP
+                }
+            }
+            req.session.forgotOTP=response.otp
+        } else {
+            console.log("jhf");
+            req.session.forgotErr = "Invalid Email"
+
+        }
+        res.redirect('/forgot-password')
+    },
+    verifyForgotOtp:(req,res)=>{
+        let Otp=req.body.otp
+        let currOTP=req.session.forgotOTP
+        console.log(Otp,currOTP);
+        if(Otp==currOTP){
+            req.session.forgotSuccess=true
+        }else{
+            req.session.forgotErr = "Invalid Otp"
+
+        }
+        res.redirect('/forgot-password')
+    },
+    resetPassword:async(req,res)=>{
+        let email=req.session.otpForEmail
+        let password=req.body.password
+        password=await bcrypt.hash(password,10)
+        user.updateOne({email:email},{$set:{
+                        password:password
+                    }})
+
+                    res.redirect('/login')
+
     }
 }

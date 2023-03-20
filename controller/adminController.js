@@ -296,7 +296,7 @@ module.exports = {
     },
     bannerUpdate:async(req,res)=>{
         console.log(req.files);
-        if(req.files.mainBanner){
+        if(req.files?.mainBanner){
             let path=req.files.mainBanner.tempFilePath
             await sharp(path)
                 .rotate()
@@ -305,7 +305,7 @@ module.exports = {
                 .toFile(`./public/Banner-images/banner.jpg`)
         }
 
-        if(req.files.subBanner){
+        if(req.files?.subBanner){
             let path=req.files.subBanner.tempFilePath
             await sharp(path)
                 .rotate()
@@ -315,6 +315,28 @@ module.exports = {
         }
 
         res.redirect('/admin/banner-image')
+    },
+    editCoupon:async(req,res)=>{
+        let couponData = await couponCollection.findOne({_id:ObjectId(req.params.id)})
+        res.render('admin/edit-coupon',{couponData})
+    },
+    couponUpdate:(req,res)=>{
+        console.log(req.body);
+        let coupData=req.body
+        couponCollection.updateOne({_id:ObjectId(req.params.id)},{$set:{
+            coupon:coupData.coupon,
+            expiry:coupData.expiry,
+            minItems:coupData.minItems,
+            minAmount:coupData.minAmount,
+            discType:coupData.disType,
+            discount:coupData.discount
+        }})
+        res.redirect('/admin/coupons')
+    },
+    deleteCoupon:(req,res)=>{
+        let id=req.params.id
+        couponCollection.deleteOne({_id:ObjectId(id)})
+        res.redirect('/admin/coupons')
     }
 
 }

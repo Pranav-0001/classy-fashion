@@ -2,19 +2,23 @@
 <div class="container mt-4 ">
     <div class="row">
         <div class="col-md-4 ">
-            <img id="main-img" src="/product-images/{{product.Images.[0]}}.jpg" alt="" width="100%">
+            <img id="main-img" src="/product-images/{{product.Images.[0]}}.jpg" alt="" class="shadow" width="100%">
             <div class="d-flex mt-2">
                 {{#each product.Images}}
-                <img id="{{[]}}" src="/product-images/{{[]}}.jpg" alt="" width="60px" class="ms-2"
+                <img id="{{[]}}" src="/product-images/{{[]}}.jpg" alt="" width="70px" class="ms-2 mt-1  border"
                     onclick="imgClick(this.id)">
                 {{/each}}
             </div>
         </div>
-        <div class="col-md-6 mt-4">
+        <div class="col-md-6 ms-3 mt-4">
             <h2>{{product.product}}</h2>
             <h4 class="text-secondary">{{product.brand}}</h4>
             <br>
-            <h4>4.5 <i class="fa-regular fa-star text-success"></i> | 2K Ratings</h4>
+            {{#if ratingData}}
+            <h4>{{ratingData.avg}} <i class="fa-regular fa-star text-success"></i> | {{ratingData.count}} Ratings</h4>
+            {{else}}
+            <h4>No Ratings & reviews</h4>
+            {{/if}}
 
             <hr style="background-color: gray;">
             <form action="/add-to-cart/{{product._id}}" method="post">
@@ -45,7 +49,8 @@
                 <div class="d-flex">
 
                     <a onclick="addToWishlist('{{product._id}}')"
-                        class="addToCart bg-danger text-light ps-4 pe-4 pt-3 mb-3 mb-md-0 pb-md-3"><i class="fa-regular fa-heart"></i>
+                        class="addToCart bg-danger text-light ps-4 pe-4 pt-3 mb-3 mb-md-0 pb-md-3"><i
+                            class="fa-regular fa-heart"></i>
                         Add To Wishlist</a>
 
                     <button type="submit" class="addToCart bg-dark text-light ps-5 pe-5 pt-3 pb-3 ms-2 mb-3 mb-md-0"><i
@@ -55,11 +60,44 @@
         {{/if}}
     </div>
 
+    <hr class="mt-4" style="background-color: black;">
+
+    <div class="row">
+        <div class="col-md-6 text-center d-flex justify-content-center " style="border-right: solid; border-color: rgb(198, 204, 202);">
+            
+            <div class="d-block mt-5">
+                {{#if ratingData}}
+                <h1 class="mb-3">{{ratingData.avg}} <i class="fa-regular fa-star text-success"></i> | {{ratingData.count}} Ratings</h1>
+                {{else}}
+                <h1>No Ratings & reviews</h1>
+                {{/if}}
+                 <a href="/add-review/{{product._id}}" class="btn-primary btn">Add Review </a>
+            </div>
+
+           
+            
+        </div>
+        <div class="col-md-6 mb-3 ">
+            {{#if review}}
+            {{#each review}}
+            <div class="shadow py-1 px-3 mb-2" style="border-radius: 20px;">
+                <h5 class=" "><span {{#if (gt rating 4)}} class="badge rounded-pill bg-success" {{else}} {{#if (gt rating 2)}} class="badge rounded-pill bg-warning" {{else}} class="badge rounded-pill bg-danger" {{/if}}{{/if}}>{{rating}}<i class="fa-regular fa-star ms-1"></i></span>{{username}}</h5>
+                <h5 class="ps-5">{{title}}</h5>
+                <p class="ps-5">{{description}}</p>
+            </div>
+            {{/each}}
+            <a href="">View all reviews</a>
+            {{else}}
+            <h4 class="text-center pt-5">No Reviews found</h4>
+            {{/if}}
+        </div>
+    </div>
+
 </div>
 
 
-</div>
-<!-- Button trigger modal -->
+
+
 
 
 
@@ -74,12 +112,12 @@
 
     function addToWishlist(id) {
         console.log(id)
-        let size=document.getElementById('sizePro').value
+        let size = document.getElementById('sizePro').value
         console.log(size)
         $.ajax({
             url: `/add-to-wishlist/${id}`,
             method: 'POST',
-            data:{size:size},
+            data: { size: size },
             success: (response) => {
                 if (response.status) {
                     console.log(response)
