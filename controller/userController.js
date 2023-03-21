@@ -29,8 +29,9 @@ function cartCout(userId){
 
 
 module.exports={
-    userSignup:(req,res)=>{
-        let Err = req.session.signupErr
+    userSignup:(req,res,next)=>{
+        try{
+            let Err = req.session.signupErr
         let signData = req.session.signupData
         let user = req.session.user
         if (user) {
@@ -40,9 +41,14 @@ module.exports={
             req.session.signupErr = null
             req.session.signupData = null
           }
+        }
+        catch(err){
+            next(err)
+        }
     },
-    userSignupSubmit:async(req,res)=>{
-        let userData=req.body
+    userSignupSubmit:async(req,res,next)=>{
+        try{
+            let userData=req.body
         let userExist=await user.findOne({email:userData.email})
         if(userExist){
             req.session.signupErr = "User Email already exist"
@@ -69,6 +75,10 @@ module.exports={
             
 
         }
+        }
+        catch(err){
+            next(err)
+        }
     },
     userLogin:(req,res)=>{
        let data = req.session.loginData
@@ -80,12 +90,19 @@ module.exports={
         res.render('user/login', { Err, data,login:true })
         req.session.loginErr = null
         req.session.loginData = null
+           req.session.resetPassErr = null
+           req.session.forgotErr = null
+           req.session.forgotSuccess = null
+           req.session.forgotErr = null
+           req.session.forgotOTP = null
+           req.session.otpForEmail=null
       }
     },
-    userLoginPost: async (req, res) => {
-        let userData = req.body
+    userLoginPost: async (req, res,next) => {
+        try{
+            let userData = req.body
         let userExist = await user.findOne({ email: userData.email })
-        
+        let response;
         if (userExist) {
             if (userExist.status) {
                 bcrypt.compare(userData.password, userExist.password).then((status) => {
@@ -125,6 +142,10 @@ module.exports={
             req.session.loginData = req.body
             res.redirect('/login')
         }
+        }
+        catch(err){
+            next(err)
+        }
     },
     userLogout:(req,res)=>{
         req.session.user=null
@@ -143,8 +164,9 @@ module.exports={
             req.session.otpErr = null
         }
     },
-    sendOTP: async (req, res) => {
-        let data = req.body
+    sendOTP: async (req, res,next) => {
+        try{
+            let data = req.body
         let response = {}
         let userExist = await user.findOne({ email: data.email })
         if (userExist) {
@@ -202,8 +224,12 @@ module.exports={
             req.session.otpData = req.body
             res.redirect('/otp-login')
         }
+        }
+        catch(err){
+            next(err)
+        }
     },
-    otpLoginPost:(req,res)=>{
+    otpLoginPost:(req,res,next)=>{
         let otp = req.session.otp
         let userOtp = req.body.otp
         let userData = req.session.otpUser
@@ -216,8 +242,9 @@ module.exports={
             res.redirect('/otp-login')
         }
     },
-    homePage:async(req,res)=>{
-        let userExist=req.session.user
+    homePage:async(req,res,next)=>{
+        try{
+            let userExist=req.session.user
         let products=await productCollection.find().sort({_id:-1}).limit(4).toArray()
         console.log(products);
         let cartCount=0
@@ -225,30 +252,45 @@ module.exports={
             cartCount=await cartCout(req.session.user._id) 
         }
         res.render('user/index', { user:req.session.user, products, cartCount });
+        }
+        catch(err){
+            next(err)
+        }
     },
 
-    userProfile:async(req,res)=>{
-        let userId=req.session.user._id
+    userProfile:async(req,res,next)=>{
+        try{
+            let userId=req.session.user._id
         let userData=await user.findOne({_id:ObjectId(userId)})
         let cartCount=0
         if(req.session?.user){
             cartCount=await cartCout(req.session.user._id)
         }
         res.render('user/profile', { user: req.session.user ,userData ,cartCount})
+        }
+        catch(err){
+            next(err)
+        }
     },
 
-    updateUserData:async(req,res)=>{
-        let userData=req.body
+    updateUserData:async(req,res,next)=>{
+        try{
+            let userData=req.body
         let userId=req.session.user._id
         user.updateOne({_id:ObjectId(userId)},{$set:{
             username:userData.username,
             phone:userData.phone
         }})
         res.redirect('/profile')
+        }
+        catch(err){
+            next(err)
+        }
     },
 
-    changePassword:async(req,res)=>{
-        let upass=req.session.pass
+    changePassword:async(req,res,next)=>{
+        try{
+            let upass=req.session.pass
         let response=req.session.res
         let Err=req.session.verifyErr
         let cartCount=0
@@ -259,9 +301,14 @@ module.exports={
         req.session.pass=null
         req.session.res=null
         req.session.verifyErr=null
+        }
+        catch(err){
+            next(err)
+        }
     },
-    verifyPassword:async(req,res)=>{
-        let userId=req.session.user._id
+    verifyPassword:async(req,res,next)=>{
+        try{
+            let userId=req.session.user._id
         let userData=await user.findOne({_id:ObjectId(userId)})
            let Password=req.body
             let response={}
@@ -282,9 +329,14 @@ module.exports={
                 }
                
             })
+        }
+        catch(err){
+            next(err)
+        }
     },
-    changePasswordPost:async(req,res)=>{
-        let password=req.body.newpass
+    changePasswordPost:async(req,res,next)=>{
+        try{
+            let password=req.body.newpass
         let userId=req.session.user._id
         
         
@@ -305,19 +357,29 @@ module.exports={
                     })
                 }
             })
+        }
+        catch(err){
+            next(err)
+        }
         
     },
-    getUserAddress:async(req,res)=>{
-        let userId=req.session.user._id
+    getUserAddress:async(req,res,next)=>{
+        try{
+            let userId=req.session.user._id
         let userData =await user.findOne({ _id: ObjectId(userId)})
         let address=userData.address
         res.render('user/address', { address, user: req.session.user, address })
+        }
+        catch(err){
+            next(err)
+        }
     },
     addAddress:(req,res)=>{
         res.render('user/add-address',{user:req.session.user})
     },
-    addUserAddress:async(req,res)=>{
-        let userId=req.session.user._id
+    addUserAddress:async(req,res,next)=>{
+        try{
+            let userId=req.session.user._id
         let addressData=req.body
             let count=uuid.v4()
             let address={
@@ -332,21 +394,31 @@ module.exports={
             }
             user.updateOne({_id:ObjectId(userId)},{$push:{address:address}})
             res.redirect('/address-manage')
+        }
+        catch(err){
+            next(err)
+        }
     },
-    deleteAddress:(req,res)=>{
+    deleteAddress:(req,res,next)=>{
         let userId=req.session.user._id
         let indexId=req.params.index
         user.updateOne({_id:ObjectId(userId)},{$pull:{address:{index:indexId}}})
         res.redirect('/address-manage')
     },
-    selectUserAddress:async(req,res)=>{
-        let userId=req.session.user._id
+    selectUserAddress:async(req,res,next)=>{
+        try{
+            let userId=req.session.user._id
         let userData=await user.findOne({_id:ObjectId(userId)})
         let address=userData.address
         res.render('user/select-address',{user:req.session.user,address})
+        }
+        catch(err){
+            next(err)
+        }
     },
-    showSelectedAddress:async(req,res)=>{
-        let userId = req.session.user._id
+    showSelectedAddress:async(req,res,next)=>{
+        try{
+            let userId = req.session.user._id
         let id = req.params.id
         let selAddress=await user.aggregate([
             {
@@ -376,75 +448,15 @@ module.exports={
         }
         req.session.address=address
         res.redirect('/place-order')
-    },
-    wishList:async(req,res)=>{
-        let userId=req.session.user._id
-        let product=await wishListCollection.aggregate([
-            {
-                $match:{userId:ObjectId(userId)}
-            },
-            {
-                $unwind:"$products"
-            },
-            {
-                $project:{_id:0,
-                product:'$products.product',
-                size:'$products.size'}
-            },
-            {
-                $lookup: {
-                    from: 'products',
-                    localField: 'product',
-                    foreignField: '_id',
-                    as: "result"
-                }
-            },
-            {
-                $project:{product: { $arrayElemAt: ['$result', 0] } ,size:1}
-            }
-        ]).toArray()
-        console.log(product);
-        let cartCount=await cartCout(userId)
-        res.render('user/wishlist',{user:req.session.user,product,cartCount})
-    },
-    addToWishlist:async(req,res)=>{
-        console.log(req.body);
-        let userId=req.session.user._id
-        let ProId=req.params.id
-        let resp={}
-        let product={product:ObjectId(ProId),size:req.body.size}
-        let checkWishlist=await wishListCollection.findOne({userId:ObjectId(userId)})
-
-        if(checkWishlist){
-            let proExist=checkWishlist.products.findIndex(product=>product.product==ProId)
-            console.log(proExist);
-            if(proExist!=-1){
-                resp.exist=true
-            }else{
-               wishListCollection.updateOne({userId:ObjectId(userId)},{
-                $push:{products:product}
-                
-            }) 
-            resp.status=true
-            }
-            
-        }else{
-            let wishListObj={
-                userId:ObjectId(userId),
-                products:[product]
-            }
-            wishListCollection.insertOne(wishListObj)
         }
-        res.json(resp)
+        catch(err){
+            next(err)
+        }
     },
-    removeWishlistProduct:(req,res)=>{
-        let proId=req.params.id
-        let userId=req.session.user._id
-        wishListCollection.updateOne({userId:ObjectId(userId)},{$pull:{products:{product:ObjectId(proId)}}})
-        res.redirect('/wishlist')
-    },
-    editAddress:async(req,res)=>{
-        let addId=req.params.id
+    
+    editAddress:async(req,res,next)=>{
+        try{
+            let addId=req.params.id
         let userId=req.session.user._id
         let address=await user.aggregate([
             {
@@ -462,6 +474,10 @@ module.exports={
         Address.fname=arr[0]
         Address.lname=arr[1]
         res.render('user/edit-address',{Address})
+        }
+        catch(err){
+            next(err)
+        }
     },
     updateAddress:(req,res)=>{
         console.log(req.body);
@@ -484,14 +500,16 @@ module.exports={
     forgotPass:(req,res)=>{
         let err=req.session.forgotErr
         let email=req.session.otpForEmail
+        let resetErr=req.session.resetPassErr
         console.log("sent", req.session.forgotOTP);
         let OTP=req.session.forgotOTP
         let success=req.session.forgotSuccess
-        res.render('user/forgot-password',{login:true,err,OTP,email,success})
+        res.render('user/forgot-password',{login:true,err,OTP,email,success,resetErr})
         req.session.forgotErr=null
     },
-    forgotVerify:async(req,res)=>{
-        let email=req.body.email
+    forgotVerify:async(req,res,next)=>{
+        try{
+            let email=req.body.email
         let userExist=await user.findOne({email:email})
         let response={}
         if (userExist) {
@@ -539,8 +557,12 @@ module.exports={
 
         }
         res.redirect('/forgot-password')
+        }
+        catch(err){
+            next(err)
+        }
     },
-    verifyForgotOtp:(req,res)=>{
+    verifyForgotOtp:(req,res,next)=>{
         let Otp=req.body.otp
         let currOTP=req.session.forgotOTP
         console.log(Otp,currOTP);
@@ -552,15 +574,33 @@ module.exports={
         }
         res.redirect('/forgot-password')
     },
-    resetPassword:async(req,res)=>{
-        let email=req.session.otpForEmail
-        let password=req.body.password
-        password=await bcrypt.hash(password,10)
-        user.updateOne({email:email},{$set:{
-                        password:password
-                    }})
+    resetPassword: async (req, res,next) => {
+        try {
+            let email = req.session.otpForEmail
+            let password = req.body.password
+            let passwordRegx=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/gm
 
-                    res.redirect('/login')
+            if(passwordRegx.test(password)==false){
+                req.session.resetPassErr="Password should contain Atleast one uppercase one lowercase and one number"
+                res.redirect('/forgot-password')
+            }else{
+                password = await bcrypt.hash(password, 10)
+            user.updateOne({ email: email }, {
+                $set: {
+                    password: password
+                }
+            })
+            res.redirect('/login')
+            
+            }
+
+            
+
+            
+        }
+        catch (err) {
+           console.log(err);
+        }
 
     }
 }

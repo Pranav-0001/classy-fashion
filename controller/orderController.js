@@ -47,6 +47,9 @@ function getCartProducts(userId){
             }
         ]).toArray()
         cartItems[0].proTotal=cartItems[0].quantity*cartItems[0].product.offerPrice
+
+        
+
         console.log(cartItems);
         resolve(cartItems)
 
@@ -105,8 +108,9 @@ function CartCount(userId){
 
 
 module.exports={
-    placeOrder:async(req,res)=>{
-        let Err=req.session.placeOrderErr
+    placeOrder:async(req,res,next)=>{
+        try{
+            let Err=req.session.placeOrderErr
         let user = req.session.user
         let cartCount=await CartCount(user._id)
         let totalPrice =await getTotalAmount(req.session.user._id)
@@ -144,9 +148,14 @@ module.exports={
         req.session.placeOrderErr = null
         
         req.session.coupNotValid=null
+        }
+        catch(err){
+            next(err)
+        }
     },
-    placeOrderPost:async(req,res)=>{
-        let userId = req.session.user._id
+    placeOrderPost:async(req,res,next)=>{
+        try{
+            let userId = req.session.user._id
         let username = req.session.user.username
         let cartProducts = await getCartProducts(userId)
         let totalPrice = await getTotalAmount(userId)
@@ -255,10 +264,15 @@ module.exports={
                
            }
            req.session.address = null
+        }
+        catch(err){
+            next(err)
+        }
            
     },
-    verifyPayment:async(req,res)=>{
-        console.log("aaasssssqqqwww",req.body);
+    verifyPayment:async(req,res,next)=>{
+        try{
+            console.log("aaasssssqqqwww",req.body);
         let details=req.body
         const crypto=require('crypto')
         let hmac=crypto.createHmac('sha256','wkCYl3fic8fJv3nXbkRPc7qx')
@@ -324,32 +338,52 @@ module.exports={
             console.log("payment failed");
         }
         req.session.coupApply=null
+        }
+        catch(err){
+            next(err)
+        }
     },
     successOrder:(req,res)=>{
         res.render('user/order-success',{user:req.session.user})
     },
-    viewOrders:async(req,res)=>{
-        let userId=req.session.user._id
+    viewOrders:async(req,res,next)=>{
+        try{
+            let userId=req.session.user._id
         let cartCount=await CartCount(userId)
         let orderData=await orderCollection.find({userId:ObjectId(userId)}).sort({_id:-1}).toArray()
         res.render('user/orders',{orderData,user:req.session.user})
+        }
+        catch(err){
+            next(err)
+        }
     },
-    singleOrder:async(req,res)=>{
-        let orderId = req.params.id
+    singleOrder:async(req,res,next)=>{
+        try{
+            let orderId = req.params.id
         
         
         let order=await orderCollection.findOne({_id:ObjectId(orderId)})
         let cartCount=await CartCount(req.session.user._id)
             
         res.render('user/singleOrder',{order,user:req.session.user,cartCount})
+        }
+        catch(err){
+            next(err)
+        }
     },
-    cancelOrderProducts:async(req,res)=>{
-        let id=req.params.id
+    cancelOrderProducts:async(req,res,next)=>{
+        try{
+            let id=req.params.id
         let orderData=await orderCollection.findOne({_id:ObjectId(id)})
         res.render('user/cancel-order',{orderData})
+        }
+        catch(err){
+            next(err)
+        }
     },
     cancelOrderPost:(req,res)=>{
-       let orderId= req.params.id
+       try{
+        let orderId= req.params.id
        let cancelData=req.body
        orderCollection.updateOne({_id:ObjectId(orderId)},{$set:{
         orderStatus:"userCancelPending",
@@ -357,29 +391,57 @@ module.exports={
         feedback:cancelData.feedback
     }})
     res.redirect('/orders')
-
+       }
+       catch(err){
+        next(err)
+       }
     },
-    adminAllOrder:async(req,res)=>{
-        let orders=await orderCollection.find().sort({_id:-1}).toArray()
-        res.render('admin/all-orders',{admin:req.session.admin,orders})
+    adminAllOrder:async(req,res,next)=>{
+        try {
+            let orders=await orderCollection.find().sort({_id:-1}).toArray()
+            let filter=req.session.orderFilter
+            let opt
+            if(filter){
+               opt=req.session.orderFilter.filter 
+               if(filter.filter!=''){
+                orders=await orderCollection.find({orderStatus:filter.filter}).sort({_id:-1}).toArray()
+            }
+            }
+            
+            
+            
+        res.render('admin/all-orders',{admin:req.session.admin,orders,opt})
+        } catch (err) {
+            next(err)
+        }
     },
-    orderDetails:async(req,res)=>{
-        let orderId = req.params.id
+    orderDetails:async(req,res,next)=>{
+        try{
+            let orderId = req.params.id
         orderId = ObjectId(orderId)
         let order = await orderCollection.findOne({ _id: orderId })
         res.render('admin/order-details',{order,admin:req.session.admin})
+        }catch(err){
+            next(err)
+        }
     },
     changeOrderStatus:(req,res)=>{
-        let orderId=req.params.id
+        try{
+            let orderId=req.params.id
         let status=req.body
         if(status.status=='Delivered'){
             orderCollection.updateOne({_id:ObjectId(orderId)},{$set:{paymentStatus:"Paid"}})
         }
         orderCollection.updateOne({_id:ObjectId(orderId)},{$set:{orderStatus:status.status}})
         res.redirect('/admin/orderdetails/'+req.params.id)
+        }
+        catch(err){
+            next(err)
+        }
     },
-    orderCancelRequest:async(req,res)=>{
-        let status=req.params.set
+    orderCancelRequest:async(req,res,next)=>{
+        try{
+            let status=req.params.set
 
         let id=req.params.id
         if(status=='true'){
@@ -399,9 +461,14 @@ module.exports={
             res.redirect('/admin/all-orders')
           })
       }
+        }
+        catch(err){
+            next(err)
+        }
     },
-    applyCoupon:async(req,res)=>{
-        let code=req.body.code
+    applyCoupon:async(req,res,next)=>{
+        try{
+            let code=req.body.code
         let coupon=await couponCollection.findOne({coupon:code})
         let totalPrice=await getTotalAmount(req.session.user._id)
         let cartCount=await CartCount(req.session.user._id)
@@ -451,16 +518,25 @@ module.exports={
             req.session.coupNotValid="Invalid Coupon"
             res.json({invalid:true})
         }
+        }
+        catch(err){
+            next(err)
+        }
         
     },
-    useWallet:async(req,res)=>{
-        console.log("calll");
+    useWallet:async(req,res,next)=>{
+        try{
+            console.log("calll");
         let userId=req.session.user._id
         let user=await userCollection.findOne({_id:ObjectId(userId)})
         let walletAmt=user.wallet
         req.session.walletAmt=walletAmt
         
         res.json({})
+        }
+        catch(err){
+            next(err)
+        }
     },
     disableWallet:(req,res)=>{
         req.session.walletAmt=null

@@ -23,8 +23,9 @@ function CartCount(userId){
 }
 
 module.exports={
-    shop: async(req, res) => {
-        let user = req.session.user
+    shop: async(req, res,next) => {
+        try{
+            let user = req.session.user
         let cartCount = 0
         if (user) {
             let userId = user._id
@@ -119,24 +120,40 @@ module.exports={
         
     
         res.render('user/shop', { products, user, category, brands, cartCount ,sort,option })
+        }
+        catch(err){
+            next(err)
+        }
        
     }, 
-    singleProduct: async(req,res)=>{
-        let user=req.session.user
+    singleProduct: async(req,res,next)=>{
+        try{
+            let user=req.session.user
         let cartCount
         let proId=req.params.id
         if(user){ 
             cartCount=await CartCount(user._id)
         }
-        let reviews=await reviewCollection.findOne({product:ObjectId(proId)})
-        let review=[]
-        if(reviews?.review.length>0){
-            for(i=4;i>0;i--){
-                console.log(reviews.review[i]);
-                review.push(reviews.review[i])
+        let review=await reviewCollection.aggregate([
+            {
+                $match:{product:ObjectId(proId)}
+            },
+            {
+                $unwind:"$review"
+            },
+            {
+                $limit:4
             }
-            console.log("arr",review);
-        }
+        ]).toArray()
+        console.log("reviews",review);
+        // let review=[]
+        // if(reviews?.review.length>0){
+        //     for(i=4;i>0;i--){
+        //         console.log(reviews.review[i]);
+        //         review.push(reviews.review[i])
+        //     }
+        //     console.log("arr",review);
+        // }
         let rating=await reviewCollection.aggregate([
             {
                 $match:{product:ObjectId(proId)}
@@ -153,9 +170,14 @@ module.exports={
         let product= await productCollection.findOne({_id:ObjectId(proId)})
         
         res.render('user/single-product', { product, user, cartCount,review,ratingData })
+        }
+        catch(err){
+            next(err)
+        }
     },
-    deleteProduct:async(req,res)=>{
-        let proId=req.params.id
+    deleteProduct:async(req,res,next)=>{
+        try {
+            let proId=req.params.id
         pro=await productCollection.findOne({_id:ObjectId(proId)})
             let count=pro.Images.length
             for(i=0;i<count;i++){
@@ -167,18 +189,27 @@ module.exports={
             }
             productCollection.deleteOne({_id:ObjectId(proId)})
             res.redirect('/admin/products')
+        } catch (err) {
+            next(err)
+        }
     },
-    editProduct:async(req,res)=>{
-        let admin = req.session.admin
+    editProduct:async(req,res,next)=>{
+        try{
+            let admin = req.session.admin
         err = req.session.editProductErr
         let id=req.params.id
         delImgErr = req.session.deleteImgErr
         let product=await productCollection.findOne({_id:ObjectId(id)})
         let cate=await categoryCollection.find().toArray()
         res.render('admin/edit-product',{product,err,cate,delImgErr,admin})
+        }
+        catch(err){
+            next(err)
+        }
     },
-    editProductPost:async(req,res)=>{
-        let proId = req.params.id
+    editProductPost:async(req,res,next)=>{
+        try{
+            let proId = req.params.id
         let productData = req.body
         console.log(productData);
         priceRegx=/^([0-9]){1,6}$/gm
@@ -312,9 +343,15 @@ module.exports={
               }
            
         }
+        
+        }
+        catch(err){
+            next(err)
+        }
     },
-    getCategory:async(req,res)=>{
-        let data = req.session.cateData
+    getCategory:async(req,res,next)=>{
+        try{
+            let data = req.session.cateData
         let err = req.session.categoryErr
         let category = req.session.editCateData
         let admin = req.session.admin
@@ -324,9 +361,14 @@ module.exports={
         req.session.categoryErr=null
         req.session.cateData=null
         req.session.editCateData=null
+        }
+        catch(err){
+            next(err)
+        }
     },
-    addCategory:async(req,res)=>{
-        let cate=req.body
+    addCategory:async(req,res,next)=>{
+        try{
+            let cate=req.body
         let regx=/^([a-zA-Z ]){3,20}$/gm
         let category=await categoryCollection.findOne({category:{$regex:cate.category,$options:"i"}})
            
@@ -348,14 +390,24 @@ module.exports={
                 res.redirect('/admin/categories')
             })
             }
+        }
+        catch(err){
+            next(err)
+        }
     },
-    deleteCategory:async(req,res)=>{
-        let cateId=req.params.id
+    deleteCategory:async(req,res,next)=>{
+        try{
+            let cateId=req.params.id
         categoryCollection.deleteOne({_id:ObjectId(cateId)})
         res.redirect('/admin/categories')
+        }
+        catch(err){
+            next(err)
+        }
     },
-    deleteProductImage:async(req,res)=>{
-        let imgId=req.params.imgId
+    deleteProductImage:async(req,res,next)=>{
+        try{
+            let imgId=req.params.imgId
         let response={}
         let product = await productCollection.findOne({ Images: { $in: [imgId] } })
 
@@ -373,16 +425,26 @@ module.exports={
             let id=response.id
             res.redirect('/admin/edit-product/' + id)
         }
+        }
+        catch(err){
+            next(err)
+        }
     },
-    addProductImage:async(req,res)=>{
-        let err = req.session.addProImageErr
+    addProductImage:async(req,res,next)=>{
+        try{
+            let err = req.session.addProImageErr
         let admin = req.session.admin
         let proId=req.params.id
         let product=await productCollection.findOne({_id:ObjectId(proId)})
         res.render('admin/add-image',{product,err,admin})
+        }
+        catch(err){
+            next(err)
+        }
     },
-    AddProductImagePost:async(req,res)=>{
-        let proId=req.params.id
+    AddProductImagePost:async(req,res,next)=>{
+        try{
+            let proId=req.params.id
         let Image=req.files.Image
         let product=await productCollection.findOne({_id:ObjectId(proId)})
             let count=product.Images.length
@@ -414,21 +476,33 @@ module.exports={
             response.status=true
             res.redirect('/admin/products')
             } 
+        }
+        catch(err){
+            next(err)
+        }
     },
-    editCategory:async(req,res)=>{
-        let cateId = req.params.id
+    editCategory:async(req,res,next)=>{
+        try{
+            let cateId = req.params.id
         let category = await categoryCollection.findOne({ _id: ObjectId(cateId) })
         req.session.editCateData = category
         res.redirect('/admin/categories')
+        }
+        catch(err){
+            next(err)
+        }
     },
-    updateCategory:(req,res)=>{
-        let cateId = req.params.id
+    updateCategory:(req,res,next)=>{
+        try{
+            let cateId = req.params.id
         let cate = req.body
         let regx = /^(\w)([A-Za-z ]){1,20}/gm
         categoryCollection.updateOne({ _id: ObjectId(cateId) }, { $set: { category: cate.category } })
         res.redirect('/admin/categories')
-        
-        
+        }
+        catch(err){
+            next(err)
+        }
     },
     adminLogout:(req,res)=>{
         req.session.admin=null
@@ -439,14 +513,19 @@ module.exports={
         req.session.sort=req.body.sortOption
         res.json({status:true})
     },
-    productSearch:async(req,res)=>{
+    productSearch:async(req,res,next)=>{
        
-        let payload=req.body.payload.trim();
+        try{
+            let payload=req.body.payload.trim();
         console.log(payload);
         let search = await productCollection.find({product: {$regex: new RegExp(''+payload+'.*','i' )}}).toArray()
         console.log(search);
         search=search.slice(0,10)
         res.send({payload:search})
+        }
+        catch(err){
+            next()
+        }
     },
     filter:(req,res)=>{
         let selection=req.params.selection
@@ -463,51 +542,6 @@ module.exports={
         req.session.filter=null
         res.redirect('/shop')
     },
-    getReview:async(req,res)=>{
-        let proId=req.params.id
-        let userId=req.session.user._id
-        let product=await productCollection.findOne({_id:ObjectId(proId)})
-        let buy=await orderCollection.aggregate([
-            {
-                $match:{userId:ObjectId(userId)}
-            },
-            {
-                $unwind:'$products'
-            },
-            {
-                $match:{"products.item":ObjectId(proId)}
-            }
-        ]).toArray()
-        let itemVali;
-        if(buy.length>0){
-            itemVali=true
-        }else{
-            itemVali=false
-        }
-        console.log(buy);
-        res.render('user/add-review',{product,itemVali,user:req.session.user})
-    },
-    submitReviw:async(req,res)=>{
-        console.log(req.body)
-        proId=req.params.id
-        let reviewObj={
-            rating:parseInt(req.body.rate),
-            title:req.body.title,
-            description:req.body.description,
-            userId:req.session.user._id,
-            username:req.session.user.username
-        }
-        let review=await reviewCollection.findOne({product:ObjectId(proId)})
-        if(review){
-            reviewCollection.updateOne({product:ObjectId(proId)},{$push:{review:reviewObj}})
-        }else{
-            let obj={
-                product:ObjectId(proId),
-                review:[reviewObj]
-            }
-            reviewCollection.insertOne(obj)
-        }
-        res.redirect('/product/'+req.params.id)
-    }
+
 
 }

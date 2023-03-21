@@ -709,3 +709,15 @@ a:hover{
 .rate > label:hover ~ input:checked ~ label {
   color: #c59b08;
 }
+
+#searchResultsBox{
+  position: absolute;
+  top: 243px;
+  width: 40vw;
+  max-height: 40vh;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: white;
+  visibility: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}

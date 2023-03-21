@@ -45,6 +45,11 @@ hb.handlebars.registerHelper('eq', function (a,b) {
  hb.handlebars.registerHelper('gt',function(a,b){
   return a>=b;
  })
+
+ hb.handlebars.registerHelper('mul',function(a,b){
+  return a*b
+ })
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development

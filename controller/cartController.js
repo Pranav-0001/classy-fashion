@@ -58,7 +58,8 @@ function getCartTotal(userId){
 }
 
 module.exports={
-    cart: async (req, res) => {
+    cart: async (req, res ,next) => {
+       try {
         req.session.walletAmt=null
         let user = req.session.user
         let userId=req.session.user._id
@@ -107,9 +108,13 @@ module.exports={
         res.render('user/cart', { user: req.session.user, products, cartCount,total })
         req.session.address = null
         req.session.coupApply = null
+       } catch (err) {
+        next(err)
+       }
     },
-    addToCart:async(req,res)=>{
-        let proId = req.params.id
+    addToCart:async(req,res,next)=>{
+        try{
+            let proId = req.params.id
         let userId = req.session.user._id
         let size=req.body.Size
         let proObj={
@@ -140,11 +145,16 @@ module.exports={
                 res.redirect('/cart')
             })
         }
+        }
+        catch(err){
+            next(err)
+        }
        
     },
-    changeProductQuantity:async(req,res)=>{
+    changeProductQuantity:async(req,res,next)=>{
 
-        let details = req.body
+        try{
+            let details = req.body
         console.log("size",details.size);
         details.count = parseInt(details.count)
         details.quantity = parseInt(details.quantity)
@@ -175,14 +185,23 @@ module.exports={
                 res.json(response)
             })
         }
+        }
+        catch(err){
+            next(err)
+        }
     },
     removeCartProduct:(req,res)=>{
-        let details=req.body
+        try{
+            let details=req.body
         cartCollection.updateOne({_id:ObjectId(details.cart)},
             {
                 $pull:{products:{item:ObjectId(details.product),size:details.size}}
             }).then((response)=>{
                 res.json({removeProduct:true})
             })
+        }
+        catch(err){
+            next(err)
+        }
     }
 }

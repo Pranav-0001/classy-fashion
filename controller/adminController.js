@@ -14,8 +14,9 @@ const { ObjectId } = mongoose.Types
 const sharp=require('sharp')
 
 module.exports = {
-    adminHome:async (req, res) => {
-        let admin = req.session.admin
+    adminHome:async (req, res ,next) => {
+        try{
+            let admin = req.session.admin
         let revenue = await orderCollection.aggregate([
             {
                 $match:{paymentStatus:"Paid"}
@@ -33,9 +34,14 @@ module.exports = {
         let cancelCount=await orderCollection.countDocuments({orderStatus:'adminAcceptCancel'})
         console.log(cancelCount);
         res.render('admin/home',{admin,revenue,userCount,ordersCount,cancelCount})
+        }catch(err){
+            next(err)
+        }
+        
     },
     adminLogin: (req, res) => {
-        let admin = req.session.admin
+        try{
+            let admin = req.session.admin
         if (admin) {
             res.redirect('/admin')
         } else {
@@ -43,9 +49,13 @@ module.exports = {
             res.render('admin/login', { err ,login:true})
             req.session.adminLoginErr = null
         }
+        }catch(err){
+            next(err)
+        }
     },
-    adminLoginPost: async (req, res) => {
-        let admindata = req.body
+    adminLoginPost: async (req, res ,next) => {
+        try {
+            let admindata = req.body
 
         let response = {}
         let admin = await adminCollection.findOne({ email: admindata.email })
@@ -77,24 +87,39 @@ module.exports = {
             req.session.adminLoginErr = response.msg
             res.redirect('/admin/login')
         }
+        } catch (err) {
+            next(err)
+        }
+        
     },
-    adminProduct:async(req,res)=>{
-        let admin=req.session.admin
+    adminProduct:async(req,res ,next)=>{
+        try{
+            let admin=req.session.admin
         let products=await productCollection.find().toArray()
         res.render('admin/products',{products,admin})
+        }
+        catch(err){
+            next(err)
+        }
 
     },
-    adminAddProduct:async(req,res)=>{
-        let err = req.session.addProductErr
+    adminAddProduct:async(req,res,next)=>{
+        try{
+            let err = req.session.addProductErr
         let data = req.session.addData
         let admin = req.session.admin
         let category= await categoryCollection.find().toArray()
         res.render('admin/add-product', { err, data, category, admin })
         req.session.addProductErr = null
         req.session.addData = null
+        }
+        catch(err){
+            next(err)
+        }
     },
-    adminAddProductPost:async(req,res)=>{
-        let Images = req.files.images
+    adminAddProductPost:async(req,res,next)=>{
+        try{
+            let Images = req.files.images
         req.session.addData = req.body
         let productData=req.body
         let response={}
@@ -155,29 +180,62 @@ module.exports = {
                 res.redirect('/admin/add-product')
             }
         }
+        }catch(err){
+            next(err)
+        }
     },
-    adminUserList:async(req,res)=>{
-        let admin=req.session.admin
+    adminUserList:async(req,res,next)=>{
+        try{
+            let admin=req.session.admin
+            let filter=req.session.userFilter
+            
         let users=await userCollection.find().toArray()
-        res.render('admin/users',{users,admin})
+        console.log(filter)
+        if(filter){
+            
+           if(filter=="banned"){
+            users=await userCollection.find({status:false}).toArray()
+           }else if(filter=='active'){
+            users=await userCollection.find({status:true}).toArray()
+           }else{
+            users=await userCollection.find().toArray()
+           }
+            
+        }
+        res.render('admin/users',{users,admin,filter})
+        }
+        catch(err){
+            next(err)
+        }
     },
     banUser:(req,res)=>{
-        let userId=req.params.id
+        try{
+            let userId=req.params.id
         user.updateOne({ _id: ObjectId(userId) }, { $set: { status: false } })
         res.redirect('/admin/user-list')
+        }
+        catch(err){
+            next(err)
+        }
     },
     unblockUser:(req,res)=>{
-        let userId=req.params.id
+        try {
+            let userId=req.params.id
         user.updateOne({ _id: ObjectId(userId) }, { $set: { status: true } })
         res.redirect('/admin/user-list')
+        } catch (err) {
+            next(err)
+        }
+        
     },
     deleteUser:(req,res)=>{
         let userId=req.params.id
         userCollection.deleteOne({ _id: ObjectId(userId) })
         res.redirect('/admin/user-list')
     },
-    salesReport:async(req,res)=>{
-        let Products=await productCollection.find().toArray()
+    salesReport:async(req,res,next)=>{
+        try{
+            let Products=await productCollection.find().toArray()
         let sale=req.session.salesReport
         
         let salesData=await orderCollection.find({paymentStatus:"Paid"}).sort({timeStamp:-1}).toArray()
@@ -219,7 +277,7 @@ module.exports = {
         }
         let revenue = await orderCollection.aggregate([
             {
-                $match:{orderStatus:"Delivered"}
+                $match:{paymentStatus:"Paid"}
             },
             {
                 $group:{_id:null,revenue:{$sum:{$convert:{input:'$discTotal',to:'int'}}}}
@@ -229,73 +287,29 @@ module.exports = {
         else revenue=0
         res.render('admin/sales-report',{salesData,admin:req.session.admin,revenue,sale})
         req.session.salesReport=null
-    },
-    salesReportPost:(req,res)=>{
-        req.session.salesReport=req.body.opt
-        res.json({status:true})
-    },
-    couponsGet:async(req,res)=>{
-        let coupons=await couponCollection.find().toArray()
-        res.render('admin/coupons',{admin:req.session.admin,coupons})
-    },
-    addCoupon:(req,res)=>{
-        let Err=req.session.couponErr
-        let couponData=req.session.couponData
-        res.render('admin/add-coupon',{admin:req.session.admin,Err,couponData})
-    },
-    addCouponPost:(req,res)=>{
-        let couponData=req.body
-        req.session.couponData=couponData
-        let coupon=couponData.coupon
-        let coupREgx=/^([A-Za-z0-9]){3,10}$/gm
-        let amount=/^([0-9]){1,4}$/gm
-        let disregx=/^([0-9]){1,4}$/gm
-        if(couponData.coupon==''){
-            req.session.couponErr="Coupon field required"
-            res.redirect('/admin/add-coupon')
-        }else if(couponData.expiry==''){
-            req.session.couponErr="Expiry date field required"
-            res.redirect('/admin/add-coupon')
-        }else if(couponData.discount==''){
-            req.session.couponErr="Discount field required"
-            res.redirect('/admin/add-coupon')
-        }else if(couponData.minAmount==''){
-            req.session.couponErr="min amount field required"
-            res.redirect('/admin/add-coupon')
-        }else if(coupREgx.test(coupon)==false){
-            req.session.couponErr="Coupon only allows A-Z and 0-9"
-            res.redirect('/admin/add-coupon')
-        }else if(amount.test(couponData.minAmount)==false){
-            req.session.couponErr="Amount field only allows numbers"
-            res.redirect('/admin/add-coupon')
-        }else if(disregx.test(couponData.discount)==false){
-            req.session.couponErr="Discount field only allows numbers"
-            res.redirect('/admin/add-coupon')
-        }else if(couponData.disType=='percentage'&&couponData.discount>=100){
-            req.session.couponErr="Percentage can only set up to 100%"
-            res.redirect('/admin/add-coupon')
-        }else{
-            let today=new Date()
-            let coupon={
-                coupon:couponData.coupon,
-                expiry:couponData.expiry,
-                minItems:parseInt(couponData.minItems),
-                minAmount:parseInt(couponData.minAmount),
-                disType:couponData.disType,
-                discount:parseInt(couponData.discount),
-                timeStamp:Math.floor(today.getTime()/1000)
-            }
-            couponCollection.insertOne(coupon).then(()=>{
-                res.redirect('/admin/coupons')
-            })
-            
+        }
+        catch(err){
+            next(err)
         }
     },
-    bannerImage:async(req,res)=>{
-        res.render('admin/banner',{admin:req.session.admin}) 
+    salesReportPost:(req,res)=>{
+        try{
+            req.session.salesReport=req.body.opt
+        res.json({status:true})
+        }catch(err){
+            next(err)
+        }
     },
-    bannerUpdate:async(req,res)=>{
-        console.log(req.files);
+    bannerImage:async(req,res,next)=>{
+        try{
+            res.render('admin/banner',{admin:req.session.admin})
+        } catch(err){
+            next(err)
+        }
+    },
+    bannerUpdate:async(req,res,next)=>{
+        try{
+            console.log(req.files);
         if(req.files?.mainBanner){
             let path=req.files.mainBanner.tempFilePath
             await sharp(path)
@@ -315,28 +329,21 @@ module.exports = {
         }
 
         res.redirect('/admin/banner-image')
+        }
+        catch(err){
+            next(err)
+        }
     },
-    editCoupon:async(req,res)=>{
-        let couponData = await couponCollection.findOne({_id:ObjectId(req.params.id)})
-        res.render('admin/edit-coupon',{couponData})
-    },
-    couponUpdate:(req,res)=>{
+    
+    orderFilter:(req,res)=>{
         console.log(req.body);
-        let coupData=req.body
-        couponCollection.updateOne({_id:ObjectId(req.params.id)},{$set:{
-            coupon:coupData.coupon,
-            expiry:coupData.expiry,
-            minItems:coupData.minItems,
-            minAmount:coupData.minAmount,
-            discType:coupData.disType,
-            discount:coupData.discount
-        }})
-        res.redirect('/admin/coupons')
+        req.session.orderFilter=req.body
+        res.json({})
     },
-    deleteCoupon:(req,res)=>{
-        let id=req.params.id
-        couponCollection.deleteOne({_id:ObjectId(id)})
-        res.redirect('/admin/coupons')
+    userFilter:(req,res)=>{
+        console.log("djg",req.body);
+        req.session.userFilter=req.body.filter
+        res.json({})
     }
 
 }

@@ -1,7 +1,9 @@
 <div class="head-img d-flex align-items-center justify-content-center mb-2">
     <h1 class=" text-white " style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Product List</h1>
 </div>
-<div class="container d-none d-md-block">
+<div class="container d-none d-md-block mt-4">
+  <input type="text" placeholder="Search" onkeyup="sendInfo(this)">
+  <div id="searchResultsBox"></div>
     <a href="/admin/add-product" class="float-end add-btn pt-2 pb-2 ps-4 pe-4 mb-4">Add Product</a>
     <table class="table table-hover">
   <thead>
@@ -61,3 +63,35 @@
   </tbody>
 </table>
 </div>
+
+
+<script>
+  function sendInfo(e){
+    console.log(e)
+    let searchResults=document.getElementById('searchResultsBox');
+    if(e.value==''){
+            searchResults.innerHTML=''
+            searchResults.style.visibility='hidden'
+        }else{
+        searchResults.style.visibility='visible'
+        fetch('getSearchProduct',{
+            method:'POST',
+            headers:{'Content-Type' : 'application/json'},
+            body:JSON.stringify({payload:e.value})
+        }).then(res=>res.json()).then(data=>{
+            let payload=data.payload
+            console.log(payload)
+            searchResults.innerHTML=''
+            if(payload.length < 1){
+                searchResults.innerHTML="<p class='mt-3 text-center'>Sorry no results found</p>"
+                return
+            }
+            payload.forEach((item,index)=>{
+                if(index>0) searchResults.innerHTML+= '<hr>';
+                searchResults.innerHTML+=` <div  class="d-flex"><img src='/product-images/${item.Images[0]}.jpg' width='100px'><p>${item.product} </p> <div class='d-flex justify-content-center align-items-center'><a  href="/admin/add-productImg/${item._id}" class="edt-btn bg-warning me-1 pb-2  ps-3 pe-3 ">Add Image </a><br ><a href="/admin/edit-product/${item._id}" class="edt-btn bg-primary me-1 pt-1 pb-1 ps-3 pe-3 mb-2 mt-2">Edit </a> <br ><a href="/admin/delete-product/${item._id}" onclick="return confirm('Do you want to Delete ${item.product}?')" class="dlt-btn bg-danger pt-1 pb-1 ps-3 pe-3 ">Delete</a> </div> </div>`
+            })
+            return
+        })
+        }
+  }
+</script>

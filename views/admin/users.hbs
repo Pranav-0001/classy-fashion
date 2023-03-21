@@ -2,7 +2,14 @@
     <h1 class=" text-white " style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Users</h1>
 </div>
 <div class="container d-none d-md-block">
-    
+    <div class="float-end">
+      <label for="">Filter : </label><select name="" id="" style="border: none;" oninput="usersFilter(this.value)">
+        <option value=" ">All users</option>
+        <option value="active" {{#if (eq filter "active")}}selected{{/if}}>Active Users</option>
+        <option value="banned" {{#if (eq filter "banned")}}selected{{/if}}>Banned Users</option>
+        
+      </select>
+    </div>
  <table class="table table-hover">
   <thead>
     <tr>
@@ -18,6 +25,7 @@
     </tr>
   </thead>
   <tbody>
+    {{#if users}}
     {{#each users}}
     <tr>
       {{#if status}}
@@ -44,6 +52,11 @@
          <a href="/admin/delete-user/{{_id}}"   onclick="return confirm('Do you want to Delete {{username}}?')" class="dlt-btn bg-danger pt-1 pb-1 ps-3 pe-3 ms-2" >Delete </a></td>
     </tr>
     {{/each}}
+    {{else}}
+    <tr>
+      <td colspan="7" class="fs-4 text-center">No results found</td>
+    </tr>
+    {{/if}}
    
   </tbody>
 </table>
@@ -84,3 +97,17 @@
   </tbody>
 </table>
 </div>
+
+<script>
+  function usersFilter(v){
+    console.log(v)
+    $.ajax({
+      url:'/admin/user-filter',
+      method:'POST',
+      data:{filter:v},
+      success:(response)=>{
+        location.reload()
+      }
+    })
+  }
+</script>

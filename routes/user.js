@@ -7,6 +7,8 @@ const userController=require('../controller/userController')
 const productController=require('../controller/productController');
 const cartController = require('../controller/cartController');
 const orderController=require('../controller/orderController')
+const wishlistController=require('../controller/wishlistController')
+const reviewController=require('../controller/reviewController')
 /* GET home page. */
 
 let verifyLogin = (req, res, next) => {
@@ -88,11 +90,11 @@ router.post('/select-sort',productController.sortShop)
 
 router.post('/getSearchProduct',productController.productSearch)
 
-router.get('/wishlist',verifyLogin,userController.wishList)
+router.get('/wishlist',verifyLogin,wishlistController.wishList)
 
-router.post('/add-to-wishList/:id',verifyLogin,userController.addToWishlist)
+router.post('/add-to-wishList/:id',verifyLogin,wishlistController.addToWishlist)
 
-router.get('/remove-from-wishlist/:id',verifyLogin,userController.removeWishlistProduct)
+router.get('/remove-from-wishlist/:id',verifyLogin,wishlistController.removeWishlistProduct)
 
 router.post('/coupon-apply',verifyLogin,orderController.applyCoupon)
 
@@ -108,12 +110,15 @@ router.get('/remove-coupon',verifyLogin,orderController.removeCoupon)
 router.get('/edit-address/:id',verifyLogin,userController.editAddress)
 router.post('/edit-address/:id',verifyLogin,userController.updateAddress)
 
-router.get('/add-review/:id',verifyLogin,productController.getReview)
-router.post('/submit-review/:id',verifyLogin,productController.submitReviw)
+router.get('/add-review/:id',verifyLogin,reviewController.getReview)
+router.post('/submit-review/:id',verifyLogin,reviewController.submitReviw)
 
 router.get('/forgot-password',userController.forgotPass)
 router.post('/forgot-verify',userController.forgotVerify)
+
 router.post('/verifyForgotOTP',userController.verifyForgotOtp)
 router.post('/reset-password',userController.resetPassword)
+
+
 
 module.exports = router;   

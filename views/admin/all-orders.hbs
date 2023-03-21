@@ -2,6 +2,18 @@
     <h1 class=" text-white " style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Orders</h1>
 </div>
 <div class="container d-none d-md-block">
+  <div class="float-end mb-4">
+    <select name="" oninput="orderFilter()" id="order-filter" class="fs-5" style="border: none;">
+      <option value="">All</option>
+      <option value="userCancelPending" {{#if (eq opt 'userCancelPending')}} selected{{/if}}>Pending Cancel</option>
+      <option value="adminAcceptCancel" {{#if (eq opt 'adminAcceptCancel')}} selected{{/if}}>Cancelled</option>
+      <option value="orderPlaced" {{#if (eq opt 'orderPlaced')}} selected{{/if}}>Order Placed</option>
+      <option value="shipped" {{#if (eq opt 'shipped')}} selected{{/if}}>Shipped</option>
+      <option value="outForDelivery" {{#if (eq opt 'outForDelivery')}} selected{{/if}}>Out For delivery</option>
+      <option value="Delivered" {{#if (eq opt 'Delivered')}} selected{{/if}}>Delivered</option>
+      
+    </select>
+  </div>
     <table class="table table-hover">
   <thead>
     <tr>
@@ -57,3 +69,18 @@
   </tbody>
 </table>
 </div>
+
+<script>
+  function orderFilter(){
+    let filter=document.getElementById('order-filter').value
+    console.log(filter)
+    $.ajax({
+      url:'/admin/order-filter',
+      method:"POST",
+      data:{filter:filter},
+      success:(response)=>{
+        location.reload()
+      }
+    })
+  }
+</script>

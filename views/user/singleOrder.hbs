@@ -269,9 +269,12 @@
             {{#if (eq order.orderStatus 'userCancelPending')}}
             <img src="/images/pending.webp" alt="" width="50%" class="pt-4" style="opacity: 0.7;">
             <h5 class="text-warning pt-4 ">Processing your cancel request</h5>
+            {{else}} {{#if (eq order.orderStatus 'Delivered')}}
+            {{!-- <a href="" class="btn btn-danger text-white">Return</a> --}}
             {{else}}
 
             <a href="/cancel-order/{{order._id}}" class="btn btn-danger text-white">Cancel Order</a>
+            {{/if}}
             {{/if}}
             {{/if}}
 

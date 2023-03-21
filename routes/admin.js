@@ -8,11 +8,13 @@ const fs=require('fs');
 
 const adminController=require('../controller/adminController')
 const productController=require('../controller/productController');
+const couponController=require('../controller/couponController');
 
 const orderController = require('../controller/orderController');
 const { adminAddProduct } = require('../controller/adminController');
 const userController = require('../controller/userController');
 const coupon = require('../model/couponModel');
+
 
 
 /* GET users listing. */
@@ -77,21 +79,25 @@ router.get('/submit-order-request/:set/:id',verifyLogin,orderController.orderCan
 router.get('/sales-report',verifyLogin,adminController.salesReport)
 router.post('/sales-report',verifyLogin,adminController.salesReportPost)
 
-router.get('/coupons',verifyLogin,adminController.couponsGet)
+router.get('/coupons',verifyLogin,couponController.couponsGet)
 
-router.get('/add-coupon',verifyLogin,adminController.addCoupon)
-router.post('/add-coupon',verifyLogin,adminController.addCouponPost)
+router.get('/add-coupon',verifyLogin,couponController.addCoupon)
+router.post('/add-coupon',verifyLogin,couponController.addCouponPost)
 
-router.get('/edit-coupon/:id',verifyLogin,adminController.editCoupon)
-router.post('/edit-coupon/:id',verifyLogin,adminController.couponUpdate)
+router.get('/edit-coupon/:id',verifyLogin,couponController.editCoupon)
+router.post('/edit-coupon/:id',verifyLogin,couponController.couponUpdate)
 
 router.get('/banner-image',verifyLogin,adminController.bannerImage)
 
 router.post('/update-banner',verifyLogin,adminController.bannerUpdate)
 
-router.get('/delete-coupon/:id',verifyLogin,adminController.deleteCoupon)
+router.get('/delete-coupon/:id',verifyLogin,couponController.deleteCoupon)
 
+router.post('/order-filter',verifyLogin,adminController.orderFilter)
 
+router.post('/user-filter',verifyLogin,adminController.userFilter)
+
+router.post('/getSearchProduct',productController.productSearch)
 
 module.exports = router;
   

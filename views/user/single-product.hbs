@@ -81,9 +81,9 @@
             {{#if review}}
             {{#each review}}
             <div class="shadow py-1 px-3 mb-2" style="border-radius: 20px;">
-                <h5 class=" "><span {{#if (gt rating 4)}} class="badge rounded-pill bg-success" {{else}} {{#if (gt rating 2)}} class="badge rounded-pill bg-warning" {{else}} class="badge rounded-pill bg-danger" {{/if}}{{/if}}>{{rating}}<i class="fa-regular fa-star ms-1"></i></span>{{username}}</h5>
-                <h5 class="ps-5">{{title}}</h5>
-                <p class="ps-5">{{description}}</p>
+                <h5 class=" "><span {{#if (gt review.rating 4)}} class="badge rounded-pill bg-success" {{else}} {{#if (gt review.rating 2)}} class="badge rounded-pill bg-warning" {{else}} class="badge rounded-pill bg-danger" {{/if}}{{/if}}>{{review.rating}}<i class="fa-regular fa-star ms-1"></i></span>{{review.username}}</h5>
+                <h5 class="ps-5">{{review.title}}</h5>
+                <p class="ps-5">{{review.description}}</p>
             </div>
             {{/each}}
             <a href="">View all reviews</a>
