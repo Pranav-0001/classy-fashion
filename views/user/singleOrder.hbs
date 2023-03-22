@@ -255,7 +255,19 @@
 
         </div>
         <div class=" col-md-4 ">
-            {{#if (eq order.orderStatus 'adminAcceptCancel')}}{{else}}
+            {{#if (eq order.orderStatus 'orderPlaced')}}
+            <h5 class="text-secondary mb-5 mt-3">More Actions</h5>
+            <a href="" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
+            {{/if}}
+            {{#if (eq order.orderStatus 'shipped')}}
+            <h5 class="text-secondary mb-5 mt-3">More Actions</h5>
+            <a href="" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
+            {{/if}}
+             {{#if (eq order.orderStatus 'outForDelivery')}}
+            <h5 class="text-secondary mb-5 mt-3">More Actions</h5>
+            <a href="" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
+            {{/if}}
+             {{#if (eq order.orderStatus 'Delivered')}}
             <h5 class="text-secondary mb-5 mt-3">More Actions</h5>
             <a href="" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
             {{/if}}
@@ -274,9 +286,15 @@
             {{else}}{{#if (eq order.orderStatus "returnPending")}}
             <img src="/images/pending.webp" alt="" width="50%" class="pt-4" style="opacity: 0.7;">
             <h5 class="text-warning pt-4 ">Processing your return request</h5>
-            {{else}}
+            {{else}} {{#if (eq order.orderStatus "returnConfirmed")}}
+            <div class="d-block">
+                <h3>Order Returned</h3>
+            <h5 class="text-primary ">Amount refunded to your wallet</h5>
+            </div>
+            {{else}} 
 
             <a href="/cancel-order/{{order._id}}" class="btn btn-danger text-white">Cancel Order</a>
+            {{/if}}
             {{/if}}
             {{/if}}
             {{/if}}

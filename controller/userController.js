@@ -604,6 +604,9 @@ module.exports={
 
     },
     aboutUs:(req,res)=>{
-        res.render('user/about')
+        res.render('user/about',{user:req.session.user})
+    },
+    contact:(req,res)=>{
+        res.render('user/contact',{user:req.session.user})
     }
 }

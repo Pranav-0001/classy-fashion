@@ -125,5 +125,7 @@ router.post('/review-filter',reviewController.filter)
 router.post('/return',orderController.orderReturn)
 
 router.get('/about-us',userController.aboutUs)
+router.get('/contact',userController.contact)
+
 
 module.exports = router;   
