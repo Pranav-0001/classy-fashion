@@ -92,6 +92,7 @@ module.exports={
                 products:[product]
             }
             wishListCollection.insertOne(wishListObj)
+            resp.status=true
         }
         res.json(resp)
         }

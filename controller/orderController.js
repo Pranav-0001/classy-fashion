@@ -213,7 +213,8 @@ module.exports={
                coupDiscount:appliedCoupon.coupSave,
                orderStatus:"orderPlaced",
                paymentStatus:(paymentMethod=='cash')?"Pending":"Paid",
-               timeStamp:d.getTime()
+               timeStamp:d.getTime(),
+               month:d.getMonth()+1
                
            }
            
@@ -327,7 +328,8 @@ module.exports={
                coupDiscount:appliedCoupon.coupSave,
                orderStatus:"orderPlaced",
                paymentStatus:(paymentMethod=='cash')?"Pending":"Paid",
-               timeStamp:d.getTime()
+               timeStamp:d.getTime(),
+               month:d.getMonth()+1
                
            }
             orderCollection.insertOne(OrderObj).then((response) => {
@@ -545,6 +547,11 @@ module.exports={
     removeCoupon:(req,res)=>{
         req.session.coupApply=null
         res.redirect('/place-order')
+    },
+    orderReturn:(req,res)=>{
+        console.log(req.body);
+        orderCollection.updateOne({_id:ObjectId(req.body.id)},{$set:{orderStatus:"returnPending",reason:req.body.reason}})
+        res.json({})
     }
     
 }

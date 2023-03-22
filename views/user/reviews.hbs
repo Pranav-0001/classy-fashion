@@ -1,0 +1,37 @@
+<br>
+<div class="container">
+    <select class=" mt-3 filter" name="" id="" oninput="filterReview(this.value)">
+                <option  value="Latest Fisrt">Latest First</option>
+                <option {{#if (eq filter "positive")}}selected{{/if}} value="positive">Positive Fisrt</option>
+                <option {{#if (eq filter "negative")}}selected{{/if}} value="negative">Negative Fisrt</option>
+            </select>
+    <div class="row ">
+        
+            
+        
+        {{#each reviews}}
+        <div class="col-md-6   mt-3 " >
+           <div class="review-box  p-2">
+             <h5><span {{#if (gt review.rating 4)}} class="badge rounded-pill bg-success" {{else}} {{#if (gt review.rating 2)}} class="badge rounded-pill bg-warning" {{else}} class="badge rounded-pill bg-danger" {{/if}}{{/if}}>{{review.rating}}<i class="fa-regular fa-star ms-1"></i></span>{{review.username}}</h5>
+            <h6>{{review.title}}</h6>
+            <p>{{review.description}}</p>
+           </div>
+            
+            
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+<script>
+    function filterReview(opt) {
+        $.ajax({
+            url: '/review-filter',
+            method: 'POST',
+            data: { filter: opt },
+            success:(response)=>{
+                location.reload()
+            }
+        })
+    }
+</script>

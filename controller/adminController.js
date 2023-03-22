@@ -26,13 +26,15 @@ module.exports = {
             }
         ]).toArray()
         console.log(revenue);
-        if(revenue.length>=0) revenue=revenue[0]?.revenue;
+        if(revenue.length>0) revenue=revenue[0]?.revenue;
         else revenue=0
        
         let userCount=await userCollection.countDocuments({status:true})
         let ordersCount=await orderCollection.countDocuments()
         let cancelCount=await orderCollection.countDocuments({orderStatus:'adminAcceptCancel'})
-        console.log(cancelCount);
+        
+        console.log("test",cancelCount);
+        
         res.render('admin/home',{admin,revenue,userCount,ordersCount,cancelCount})
         }catch(err){
             next(err)
@@ -344,6 +346,47 @@ module.exports = {
         console.log("djg",req.body);
         req.session.userFilter=req.body.filter
         res.json({})
+    },
+    chartData:async(req,res,next)=>{
+        try{
+            console.log("call success");
+        let monthWise=await orderCollection.aggregate([
+            {
+                $group:{_id:"$month",revenue:{$sum:"$discTotal"}}
+            },
+            {
+                $sort:{_id:1}
+            }
+        ]).toArray()
+        console.log(monthWise);
+        res.json(monthWise)
+        }
+        catch(err){
+            next(err)
+        }
+    },
+    returnAccept:async(req,res,next)=>{
+        try {
+            let status = req.params.response
+            let id = req.params.id
+            
+            let order=await orderCollection.findOne({_id:ObjectId(id)})
+            let amount=order.discTotal
+            if(order.coupon!=null){
+                amount-=order.coupDiscount
+            }
+            if (status == "true") {
+                orderCollection.updateOne({ _id: ObjectId(id) }, { $set: { orderStatus: "returnConfirmed",paymentStatus:"refunded" } })
+                userCollection.updateOne({_id:order.userId},{$inc:{wallet:amount}})
+            }
+            else{
+                orderCollection.updateOne({ _id: ObjectId(id) }, { $set: { orderStatus: "Delivered" } })
+            }
+            res.redirect('/admin/all-orders')
+        }
+        catch (err) {
+            next(err)
+        }
     }
 
 }

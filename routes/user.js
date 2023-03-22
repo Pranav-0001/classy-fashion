@@ -119,6 +119,11 @@ router.post('/forgot-verify',userController.forgotVerify)
 router.post('/verifyForgotOTP',userController.verifyForgotOtp)
 router.post('/reset-password',userController.resetPassword)
 
+router.get('/reviews/:id',reviewController.getAllReview)
+router.post('/review-filter',reviewController.filter)
 
+router.post('/return',orderController.orderReturn)
+
+router.get('/about-us',userController.aboutUs)
 
 module.exports = router;   

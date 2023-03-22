@@ -10,7 +10,7 @@
                 {{/each}}
             </div>
         </div>
-        <div class="col-md-6 ms-3 mt-4">
+        <div class="col-md-6  mt-4">
             <h2>{{product.product}}</h2>
             <h4 class="text-secondary">{{product.brand}}</h4>
             <br>
@@ -86,7 +86,7 @@
                 <p class="ps-5">{{review.description}}</p>
             </div>
             {{/each}}
-            <a href="">View all reviews</a>
+            <a href="/reviews/{{product._id}}">View all reviews</a>
             {{else}}
             <h4 class="text-center pt-5">No Reviews found</h4>
             {{/if}}

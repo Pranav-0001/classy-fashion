@@ -57,7 +57,7 @@
         </div>
         <div class="row mt-4 gx-1  d-flex justify-content-center">
 
-            <div class="col-md-4  bg-lg-white pt-4 dash-py pe-5" style="max-width: 80vw;">
+            <div class="col-lg-4  bg-lg-white pt-4 dash-py pe-5" style="max-width: 80vw;">
                 <div class="container " style="max-width: 80vw;">
                     <div class="chart-container  " style="max-width: 80vw;">
                     <canvas class="px-sm-4 pe-3 px-lg-0" id="myChart" style="max-width: 80vw;"></canvas>
@@ -75,9 +75,9 @@
             <style>
                 #chartContainer {
                     width: 100%;
-                    height: 424px;
+                    height: auto;
                 }
-
+            
                 #barGraph {
                     width: 100%;
                     height: 100%;
@@ -85,14 +85,21 @@
             </style>
             <script>
                 // Data
-                let rev = parseInt(document.getElementById('count1').innerHTML)
-                const barData = [
-                    { label: 'Jan', value: 0 },
-                    { label: 'Feb', value: 0 },
-                    { label: 'Mar', value: rev },
-                    { label: 'Apr', value: 0 },
-                    { label: 'May', value: 0 }
-                ];
+                
+                $.ajax({
+                    url:'/admin/getChart-data',
+                    method:'GET',
+                    success:(reve)=>{
+                        console.log(reve)
+                        let Data=[]
+                        let Month=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                        reve.forEach(value=>{
+
+                            Data.push({'label':Month[value._id-1],'value':value.revenue})
+                        })
+                         let rev = parseInt(document.getElementById('count1').innerHTML)
+                         
+                const barData = Data;
 
                 // Chart creation
                 const chartCanvas = document.getElementById('barGraph');
@@ -117,6 +124,11 @@
                         }
                     }
                 });
+                    }
+                    
+                })
+
+               
 
             </script>
 
@@ -125,6 +137,7 @@
     </div>
 
 </section>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -148,7 +161,10 @@
         let canc = parseInt(document.getElementById('count4').innerHTML)
         counter("count1", rev - 400, rev, 1);
         counter("count2", 0, user, 2500);
-        counter("count3", 0, ord, 1000);
+        if (ord > 0){
+           counter("count3", 0, ord, 1000); 
+        }
+        
         if (canc > 0) {
             counter("count4", 0, canc, 1000);
         }

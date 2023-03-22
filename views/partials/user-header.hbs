@@ -105,27 +105,33 @@
 
             <input class="nav-search" type="text" placeholder="Search" onkeyup="sendData(this)" style="width: 100px;">
         </div>
-        <div class="head-search-box ps-2 pt-1 pe-4 ">
+        {{#if user}}
+        <div class="head-search-box ps-2 pt-1 pe-4 " onclick="window.location.href='/wishlist'">
 
             <i class="fa-regular fa-heart fs-6"></i>
         </div>
+        {{/if}}
         <div class="head-search-box ps-1 pt-1 pe-4 d-flex">
             {{#if user}}
             <p class="ms-3" onclick="openNav()" style="cursor: pointer;"> {{user.username}}</p>
             {{else}}
-            <i class="fa-regular fa-user fs-6 pt-1"></i>
-            <p class="ms-3"> Login</p>
+            <div class="d-flex" onclick="window.location.href='/login'" >
+                <i class="fa-regular fa-user fs-6 pt-1"></i>
+            <p class="ms-2"> Login</p>
+            </div>
             {{/if}}
         </div>
-        <div class="head-search-box ps-3 pt-1 " style="border-right-style: none;">
+        {{#if user}}
+        <div class="head-search-box ps-3 pt-1 " style="border-right-style: none;" onclick="window.location.href='/cart'">
 
-            <i class="fa-solid fa-cart-shopping fs-6"></i>
+            <i class="fa-solid fa-cart-shopping fs-6"><span class="badge rounded-pill bg-warning text-dark">{{cartCount}}</span></i>
         </div>
+        {{/if}}
     </div>
 </nav>
 <br><br>
 
-<div {{#if user}} class="search-item-user mt-4" {{else}}class="search-item mt-4" {{/if}} id="searchResults">
+<div {{#if user}} class="search-item-user mt-5 mt-md-4" {{else}}class="search-item mt-5 mt-md-4" {{/if}} id="searchResults">
 
 </div>
 {{/if}}

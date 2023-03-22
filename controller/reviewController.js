@@ -78,5 +78,63 @@ module.exports={
         catch(err){
             next(err)
         }
+    },
+    getAllReview:async(req,res,next)=>{
+        try {
+            let proId=req.params.id
+            let filter=req.session.reviewFilter
+            let reviews=await reviewCollection.aggregate([
+                {
+                    $match:{product:ObjectId(proId)}
+                },
+                {
+                    $unwind:'$review'
+                }
+            ]).toArray()
+            console.log(reviews);
+            if(filter){
+                console.log(filter);
+                if(filter=="positive"){
+                    reviews=await reviewCollection.aggregate([
+                        {
+                            $match:{product:ObjectId(proId)}
+                        },
+                        {
+                            $unwind:'$review'
+                        },
+                        {
+                            $sort:{"review.rating":-1}
+                        }
+                    ]).toArray()
+                }else if(filter=="negative"){
+                    reviews=await reviewCollection.aggregate([
+                        {
+                            $match:{product:ObjectId(proId)}
+                        },
+                        {
+                            $unwind:'$review'
+                        },
+                        {
+                            $sort:{"review.rating":1}
+                        }
+                    ]).toArray()
+                }
+            }
+            
+            res.render('user/reviews',{reviews,filter,user:req.session.user})
+
+
+        } catch (error) {
+            next(error)
+        }
+    },
+    filter:(req,res)=>{
+        console.log(req.body);
+        if(req.body.filter==''){
+            req.session.reviewFilter=null
+        }else{
+            req.session.reviewFilter=req.body.filter
+        }
+        res.json({})
     }
 }

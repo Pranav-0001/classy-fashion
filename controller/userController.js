@@ -602,5 +602,8 @@ module.exports={
            console.log(err);
         }
 
+    },
+    aboutUs:(req,res)=>{
+        res.render('user/about')
     }
 }

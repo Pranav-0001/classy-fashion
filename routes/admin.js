@@ -9,6 +9,10 @@ const fs=require('fs');
 const adminController=require('../controller/adminController')
 const productController=require('../controller/productController');
 const couponController=require('../controller/couponController');
+const categoryController=require('../controller/categoryController');
+
+
+
 
 const orderController = require('../controller/orderController');
 const { adminAddProduct } = require('../controller/adminController');
@@ -50,11 +54,11 @@ router.get('/edit-product/:id',verifyLogin,productController.editProduct)
 
 router.post('/edit-product/:id',verifyLogin,productController.editProductPost)
 
-router.get('/categories',verifyLogin,productController.getCategory)
+router.get('/categories',verifyLogin,categoryController.getCategory)
 
-router.post('/add-category',verifyLogin,productController.addCategory)
+router.post('/add-category',verifyLogin,categoryController.addCategory)
 
-router.get('/delete-category/:id',verifyLogin,productController.deleteCategory)
+router.get('/delete-category/:id',verifyLogin,categoryController.deleteCategory)
 
 router.get('/delete-image/:imgId',verifyLogin,productController.deleteProductImage)
 
@@ -62,9 +66,9 @@ router.get('/add-productImg/:id',verifyLogin,productController.addProductImage)
 
 router.post('/add-productImg/:id',verifyLogin,productController.AddProductImagePost)
 
-router.get('/edit-category/:id',verifyLogin,productController.editCategory)
+router.get('/edit-category/:id',verifyLogin,categoryController.editCategory)
 
-router.post('/edit-category/:id',verifyLogin,productController.updateCategory)
+router.post('/edit-category/:id',verifyLogin,categoryController.updateCategory)
 
 router.get('/logout',productController.adminLogout)
 
@@ -98,6 +102,10 @@ router.post('/order-filter',verifyLogin,adminController.orderFilter)
 router.post('/user-filter',verifyLogin,adminController.userFilter)
 
 router.post('/getSearchProduct',productController.productSearch)
+
+router.get('/getChart-data',verifyLogin,adminController.chartData)
+
+router.get('/submit-return-request/:response/:id',verifyLogin,adminController.returnAccept)
 
 module.exports = router;
   

@@ -349,62 +349,7 @@ module.exports={
             next(err)
         }
     },
-    getCategory:async(req,res,next)=>{
-        try{
-            let data = req.session.cateData
-        let err = req.session.categoryErr
-        let category = req.session.editCateData
-        let admin = req.session.admin
-        console.log(err);
-        let categories= await categoryCollection.find().toArray()
-        res.render('admin/categories',{categories,err,data,category,admin})
-        req.session.categoryErr=null
-        req.session.cateData=null
-        req.session.editCateData=null
-        }
-        catch(err){
-            next(err)
-        }
-    },
-    addCategory:async(req,res,next)=>{
-        try{
-            let cate=req.body
-        let regx=/^([a-zA-Z ]){3,20}$/gm
-        let category=await categoryCollection.findOne({category:{$regex:cate.category,$options:"i"}})
-           
-            if(cate.category==''){ 
-                req.session.cateData=req.body
-                req.session.categoryErr="field Empty"
-                res.redirect('/admin/categories')
-            }else if(regx.test(cate.category)==false){
-                req.session.cateData=req.body
-                req.session.categoryErr="Invalid input"
-                res.redirect('/admin/categories')
-            }else if(category){
-                req.session.cateData=req.body
-                req.session.categoryErr="Category Already Exist"
-                res.redirect('/admin/categories')
-            }
-            else{
-                categoryCollection.insertOne(cate).then((data)=>{
-                res.redirect('/admin/categories')
-            })
-            }
-        }
-        catch(err){
-            next(err)
-        }
-    },
-    deleteCategory:async(req,res,next)=>{
-        try{
-            let cateId=req.params.id
-        categoryCollection.deleteOne({_id:ObjectId(cateId)})
-        res.redirect('/admin/categories')
-        }
-        catch(err){
-            next(err)
-        }
-    },
+    
     deleteProductImage:async(req,res,next)=>{
         try{
             let imgId=req.params.imgId
@@ -481,29 +426,6 @@ module.exports={
             next(err)
         }
     },
-    editCategory:async(req,res,next)=>{
-        try{
-            let cateId = req.params.id
-        let category = await categoryCollection.findOne({ _id: ObjectId(cateId) })
-        req.session.editCateData = category
-        res.redirect('/admin/categories')
-        }
-        catch(err){
-            next(err)
-        }
-    },
-    updateCategory:(req,res,next)=>{
-        try{
-            let cateId = req.params.id
-        let cate = req.body
-        let regx = /^(\w)([A-Za-z ]){1,20}/gm
-        categoryCollection.updateOne({ _id: ObjectId(cateId) }, { $set: { category: cate.category } })
-        res.redirect('/admin/categories')
-        }
-        catch(err){
-            next(err)
-        }
-    },
     adminLogout:(req,res)=>{
         req.session.admin=null
         res.redirect('/admin/login')
@@ -518,8 +440,31 @@ module.exports={
         try{
             let payload=req.body.payload.trim();
         console.log(payload);
+        let filter=req.session.filter
         let search = await productCollection.find({product: {$regex: new RegExp(''+payload+'.*','i' )}}).toArray()
-        console.log(search);
+       
+        console.log(filter);
+        if(filter?.selection=="category"){
+            search = await productCollection.find({product: {$regex: new RegExp(''+payload+'.*','i' )},category:filter.option}).toArray()
+        }else if(filter?.selection=="brand"){
+            search = await productCollection.find({product: {$regex: new RegExp(''+payload+'.*','i' )},brand:filter.option}).toArray()
+        }else if(filter?.selection=="price"){
+            let option=filter.option
+            console.log(option);
+            if(option=='1000'){
+                search=await productCollection.find({product: {$regex: new RegExp(''+payload+'.*','i' )},offerPrice:{$lt:1000}}).toArray()
+            }else if(option=='1000-2000'){
+                search=await productCollection.find({product: {$regex: new RegExp(''+payload+'.*','i' )},$and:[{offerPrice:{$gt:1000}},{offerPrice:{$lt:2000}}]}).toArray()
+            }else if(option=='2000-3000'){
+                search=await productCollection.find({product: {$regex: new RegExp(''+payload+'.*','i' )},$and:[{offerPrice:{$gt:2000}},{offerPrice:{$lt:3000}}]}).toArray()
+            }else if(option=='3000-4000'){
+                search=await productCollection.find({product: {$regex: new RegExp(''+payload+'.*','i' )},$and:[{offerPrice:{$gt:3000}},{offerPrice:{$lt:4000}}]}).toArray()
+            }else if(option=='4000-5000'){
+                search=await productCollection.find({product: {$regex: new RegExp(''+payload+'.*','i' )},$and:[{offerPrice:{$gt:4000}},{offerPrice:{$lt:5000}}]}).toArray()
+            }else if(option=='5000'){
+                search=await productCollection.find({product: {$regex: new RegExp(''+payload+'.*','i' )},offerPrice:{$gt:5000}}).toArray()
+            } 
+        }
         search=search.slice(0,10)
         res.send({payload:search})
         }

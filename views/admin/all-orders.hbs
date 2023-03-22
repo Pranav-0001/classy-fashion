@@ -11,6 +11,9 @@
       <option value="shipped" {{#if (eq opt 'shipped')}} selected{{/if}}>Shipped</option>
       <option value="outForDelivery" {{#if (eq opt 'outForDelivery')}} selected{{/if}}>Out For delivery</option>
       <option value="Delivered" {{#if (eq opt 'Delivered')}} selected{{/if}}>Delivered</option>
+      <option value="returnPending" {{#if (eq opt 'returnPending')}} selected{{/if}}>Return Request</option>
+      <option value="returnConfirmed" {{#if (eq opt 'returnConfirmed')}} selected{{/if}}>Returned Orders</option>
+      
       
     </select>
   </div>
@@ -28,7 +31,7 @@
   </thead>
   <tbody>
     {{#each orders}}
-    <tr {{#if (eq orderStatus "userCancelPending")}} class="bg-warning" {{/if}} {{#if (eq orderStatus "adminAcceptCancel")}} class="bg-danger text-light" {{/if}} onclick="window.location.href='/admin/orderdetails/{{_id}}'">
+    <tr {{#if (eq orderStatus "userCancelPending")}} class="bg-warning" {{/if}} {{#if (eq orderStatus "returnConfirmed")}} class="text-danger" {{/if}} {{#if (eq orderStatus "adminAcceptCancel")}} class="bg-danger text-light" {{/if}}  {{#if (eq orderStatus "returnPending")}} class="text-warning " {{/if}}  onclick="window.location.href='/admin/orderdetails/{{_id}}'">
 
       <td>{{username}}</td>
       <td>{{products.length}}</td>

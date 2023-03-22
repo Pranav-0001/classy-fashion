@@ -270,10 +270,14 @@
             <img src="/images/pending.webp" alt="" width="50%" class="pt-4" style="opacity: 0.7;">
             <h5 class="text-warning pt-4 ">Processing your cancel request</h5>
             {{else}} {{#if (eq order.orderStatus 'Delivered')}}
-            {{!-- <a href="" class="btn btn-danger text-white">Return</a> --}}
+            <a   data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-danger text-white">Return</a>
+            {{else}}{{#if (eq order.orderStatus "returnPending")}}
+            <img src="/images/pending.webp" alt="" width="50%" class="pt-4" style="opacity: 0.7;">
+            <h5 class="text-warning pt-4 ">Processing your return request</h5>
             {{else}}
 
             <a href="/cancel-order/{{order._id}}" class="btn btn-danger text-white">Cancel Order</a>
+            {{/if}}
             {{/if}}
             {{/if}}
             {{/if}}
@@ -281,3 +285,45 @@
         </div>
     </div>
 </div>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Order Cancel</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ol style="list-style: decimal;">
+            <li><a onclick="returnPro(this.innerHTML,'{{order._id}}')">Don't want the product anymore </a></li>
+             <li><a onclick="returnPro(this.innerHTML,'{{order._id}}')">Quality of the product not as expected </a></li>
+             <li><a onclick="returnPro(this.innerHTML,'{{order._id}}')">Recived wrong item</a></li>
+             <li><a onclick="returnPro(this.innerHTML,'{{order._id}}')">Don't like the size</a></li>
+             <li><a onclick="returnPro(this.innerHTML,'{{order._id}}')">Recived a damaged Item</a></li>
+             <li><a onclick="returnPro(this.innerHTML,'{{order._id}}')">Product is missing in the package</a></li>
+        </ol>
+       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    function returnPro(reason,id){
+       $.ajax({
+        url:'/return',
+        method:'POST',
+        data:{reason:reason,id:id},
+        success:(response)=>{
+            location.reload()
+        }
+       })
+    }
+</script>
