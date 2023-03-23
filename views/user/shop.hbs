@@ -92,6 +92,17 @@
                 {{/if}}
             </div>
         </div>
+        <div class="d-flex justify-content-end">
+            <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {{#each pageArr}}
+                
+                <li class="page-item"><a class="page-link" href="/pagination/{{[]}}">{{[]}}</a></li>
+                {{/each}}
+                
+            </ul>
+        </nav>
+        </div>
 
     </div>
 </div>

@@ -110,9 +110,13 @@ function CartCount(userId){
 module.exports={
     placeOrder:async(req,res,next)=>{
         try{
-            let Err=req.session.placeOrderErr
+
+        let Err=req.session.placeOrderErr
         let user = req.session.user
         let cartCount=await CartCount(user._id)
+        if(cartCount==0){
+            res.redirect('/shop')
+        }else{
         let totalPrice =await getTotalAmount(req.session.user._id)
         totalPrice.saving = totalPrice.total - totalPrice.disTotal
         let address = req.session.address
@@ -148,6 +152,7 @@ module.exports={
         req.session.placeOrderErr = null
         
         req.session.coupNotValid=null
+    }
         }
         catch(err){
             next(err)

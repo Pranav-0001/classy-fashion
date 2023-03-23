@@ -127,5 +127,6 @@ router.post('/return',orderController.orderReturn)
 router.get('/about-us',userController.aboutUs)
 router.get('/contact',userController.contact)
 
+router.get('/pagination/:id',productController.pagination)
 
 module.exports = router;   

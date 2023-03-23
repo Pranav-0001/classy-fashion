@@ -50,6 +50,10 @@ hb.handlebars.registerHelper('eq', function (a,b) {
   return a*b
  })
 
+ hb.handlebars.registerHelper('inc',function(a){
+  return a+1
+ })
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
