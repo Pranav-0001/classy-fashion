@@ -239,6 +239,7 @@ module.exports = {
         try{
             let Products=await productCollection.find().toArray()
         let sale=req.session.salesReport
+        let range=req.session.salesReportRange
         
         let salesData=await orderCollection.find({paymentStatus:"Paid"}).sort({timeStamp:-1}).toArray()
         if(sale=='today'){
@@ -276,6 +277,11 @@ module.exports = {
         }else if(sale=='old'){
             console.log(sale);
             salesData=await orderCollection.find({paymentStatus:"Paid"}).sort({timeStamp:1}).toArray()
+        }else if(range){
+            let start=range.start
+            let end=range.end
+            salesData=await orderCollection.find({date:{$gte:new Date(start).toISOString(),$lt:new Date(end).toISOString()}}).toArray()
+            console.log(new Date(start).toISOString());
         }
         let revenue = await orderCollection.aggregate([
             {
@@ -287,8 +293,9 @@ module.exports = {
         ]).toArray()
         if(revenue.length>0)  revenue=revenue[0].revenue;
         else revenue=0
-        res.render('admin/sales-report',{salesData,admin:req.session.admin,revenue,sale})
+        res.render('admin/sales-report',{salesData,admin:req.session.admin,revenue,sale,range})
         req.session.salesReport=null
+        req.session.salesReportRange=null
         }
         catch(err){
             next(err)
@@ -387,6 +394,11 @@ module.exports = {
         catch (err) {
             next(err)
         }
+    },
+    salesReportRange:(req,res,next)=>{
+        console.log(req.body);
+        req.session.salesReportRange=req.body
+        res.json({})
     }
 
 }

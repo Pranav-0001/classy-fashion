@@ -10,6 +10,10 @@ const orderSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+    username:{
+        type:String,
+        required:true
+    },
     products:{
         type:Array,
         required:true
@@ -21,7 +25,33 @@ const orderSchema=new mongoose.Schema({
     disTotal:{
         type:Number,
         required:true
+    },
+    coupon:{
+        type:String
+    },
+    coupDiscount:{
+        type:Number
+    },
+    paymentStatus:{
+        type:String,
+        required:true
+    },
+    timeStamp:{
+        type:Number,
+        required:true
+    },
+    month:{
+        type:Number,
+        required:true
+    },
+    reason:{
+        type:String
+    },
+    date:{
+        type:Date,
+        required:true
     }
+
 
 })
 

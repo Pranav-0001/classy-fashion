@@ -161,6 +161,7 @@ module.exports={
         let totalPrice = await getTotalAmount(userId)
         let orderData=req.body
         let d = new Date()
+        let mon=(d.getMonth()/10<1)?'0'+(d.getMonth()+1):d.getMonth()+1
         let user = await userCollection.findOne({ _id: ObjectId(userId) })
         let count = uuid.v4()
         let proCount=cartProducts.length
@@ -214,7 +215,8 @@ module.exports={
                orderStatus:"orderPlaced",
                paymentStatus:(paymentMethod=='cash')?"Pending":"Paid",
                timeStamp:d.getTime(),
-               month:d.getMonth()+1
+               month:d.getMonth()+1,
+               date:`${d.getFullYear()}-${mon}-${d.getDate()}`
                
            }
            
@@ -287,6 +289,7 @@ module.exports={
             let cartProducts = await getCartProducts(userId)
             let totalPrice = await getTotalAmount(userId)
             let d = new Date()
+            let mon=(d.getMonth()/10<1)?'0'+(d.getMonth()+1):d.getMonth()+1
             let user = await userCollection.findOne({ _id: ObjectId(userId) })
             let count = uuid.v4()
             let proCount = cartProducts.length
@@ -329,7 +332,8 @@ module.exports={
                orderStatus:"orderPlaced",
                paymentStatus:(paymentMethod=='cash')?"Pending":"Paid",
                timeStamp:d.getTime(),
-               month:d.getMonth()+1
+               month:d.getMonth()+1,
+               date:`${d.getFullYear()}-${mon}-${d.getDate()}`
                
            }
             orderCollection.insertOne(OrderObj).then((response) => {
@@ -552,7 +556,7 @@ module.exports={
         console.log(req.body);
         orderCollection.updateOne({_id:ObjectId(req.body.id)},{$set:{orderStatus:"returnPending",reason:req.body.reason}})
         res.json({})
-    }
-    
+    }  
+     
 }
 

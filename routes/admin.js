@@ -107,5 +107,7 @@ router.get('/getChart-data',verifyLogin,adminController.chartData)
 
 router.get('/submit-return-request/:response/:id',verifyLogin,adminController.returnAccept)
 
+router.post('/sales-report-range',verifyLogin,adminController.salesReportRange)
+
 module.exports = router;
   

@@ -1,120 +1,212 @@
 <div class="head-img d-flex align-items-center justify-content-center mb-4">
-    <h1 class=" text-white " style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Sales Report</h1>
+  <h1 class=" text-white " style="text-shadow: 2px 1px 2px rgb(0, 0, 0);">Sales Report</h1>
 </div>
 
 <div class="container">
-   
-     <label for="">Sort by</label> 
-     <select  oninput="salesRep(this.value)" name="" id="" class="fs-5"  style="border: none;">
-        <option value="new" {{#if (eq sale 'new')}} selected {{/if}} >New </option>
-        <option value="old" {{#if (eq sale 'old')}} selected {{/if}} >Old </option>
-     </select>
-    <select  oninput="salesRep(this.value)" name="" id="" class="generate-btn pt-2 pb-2 ps-3 pe-3 mb-3 ms-2" >
-        <option value="">All</option>
-        <option value="today" {{#if (eq sale 'today')}} selected {{/if}}>Today</option>
-        <option  value="month" {{#if (eq sale 'month')}} selected {{/if}}>This Month</option>
-        <option value="year" {{#if (eq sale 'year')}} selected {{/if}}>This Year</option>
-    </select>
-<button class="generate-btn pt-2 pb-2 ps-3 pe-3 mb-3 ms-2" onclick="printTable()"><i class="fa-solid fa-print"></i> Print Table</button>
-    <button onclick="exportReportToExcel()" class="generate-btn pt-2 pb-2 ps-3 pe-3 mb-3"><i class="fa-regular fa-file-excel"></i> Generate Excel</button>
 
 
 
-    <table id="table" class="table table-hover">
-  <thead>
-    <tr>
-    <th scope="col">Date</th>
-    <th scope="col">Username</th>
-    <th scope="col">Product</th>
-    <th scope="col">Size</th>
-    <th scope="col">Price</th>
-    <th scope="col">Qty</th>
-    <th scope="col">Total</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each salesData}}
-    {{#each products}}
-    <tr>
-      <td>{{../Address.date}}</td>
-      <td>{{../username}}</td>
-      <td>{{product.product}}</td>
-      <td>{{size}}</td>
-      <td>₹{{product.offerPrice}}</td>
-      <td>{{quantity}}</td>
-      <td>₹{{mul quantity product.offerPrice}}</td>
-    </tr>
-    {{/each}}
-    {{/each}}
-    
-    
-  </tbody>
-</table>
+<div class="d-md-flex d-none align-items-center justify-content-between">
+    <div>
+      <label for="">Sort by</label>
+  <select oninput="salesRep(this.value)" name="" id="" class="fs-5" style="border: none;">
+    <option value="new" {{#if (eq sale 'new' )}} selected {{/if}}>New </option>
+    <option value="old" {{#if (eq sale 'old' )}} selected {{/if}}>Old </option>
+  </select>
+    </div>
+  <div>
+    <label for="" class="ps-2 pe-3">Range : </label><input oninput="rangeSelect(this.value)" id="start" type="date" value="{{range.start}}"> <input id="end" type="date" disabled value="{{range.end}}"> <a class="text-primary ps-2" onclick="applyRange()">Apply</a>
 
-<div class="revenue d-flex justify-content-end align-items-center ">
-    <h6 class="pe-5 me-5">Revenue :₹ {{revenue}}</h6>
+  </div>
+
+  <div>
+    <select oninput="salesRep(this.value)" name="" id="" class="generate-btn pt-2 pb-2 ps-3 pe-3 mb-3 ms-2">
+    <option value="">All</option>
+    <option value="today" {{#if (eq sale 'today' )}} selected {{/if}}>Today</option>
+    <option value="month" {{#if (eq sale 'month' )}} selected {{/if}}>This Month</option>
+    <option value="year" {{#if (eq sale 'year' )}} selected {{/if}}>This Year</option>
+  </select>
+  <button class="generate-btn pt-2 pb-2 ps-3 pe-3 mb-3 ms-2" onclick="printTable()"><i class="fa-solid fa-print"></i>
+    Print Table</button>
+  <button onclick="exportReportToExcel()" class="generate-btn pt-2 pb-2 ps-3 pe-3 mb-3"><i
+      class="fa-regular fa-file-excel"></i> Generate Excel</button>
+  </div>
 </div>
+<div class="d-block d-md-none justify-content-between mb-2">
+      
+  <select oninput="salesRep(this.value)" name="" id="" class="" style="border: none;">
+    <option value="new" {{#if (eq sale 'new' )}} selected {{/if}}>New </option>
+    <option value="old" {{#if (eq sale 'old' )}} selected {{/if}}>Old </option>
+  </select>
+    <select oninput="salesRep(this.value)" name="" id="" class=" " style="border: none;">
+    <option value="">All</option>
+    <option value="today" {{#if (eq sale 'today' )}} selected {{/if}}>Today</option>
+    <option value="month" {{#if (eq sale 'month' )}} selected {{/if}}>This Month</option>
+    <option value="year" {{#if (eq sale 'year' )}} selected {{/if}}>This Year</option>
+  </select>
+<div class="d-flex align-items-center">
+  <input oninput="rangeSelect(this.value)" id="start" type="date" value="{{range.start}}"> <input id="end" type="date" class="ms-2" disabled value="{{range.end}}"> <a class="text-primary ps-1" onclick="applyRange()">Apply</a>
+</div>
+<div class="d-flex justify-content-between">
+   <button class="generate-btn mt-2 " onclick="printTable()"><i class="fa-solid fa-print"></i>
+    Print Table</button>
+  <button onclick="exportReportToExcel()" class="generate-btn mt-2"><i
+      class="fa-regular fa-file-excel"></i> Generate Excel</button>
+</div>
+
+</div>
+
+
+
+<div class="d-md-block d-none">
+    <table id="table" class="table table-hover d">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Username</th>
+        <th scope="col">Product</th>
+        <th scope="col">Size</th>
+        <th scope="col">Price</th>
+        <th scope="col">Qty</th>
+        <th scope="col">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each salesData}}
+      {{#each products}}
+      <tr>
+        <td>{{../Address.date}}</td>
+        <td>{{../username}}</td>
+        <td>{{product.product}}</td>
+        <td>{{size}}</td>
+        <td>₹{{product.offerPrice}}</td>
+        <td>{{quantity}}</td>
+        <td>₹{{mul quantity product.offerPrice}}</td>
+      </tr>
+      {{/each}}
+      {{/each}}
+
+
+    </tbody>
+  </table>
+</div>
+<div class="d-md-none d-block">
+    <table id="table" class="table table-hover d">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Sales Data</th>
+       
+        <th scope="col">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each salesData}}
+      {{#each products}}
+      <tr>
+        <td>{{../Address.date}}</td>
+        <td>{{../username}} <br> Product: {{product.product}} <br> Size: {{size}} <br> Price : ₹{{product.offerPrice}} <br> Qty : {{quantity}} </td>
+        <td>₹{{mul quantity product.offerPrice}}</td>
+      </tr>
+      {{/each}}
+      {{/each}}
+
+
+    </tbody>
+  </table>
+</div>
+
+  <div class="revenue d-flex justify-content-end align-items-center ">
+    <h6 class="pe-5 me-5">Revenue :₹ {{revenue}}</h6>
+  </div>
 </div>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
 <script type="text/javascript">
 
-function exportReportToExcel(){
+  function exportReportToExcel() {
     // Include the SheetJS library
 
 
-// Get the table element
-const table = document.getElementById("table");
+    // Get the table element
+    const table = document.getElementById("table");
 
-// Convert the table to a workbook
-const workbook = XLSX.utils.table_to_book(table);
+    // Convert the table to a workbook
+    const workbook = XLSX.utils.table_to_book(table);
 
-// Convert the workbook to a binary Excel file
-const excelBinary = XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
+    // Convert the workbook to a binary Excel file
+    const excelBinary = XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
 
-// Create a Blob object and download the file
-const blob = new Blob([s2ab(excelBinary)], { type: "application/octet-stream" });
-const url = URL.createObjectURL(blob);
-const link = document.createElement("a");
-link.href = url;
-link.download = "salesReport.xlsx";
-link.click();
+    // Create a Blob object and download the file
+    const blob = new Blob([s2ab(excelBinary)], { type: "application/octet-stream" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "salesReport.xlsx";
+    link.click();
 
-// Utility function to convert a string to an ArrayBuffer
-function s2ab(s) {
-  const buf = new ArrayBuffer(s.length);
-  const view = new Uint8Array(buf);
-  for (let i = 0; i < s.length; i++) {
-    view[i] = s.charCodeAt(i) & 0xff;
+    // Utility function to convert a string to an ArrayBuffer
+    function s2ab(s) {
+      const buf = new ArrayBuffer(s.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i < s.length; i++) {
+        view[i] = s.charCodeAt(i) & 0xff;
+      }
+      return buf;
+    }
+
   }
-  return buf;
-}
-
-}
 
 
-function printTable() {
-			var table = document.getElementById("table");
-			var newWin = window.open('', 'Print-Window');
-			newWin.document.open();
-			newWin.document.write('<html><body onload="window.print()">' + table.outerHTML + '</html>');
-			newWin.document.close();
-			setTimeout(function () { newWin.close(); }, 10);
-		}
+  function printTable() {
+    var table = document.getElementById("table");
+    var newWin = window.open('', 'Print-Window');
+    newWin.document.open();
+    newWin.document.write('<html><body onload="window.print()">' + table.outerHTML + '</html>');
+    newWin.document.close();
+    setTimeout(function () { newWin.close(); }, 10);
+  }
 
-function salesRep(opt){
+  function salesRep(opt) {
     console.log(opt)
     $.ajax({
-        url:'/admin/sales-report',
-        data:{opt},
-        method:'POST',
-        success:(response)=>{
-            location.href='/admin/sales-report'
-        }
-        
+      url: '/admin/sales-report',
+      data: { opt },
+      method: 'POST',
+      success: (response) => {
+        location.href = '/admin/sales-report'
+      }
+
     })
-}
+  }
+
+  function rangeSelect(a){
+    console.log(a)
+    document.getElementById('end').disabled=false
+    var today = new Date(a).toISOString().split('T')[0];
+  document.getElementById("end").setAttribute("min", today);
+  
+
+  }
+
+  function applyRange(){
+    let start=document.getElementById('start').value
+    let end=document.getElementById('end').value
+    console.log(start,end)
+    if(start=='' || end==""){
+      console.log("select both")
+    }else{
+      $.ajax({
+        url:"/admin/sales-report-range",
+        method:"POST",
+        data:{start:start , end:end},
+        success:(response)=>{
+          location.reload()
+        }
+      })
+    }
+    
+  }
 
 </script>
-
