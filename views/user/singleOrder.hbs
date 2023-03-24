@@ -257,19 +257,19 @@
         <div class=" col-md-4 ">
             {{#if (eq order.orderStatus 'orderPlaced')}}
             <h5 class="text-secondary mb-5 mt-3">More Actions</h5>
-            <a href="" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
+            <a href="/invoice/{{order._id}}" target="_blank" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
             {{/if}}
             {{#if (eq order.orderStatus 'shipped')}}
             <h5 class="text-secondary mb-5 mt-3">More Actions</h5>
-            <a href="" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
+            <a href="/invoice/{{order._id}}" target="_blank" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
             {{/if}}
              {{#if (eq order.orderStatus 'outForDelivery')}}
             <h5 class="text-secondary mb-5 mt-3">More Actions</h5>
-            <a href="" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
+            <a href="/invoice/{{order._id}}" target="_blank" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
             {{/if}}
              {{#if (eq order.orderStatus 'Delivered')}}
             <h5 class="text-secondary mb-5 mt-3">More Actions</h5>
-            <a href="" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
+            <a href="/invoice/{{order._id}}"  target="_blank" class="dwnldbtn text-white bg-dark ps-3 pe-3 pt-3 pb-3 ">Download Invoice</a>
             {{/if}}
         </div>
         <div class="col-md-3 d-flex mt-5  mt-md-0" style="align-items: center;">

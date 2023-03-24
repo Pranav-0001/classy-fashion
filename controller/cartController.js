@@ -105,7 +105,16 @@ module.exports={
             }
         ]).toArray()
 
-        res.render('user/cart', { user: req.session.user, products, cartCount,total })
+       let outOfStk=null
+        products.forEach(product=>{
+            if(product.product.stock <= 0){
+                product.out=true
+                outOfStk=true
+            }
+        })
+        console.log(products);
+
+        res.render('user/cart', { user: req.session.user, products, cartCount,total,outOfStk })
         req.session.address = null
         req.session.coupApply = null
        } catch (err) {
@@ -155,9 +164,13 @@ module.exports={
 
         try{
             let details = req.body
-        console.log("size",details.size);
+        
         details.count = parseInt(details.count)
         details.quantity = parseInt(details.quantity)
+        let index=details.index
+        var key="products."+index+".quantity"
+        console.log("size",index);
+        
         if(details.count==-1&&details.quantity==1){
             cartCollection.updateOne({_id:ObjectId(details.cartId)},{
                     $pull:{products:{item:ObjectId(details.proId),size:details.size}}
@@ -172,7 +185,7 @@ module.exports={
             
             cartCollection.updateOne({_id:ObjectId(details.cartId),'products.item':ObjectId(details.proId),'products.size':details.size},
             {
-                $inc:{'products.$.quantity':details.count}
+                $inc:{[key]:details.count}
             }).then(async()=>{
                 let response={status:true}
                 let cartCount=await CartCount(req.session.user._id)

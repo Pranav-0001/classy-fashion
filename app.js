@@ -53,6 +53,9 @@ hb.handlebars.registerHelper('eq', function (a,b) {
  hb.handlebars.registerHelper('inc',function(a){
   return a+1
  })
+ hb.handlebars.registerHelper('minus',function(a,b){
+  return a-b
+ })
 
 // error handler
 app.use(function(err, req, res, next) {

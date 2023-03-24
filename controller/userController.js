@@ -3,13 +3,14 @@ const cart=require('../model/cartModel')
 const productCollection=require('../model/productModel')
 const categoryCollection=require('../model/categoryModel')
 const wishListCollection=require('../model/wishlistModel')
+const orderCollection=require('../model/orderModel')
 const mongoose=require('mongoose')
 const bcrypt=require('bcrypt')
 const nodemailer=require('nodemailer')
 const category = require('../model/categoryModel')
 const {ObjectId}=mongoose.Types
 const uuid=require('uuid')
-const { response } = require('../app')
+
 
 require('dotenv').config()
 
@@ -245,7 +246,7 @@ module.exports={
     homePage:async(req,res,next)=>{
         try{
             let userExist=req.session.user
-        let products=await productCollection.find().sort({_id:-1}).limit(4).toArray()
+        let products=await productCollection.find({status:true}).sort({_id:-1}).limit(4).toArray()
         console.log(products);
         let cartCount=0
         if(userExist){
@@ -608,5 +609,42 @@ module.exports={
     },
     contact:(req,res)=>{
         res.render('user/contact',{user:req.session.user})
+    },
+    contactPost:(req,res,next)=>{
+        try{
+            let mailTransporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                    user: process.env.EMAIL,
+                    pass: process.env.PASSWORD
+                }
+            })
+            
+    
+            let details = {
+                from: "classyfashionclub123@gmail.com",
+                to:"classyfashionclub123@gmail.com",
+                subject:req.body.sub,
+                html: `<p>Email : ${req.body.email} </p> <p>Phone : ${req.body.phone}</p> <p> Message : ${req.body.msg}</p>`
+            }
+            
+            mailTransporter.sendMail(details, (err) => {
+                if (err) {
+                    console.log(""+err);
+                } else {
+                    console.log("mail Send Successfully ");
+                }
+            })
+            res.redirect('/contact')
+        }
+        catch(err){
+            next(err)
+        }
+    },
+    printInvoice:async(req,res)=>{
+        let orderId=req.params.id
+        let order=await orderCollection.findOne({_id:ObjectId(orderId)})
+        console.log(order);
+        res.render('user/invoice',{login:true,order})
     }
 }

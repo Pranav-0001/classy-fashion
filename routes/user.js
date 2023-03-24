@@ -129,4 +129,9 @@ router.get('/contact',userController.contact)
 
 router.get('/pagination/:id',productController.pagination)
 
+router.post('/contact',userController.contactPost)
+
+router.get('/invoice/:id',userController.printInvoice)
+
+
 module.exports = router;   

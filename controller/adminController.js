@@ -97,8 +97,20 @@ module.exports = {
     adminProduct:async(req,res ,next)=>{
         try{
             let admin=req.session.admin
-        let products=await productCollection.find().toArray()
-        res.render('admin/products',{products,admin})
+            let limit=10
+            let skip=0
+            if(req.session.adProPage){
+               skip=(req.session.adProPage-1)*10 
+            }
+            
+        let products=await productCollection.find().limit(limit).skip(skip).sort({_id:-1}).toArray()
+        let proCount=await productCollection.countDocuments()
+        let c1=Math.ceil(proCount/limit)
+        let pageArr=[]
+        for(i=0;i<c1;i++){
+            pageArr.push(i+1)
+        }
+        res.render('admin/products',{products,admin,pageArr})
         }
         catch(err){
             next(err)
@@ -399,6 +411,10 @@ module.exports = {
         console.log(req.body);
         req.session.salesReportRange=req.body
         res.json({})
+    },
+    pagination:(req,res)=>{
+        req.session.adProPage=req.params.id
+        res.redirect('/admin/products')
     }
 
 }

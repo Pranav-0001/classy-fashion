@@ -328,3 +328,47 @@ function review(){
     return true
     
 }
+
+function contact() {
+
+    let email = document.contactForm.email.value
+    let phone = document.contactForm.phone.value
+    let sub=document.contactForm.sub.value
+    let msg=document.contactForm.msg.value
+    let phoneregex=/^([0-9]){10}$/gm
+    let EmailRegx=/^(\w){3,16}@([A-Za-z]){5,8}.([A-Za-z]){2,3}$/gm
+    let subReg=/(\w){4,}$/gm
+    let msgRegx=/(\w){10,}$/gm
+    let err=document.getElementById('errMsg')
+    console.log(email);
+    if(email==''){
+        err.innerHTML="Email field required"
+        return false;
+    }else if(phone==''){
+        err.innerHTML="Phone field required"
+        return false;
+    }
+    else if(sub==''){
+        err.innerHTML="Subject field required"
+        return false;
+    }else if(msg==''){
+        err.innerHTML="Message field required"
+        return false;
+    }else if(EmailRegx.test(email)==false){
+        err.innerHTML="Invalid Email"
+        return false;
+    }else if(phoneregex.test(phone)==false){
+        err.innerHTML="Invalid Phone number"
+        return false;
+    }else if(subReg.test(sub)==false){
+        err.innerHTML="Subject is too small or invalid"
+        return false;
+    }else if(msgRegx.test(msg)==false){
+        err.innerHTML="Message is too small or invalid"
+        return false;
+    }
+    
+    Swal.fire('Email send succesfully')
+    
+    
+}

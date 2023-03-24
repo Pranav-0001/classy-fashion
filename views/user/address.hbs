@@ -1,13 +1,13 @@
-<div class="container mt-3">
-    <a href="/add-address/{{user._id}}" class="btn float-end btn-success mt-3">Add Address</a>
+<div class="container mt-3 pb-3 pb-md-0 pt-md-0 pt-5">
+    <a href="/add-address/{{user._id}}" class="btn float-end btn-success mt-3 ">Add Address</a>
 </div>
 
 {{#if address}}
-<div class="container mt-5 pt-5  ">
-<div class="row  mx-auto">
+<div class="container mt-5 pt-5 ">
+<div class="row  mx-auto ">
       {{#each address}}
-<div class="col-md-3 ">
-  <div class="card border card-hover-add me-2 mb-2  " style="width: 18rem;">
+<div class="col-md-3 mx-md-0 mx-auto pb-2">
+  <div class="card border card-hover-add me-2 mb-2 mx-5 mx-0" style="width: 18rem;">
   <div class="card-body">
   
     <h5 class="card-subtitle mb-2 text-dark d-inline" >{{name}}</h5> <a href="/delete-address/{{index}}/{{../user._id}}"><i class="d-inline fa-solid fa-trash text-danger float-end fs-5"></i><a href="/edit-address/{{index}}"><i class="fa-regular fa-pen-to-square fs-5 float-end pe-2 text-primary"></i></a>

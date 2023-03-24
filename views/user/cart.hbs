@@ -27,7 +27,9 @@
                                         {{!-- <p class="mb-2">Price : </p> --}}
                                     </div>
                                     <div class="col-6">
-                                       
+                                       {{#if out}}
+                                       <p class="text-danger">Unfortunately, the following items from your cart are out of stock.</p>
+                                       {{else}}
                                             <ul class="pagination justify-content-end set_quantity">
                                                <p  id="" class="{{@index}}" value="" hidden>{{product.stock}}</p>
                                                 <li class="page-item">  
@@ -41,6 +43,7 @@
                                                 </li>
                                                
                                             </ul>
+                                            {{/if}}
                                         
                                     </div>
                                 </div>
@@ -81,9 +84,15 @@
                         <p>₹<span id="disT">{{total.disTotal}}</span></p>
                         </div>
                         <p id="msg" class="text-danger"></p>
+                        {{#if outOfStk}}
+                         <p class="text-danger text-center">Sorry for the inconvenience. Please remove the out of stock product to continue your shopping.</p>{{else}}
                         <div style="width: 100%;" class="bg-dark text-light text-center pt-1 pb-1">
+                            
+                   
+                    
                     <a href="/place-order" style="text-decoration: none;" class="text-light fs-4">Place Order</a>
-                </div>
+                    
+                </div>{{/if}}
                         </div>
                     </div>
 
@@ -131,6 +140,7 @@
                 count:count,
                 quantity:quantity,
                 size:size,
+                index:index
             },
             method:'post',
             success:(response)=>{

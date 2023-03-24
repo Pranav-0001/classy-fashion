@@ -31,11 +31,15 @@
   </thead>
   <tbody>
      {{#each categories}}
-    <tr>
+    <tr {{#if (eq status false)}} class="bg-secondary bg-gradient text-white" {{/if}}>
       <th scope="row">{{category}}</th>
       <td>
         <a href="/admin/edit-category/{{_id}}" class="dlt-btn bg-primary pb-2 ps-3 pt-2 pe-3">Edit</a>
-        <a href="/admin/delete-category/{{_id}}" class="dlt-btn bg-danger pb-2 ps-3 pt-2 pe-3">Delete</a></td>
+        {{#if (eq status false)}}
+        <a href="/admin/enable-category/{{_id}}" class="dlt-btn bg-success pb-2 ps-3 pt-2 pe-3">Enable</a></td>
+        {{else}}
+        <a href="/admin/delete-category/{{_id}}" class="dlt-btn bg-danger pb-2 ps-3 pt-2 pe-3">Disable</a></td>
+        {{/if}}
       
     </tr>
     {{/each}}

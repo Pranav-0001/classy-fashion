@@ -34,6 +34,7 @@ module.exports={
     addCategory:async(req,res,next)=>{
         try{
             let cate=req.body
+
         let regx=/^([a-zA-Z ]){3,20}$/gm
         let category=await categoryCollection.findOne({category:{$regex:cate.category,$options:"i"}})
            
@@ -63,7 +64,29 @@ module.exports={
     deleteCategory:async(req,res,next)=>{
         try{
             let cateId=req.params.id
-        categoryCollection.deleteOne({_id:ObjectId(cateId)})
+            let category=await categoryCollection.findOne({_id:ObjectId(cateId)})
+           console.log(category)
+           let cate=category.category
+        categoryCollection.updateOne({_id:ObjectId(cateId)},{$set:{status:false}})
+        productCollection.updateMany({category:cate},{$set:{status:false}}).then((data)=>{
+            console.log(data);
+        })
+        res.redirect('/admin/categories')
+        }
+        catch(err){
+            next(err)
+        }
+    },
+    enableCategory:async(req,res,next)=>{
+        try{
+            let cateId=req.params.id
+            let category=await categoryCollection.findOne({_id:ObjectId(cateId)})
+           console.log(category)
+           let cate=category.category
+        categoryCollection.updateOne({_id:ObjectId(cateId)},{$set:{status:true}})
+        productCollection.updateMany({category:cate},{$set:{status:true}}).then((data)=>{
+            console.log(data);
+        })
         res.redirect('/admin/categories')
         }
         catch(err){
@@ -87,6 +110,7 @@ module.exports={
         let cate = req.body
         let regx = /^(\w)([A-Za-z ]){1,20}/gm
         categoryCollection.updateOne({ _id: ObjectId(cateId) }, { $set: { category: cate.category } })
+       
         res.redirect('/admin/categories')
         }
         catch(err){

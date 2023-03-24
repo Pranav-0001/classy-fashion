@@ -49,6 +49,7 @@ router.get('/unblock-user/:id',verifyLogin,adminController.unblockUser)
 router.get('/delete-user/:id',verifyLogin,adminController.deleteUser)
 
 router.get('/delete-product/:id',verifyLogin,productController.deleteProduct)
+router.get('/enable-product/:id',verifyLogin,productController.enableProduct)
 
 router.get('/edit-product/:id',verifyLogin,productController.editProduct)
 
@@ -59,6 +60,8 @@ router.get('/categories',verifyLogin,categoryController.getCategory)
 router.post('/add-category',verifyLogin,categoryController.addCategory)
 
 router.get('/delete-category/:id',verifyLogin,categoryController.deleteCategory)
+router.get('/enable-category/:id',verifyLogin,categoryController.enableCategory)
+
 
 router.get('/delete-image/:imgId',verifyLogin,productController.deleteProductImage)
 
@@ -108,6 +111,7 @@ router.get('/getChart-data',verifyLogin,adminController.chartData)
 router.get('/submit-return-request/:response/:id',verifyLogin,adminController.returnAccept)
 
 router.post('/sales-report-range',verifyLogin,adminController.salesReportRange)
+router.get('/pagination/:id',adminController.pagination)
 
 module.exports = router;
   

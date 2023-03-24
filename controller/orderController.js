@@ -10,6 +10,7 @@ const {ObjectId}=mongoose.Types
 require('dotenv').config()
 
 const Razorpay=require('razorpay')
+const product = require('../model/productModel')
 
 
 var instance = new Razorpay({
@@ -136,6 +137,17 @@ module.exports={
             totalPrice.disTotal= (totalPrice.disTotal)-parseInt(walletAmt)
             userData.wallet=0
         }
+        let outOfStk=null
+        console.log("car",cartProducts);
+        cartProducts.forEach(product=>{
+            console.log("jhds",product);
+            console.log(product.product.stock);
+            if(product.product.stock<= 0){
+                outOfStk=true
+                console.log("here");
+            }
+        })
+        console.log(outOfStk);
         
         coupons.forEach((coup)=>{
             let exp=new Date(coup.expiry)
@@ -147,7 +159,12 @@ module.exports={
             }
         })
         console.log(coupons);
-        res.render('user/placeOrder', { totalPrice, user, Err, address ,cartCount ,cartProducts,coupons,appliedCoupon,coupValidErr,userData,walletAmt })
+            if (outOfStk) {
+                res.redirect('/cart')
+            } else {
+                res.render('user/placeOrder', { totalPrice, user, Err, address, cartCount, cartProducts, coupons, appliedCoupon, coupValidErr, userData, walletAmt })
+
+            }
         
         req.session.placeOrderErr = null
         
