@@ -22,14 +22,17 @@ const coupon = require('../model/couponModel');
 
 
 /* GET users listing. */
-let verifyLogin=(req,res,next)=>{
-  let admin=req.session.admin
-  if(admin){
-    next()
-  }else{
-    res.redirect('/admin/login')
-  }
-}
+// let verifyLogin=(req,res,next)=>{
+//   let admin=req.session.admin
+//   if(admin){
+//     next()
+//   }else{
+//     res.redirect('/admin/login')
+//   }
+// }
+
+let verifyLogin=require('../middlewares/admin-auth').adminLog
+
 router.get('/',nocache(),verifyLogin,adminController.adminHome)
 
 router.get('/login',nocache(), adminController.adminLogin)

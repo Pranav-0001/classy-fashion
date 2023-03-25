@@ -11,14 +11,16 @@ const wishlistController=require('../controller/wishlistController')
 const reviewController=require('../controller/reviewController')
 /* GET home page. */
 
-let verifyLogin = (req, res, next) => {
-  let user = req.session.user
-  if (user) {
-    next()
-  } else {
-    res.redirect('/login')
-  }
-}
+// let verifyLogin = (req, res, next) => {
+//   let user = req.session.user
+//   if (user) {
+//     next()
+//   } else {
+//     res.redirect('/login')
+//   }
+// }
+
+let verifyLogin=require('../middlewares/user-auth').userLogin
 
 router.get('/', nocache(),userController.homePage);
 

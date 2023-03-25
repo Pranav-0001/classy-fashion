@@ -25,7 +25,7 @@ module.exports = {
                 $group:{_id:null,revenue:{$sum:{$convert:{input:'$discTotal',to:'int'}}}}
             }
         ]).toArray()
-        console.log(revenue);
+        
         if(revenue.length>0) revenue=revenue[0]?.revenue;
         else revenue=0
        
@@ -33,7 +33,7 @@ module.exports = {
         let ordersCount=await orderCollection.countDocuments()
         let cancelCount=await orderCollection.countDocuments({orderStatus:'adminAcceptCancel'})
         
-        console.log("test",cancelCount);
+        
         
         res.render('admin/home',{admin,revenue,userCount,ordersCount,cancelCount})
         }catch(err){
@@ -64,7 +64,7 @@ module.exports = {
         if (admin) {
             bcrypt.compare(admindata.password, admin.password).then((status) => {
                 if (status) {
-                    console.log(status);
+                    
                     response.admin = admin
                     response.status = true
                     req.session.admin = response.admin
@@ -148,7 +148,7 @@ module.exports = {
             resolve(response.err);
         } else {
             let count = Images.length
-            console.log(count);
+           
             let imgId = []
             let size = []
             if (productData.S == 'on') size.push('S'); else size.push('')
@@ -162,9 +162,9 @@ module.exports = {
 
                     imgId[i] = uuid.v4()
                     
-                    console.log(Images);
+                   
                     let path=""+Images[i].tempFilePath
-                    console.log(path);
+                    
                     await sharp(path)
                         .rotate()
                         .resize(540, 720)
@@ -204,7 +204,7 @@ module.exports = {
             let filter=req.session.userFilter
             
         let users=await userCollection.find().toArray()
-        console.log(filter)
+        
         if(filter){
             
            if(filter=="banned"){
@@ -264,13 +264,13 @@ module.exports = {
                 let d=new Date()
                 let date=order.Address.date
                 let mnth=date.split('/')
-                console.log(d.getMonth()+1,mnth[1]);
+                
                 if(d.getMonth()+1==mnth[1]){
                     return order
                 }
                  
             })
-            console.log(salesData);
+            
         }else if(sale=='year'){
             let sales=await orderCollection.find({paymentStatus:"Paid"}).toArray()
             salesData=sales.map((order)=>{

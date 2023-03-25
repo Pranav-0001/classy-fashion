@@ -9,15 +9,20 @@
         <div class="col-6 col-md-4 col-lg-2">
             <div class="profile-card-2"
                 style="background-image:linear-gradient(to bottom, rgba(245, 246, 252, 0.16), rgba(0, 0, 0, 0.73)), url('/product-images/{{product.Images.[1]}}.jpg');background-size: cover;">
-                <img src="">
+                
                 <div onclick="window.location.href='/product/{{product._id}}'" class="profile-name">{{product.product}}</div>
                 <div class="profile-username">{{product.brand}} | Size : <span id="size">{{size}}</span></div>
                 <div class="profile-icons"><a onclick="removeWish('{{product._id}}','{{product.product}}')"><i
                             class="fs-5 fa-solid fa-trash text-danger"></i></a>
 
                 </div>
+                {{#if (eq product.stock 0)}}
+                <div class="add-from-wish "><a
+                        class=" text-white px-4 py-1 bg-danger">Out of stock</a></div>
+                {{else}}
                 <div class="add-from-wish "><a onclick="addToCartWish('{{product._id}}')"
                         class="wish-add-btn  text-white px-4 py-1 bg-warning">Add to cart</a></div>
+                        {{/if}}
             </div>
         </div>
         {{/each}}
@@ -74,6 +79,7 @@
                         showConfirmButton: false,
                         timer: 1500
                     })
+                    location.reload()
                 }
             })
         }

@@ -41,7 +41,11 @@
 
 
                 {{#if (eq product.stock 0)}}
-                <h3 class="text-danger">Product out of stock</h3>
+                <a  onclick="addToWishlist('{{product._id}}')"
+                        class="addToCart bg-danger text-light ps-4 pe-4 pt-3 mb-3 mb-md-0 pb-md-3 mb-4"><i
+                            class="fa-regular fa-heart"></i>
+                        Add To Wishlist</a>
+                <h3 class="text-danger pt-4">Product out of stock</h3>
                 <small class="text-danger">“We sincerely apologize for this inconvenience. We've experienced an
                     unusually high number of orders and have run out of inventory.”</small>
                 {{else}}

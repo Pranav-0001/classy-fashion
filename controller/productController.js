@@ -149,7 +149,7 @@ module.exports={
             
         }
         
-        let category=await productCollection.distinct("category")
+        let category=await productCollection.distinct("category",{status:true})
         let brands=await productCollection.distinct("brand")
         let option;
         if(filter){
@@ -219,16 +219,7 @@ module.exports={
     deleteProduct:async(req,res,next)=>{
         try {
             let proId=req.params.id
-        // pro=await productCollection.findOne({_id:ObjectId(proId)})
-        //     let count=pro.Images.length
-        //     for(i=0;i<count;i++){
-        //         fs.unlink('./public/product-images/'+pro.Images[i]+'.jpg',(err)=>{
-        //             if(err){
-        //                 console.log(err);
-        //             }
-        //         })
-        //     }
-        //     productCollection.deleteOne({_id:ObjectId(proId)})
+        
         productCollection.updateOne({_id:ObjectId(proId)},{$set:{status:false}})
             res.redirect('/admin/products')
         } catch (err) {

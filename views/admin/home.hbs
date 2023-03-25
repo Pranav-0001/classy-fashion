@@ -160,7 +160,10 @@
         let ord = parseInt(document.getElementById('count3').innerHTML)
         let canc = parseInt(document.getElementById('count4').innerHTML)
         counter("count1", rev - 400, rev, 1);
-        counter("count2", 0, user, 2500);
+        
+       if(user > 0){
+         counter("count2", 0, user, 2500);
+       }
         if (ord > 0){
            counter("count3", 0, ord, 1000); 
         }
