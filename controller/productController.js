@@ -247,6 +247,7 @@ module.exports={
         let product=await productCollection.findOne({_id:ObjectId(id)})
         let cate=await categoryCollection.find().toArray()
         res.render('admin/edit-product',{product,err,cate,delImgErr,admin})
+        req.session.editProductErr=null
         }
         catch(err){
             next(err)

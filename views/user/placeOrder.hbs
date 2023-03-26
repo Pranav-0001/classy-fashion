@@ -14,7 +14,7 @@
                 <label for="">State</label><br>
                 <select class="plc-inp" name="state" id="" style="height: 30px;">
                      <option value="">Select State</option>
-                    <option {{#if (eq address.state 'kerala' )}} selected {{/if}}value="Kerala">Kerala</option>
+                    <option {{#if (eq address.state 'Kerala' )}} selected {{/if}} {{#if (eq address.state 'kerala' )}} selected {{/if}}value="Kerala">Kerala</option>
                    
                 </select><br>
                 <label for="">Address</label><br>
@@ -332,7 +332,9 @@
 
     function couponApply(){
         let coupon=document.getElementById('coup').value
-        console.log(coupon)
+        
+        let add=$('#checkOut').serialize()
+        console.log(add)
         if(coupon==''){
             document.getElementById('coupErr').innerHTML="Coupon field Empty"
 
@@ -340,7 +342,7 @@
             $.ajax({
                 url:'/coupon-apply',
                 method:'post',
-                data:{code:coupon},
+                data:{code:coupon,address:add},
                 success:(response)=>{
                     location.reload()
                     

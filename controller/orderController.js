@@ -497,6 +497,16 @@ module.exports={
     applyCoupon:async(req,res,next)=>{
         try{
             let code=req.body.code
+            let address=req.body.address
+            const queryString=address
+            const urlParams = new URLSearchParams(queryString);
+            const myObj = {};
+            for (const [key, value] of urlParams) {
+                myObj[key] = value;
+            }
+            req.session.address=myObj
+            console.log(myObj);
+            console.log("laste",myObj);
         let coupon=await couponCollection.findOne({coupon:code})
         let totalPrice=await getTotalAmount(req.session.user._id)
         let cartCount=await CartCount(req.session.user._id)
