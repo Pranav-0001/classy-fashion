@@ -579,7 +579,7 @@ module.exports={
         try {
             let email = req.session.otpForEmail
             let password = req.body.password
-            let passwordRegx=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/gm
+            let passwordRegx=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\W]{8,16}$/gm
 
             if(passwordRegx.test(password)==false){
                 req.session.resetPassErr="Password should contain Atleast one uppercase one lowercase and one number"

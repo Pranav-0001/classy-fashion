@@ -31,7 +31,7 @@ module.exports={
             let userId = user._id
              cartCount = await CartCount(userId)
         }
-        let proCount=await productCollection.countDocuments()
+        let proCount=await productCollection.countDocuments({status:true})
         let limit=8
         let skip=0
 
@@ -53,57 +53,57 @@ module.exports={
             }else if(sort=='high' && filter?.selection=='category'){
                 let option=filter.option
                 products=await productCollection.find({category:option,status:true}).limit(limit).skip(skip).sort({offerPrice:-1}).toArray()
-                proCount=await productCollection.countDocuments({category:option})
+                proCount=await productCollection.countDocuments({category:option,status:true})
             }else if(sort=='low' && filter?.selection=='brand'){
                 let option=filter.option
                 products=await productCollection.find({brand:option,status:true}).limit(limit).skip(skip).sort({offerPrice:1}).toArray()
-                proCount=await productCollection.countDocuments({brand:option})
+                proCount=await productCollection.countDocuments({brand:option,status:true})
             }else if(sort=='high' && filter?.selection=='brand'){
                 let option=filter.option
                 products=await productCollection.find({brand:option,status:true}).limit(limit).skip(skip).sort({offerPrice:-1}).toArray()
-                proCount=await productCollection.countDocuments({brand:option})
+                proCount=await productCollection.countDocuments({brand:option,status:true})
             }else if(sort=='low' && filter?.selection=='price'){
                 let option=filter.option
                 if(option=='1000'){
                     products=await productCollection.find({offerPrice:{$lt:1000},status:true}).limit(limit).skip(skip).toArray()
-                    proCount=await productCollection.countDocuments({offerPrice:{$lt:1000}})
+                    proCount=await productCollection.countDocuments({offerPrice:{$lt:1000},status:true})
                 }else if(option=='1000-2000'){
                     products=await productCollection.find({$and:[{offerPrice:{$gt:1000}},{offerPrice:{$lt:2000}}],status:true}).limit(limit).skip(skip).sort({offerPrice:1}).toArray()
-                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:1000}},{offerPrice:{$lt:2000}}]})
+                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:1000}},{offerPrice:{$lt:2000}}],status:true})
                     
                 }else if(option=='2000-3000'){
                     products=await productCollection.find({$and:[{offerPrice:{$gt:2000}},{offerPrice:{$lt:3000}}],status:true}).limit(limit).skip(skip).sort({offerPrice:1}).toArray()
-                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:2000}},{offerPrice:{$lt:3000}}]})
+                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:2000}},{offerPrice:{$lt:3000}}],status:true})
                 }else if(option=='3000-4000'){
                     products=await productCollection.find({$and:[{offerPrice:{$gt:3000}},{offerPrice:{$lt:4000}}],status:true}).limit(limit).skip(skip).sort({offerPrice:1}).toArray()
-                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:3000}},{offerPrice:{$lt:4000}}]})
+                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:3000}},{offerPrice:{$lt:4000}}],status:true})
                 }else if(option=='4000-5000'){
                     products=await productCollection.find({$and:[{offerPrice:{$gt:4000}},{offerPrice:{$lt:5000}}],status:true}).limit(limit).skip(skip).sort({offerPrice:1}).toArray()
-                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:4000}},{offerPrice:{$lt:5000}}]})
+                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:4000}},{offerPrice:{$lt:5000}}],status:true})
                 }else if(option=='5000'){
                     products=await productCollection.find({offerPrice:{$gt:5000},status:true}).sort({offerPrice:1}).limit(limit).skip(skip).toArray()
-                    proCount=await productCollection.countDocuments({offerPrice:{$gt:5000}})
+                    proCount=await productCollection.countDocuments({offerPrice:{$gt:5000},status:true})
                 }
             }else if(sort=='high' && filter?.selection=='price'){
                 let option=filter.option
                 if(option=='1000'){
                     products=await productCollection.find({offerPrice:{$lt:1000},status:true}).limit(limit).skip(skip).toArray()
-                    proCount=await productCollection.countDocuments({offerPrice:{$lt:1000}})
+                    proCount=await productCollection.countDocuments({offerPrice:{$lt:1000},status:true})
                 }else if(option=='1000-2000'){
                     products=await productCollection.find({$and:[{offerPrice:{$gt:1000}},{offerPrice:{$lt:2000}}],status:true}).limit(limit).skip(skip).sort({offerPrice:-1}).toArray()
-                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:1000}},{offerPrice:{$lt:2000}}]})
+                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:1000}},{offerPrice:{$lt:2000}}],status:true})
                 }else if(option=='2000-3000'){
                     products=await productCollection.find({$and:[{offerPrice:{$gt:2000}},{offerPrice:{$lt:3000}}],status:true}).limit(limit).skip(skip).sort({offerPrice:-1}).toArray()
-                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:2000}},{offerPrice:{$lt:3000}}]})
+                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:2000}},{offerPrice:{$lt:3000}}],status:true})
                 }else if(option=='3000-4000'){
                     products=await productCollection.find({$and:[{offerPrice:{$gt:3000}},{offerPrice:{$lt:4000}}],status:true}).limit(limit).skip(skip).sort({offerPrice:-1}).toArray()
-                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:3000}},{offerPrice:{$lt:4000}}]})
+                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:3000}},{offerPrice:{$lt:4000}}],status:true})
                 }else if(option=='4000-5000'){
                     products=await productCollection.find({$and:[{offerPrice:{$gt:4000}},{offerPrice:{$lt:5000}}],status:true}).limit(limit).skip(skip).sort({offerPrice:-1}).toArray()
-                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:4000}},{offerPrice:{$lt:5000}}]})
+                    proCount=await productCollection.countDocuments({$and:[{offerPrice:{$gt:4000}},{offerPrice:{$lt:5000}}],status:true})
                 }else if(option=='5000'){
                     products=await productCollection.find({offerPrice:{$gt:5000},status:true}).limit(limit).skip(skip).sort({offerPrice:-1}).toArray()
-                    proCount=await productCollection.countDocuments({offerPrice:{$gt:5000}})
+                    proCount=await productCollection.countDocuments({offerPrice:{$gt:5000},status:true})
                 }
             }
 
