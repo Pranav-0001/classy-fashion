@@ -371,6 +371,9 @@ module.exports = {
             console.log("call success");
         let monthWise=await orderCollection.aggregate([
             {
+                $match:{paymentStatus:"Paid"}
+            },
+            {
                 $group:{_id:"$month",revenue:{$sum:"$discTotal"}}
             },
             {

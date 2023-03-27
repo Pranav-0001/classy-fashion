@@ -17,7 +17,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.engine('hbs',hbs.engine({extname:'hbs',defaultLayout:'layout',layoutDir:__dirname+'/views/layout/',partialsDir:__dirname+'/views/partials/'}))
-app.use(session({secret:"key",resave:true,saveUninitialized:true,cookie:{maxAge:60*60000}}))
+app.use(session({secret:"key",resave:true,saveUninitialized:true,cookie:{maxAge:24*60*60000}}))
 
 app.use(fileUpload({
   useTempFiles:true,

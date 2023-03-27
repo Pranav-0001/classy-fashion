@@ -115,16 +115,16 @@
     }
 
     function addToWishlist(id) {
-        console.log(id)
+        
         let size = document.getElementById('sizePro').value
-        console.log(size)
+        
         $.ajax({
             url: `/add-to-wishlist/${id}`,
             method: 'POST',
             data: { size: size },
             success: (response) => {
                 if (response.status) {
-                    console.log(response)
+                    
                     Swal.fire(
                         'Good job!',
                         'Product Added to Wishlist',

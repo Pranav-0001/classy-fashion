@@ -17,6 +17,17 @@ module.exports={
     couponsGet:async(req,res,next)=>{
         try{
             let coupons=await couponCollection.find().toArray()
+            
+            coupons.forEach((coup)=>{
+                let exp=new Date(coup.expiry)
+                let today=new Date()
+                if(Math.round((exp-today)/(1000*60*60*24))>0){
+                    coup.status="Valid"
+                }else{
+                    coup.status="Invalid"
+                }
+            })
+            console.log(coupons);
         res.render('admin/coupons',{admin:req.session.admin,coupons})
         }catch(err){
             next(err)

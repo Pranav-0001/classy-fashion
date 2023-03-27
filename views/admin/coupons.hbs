@@ -11,12 +11,17 @@
     <div class="row ">
         {{#each coupons}}
         <div class="col-xl-3 col-md-4">
-            <div class="card l-bg-blue-dark">
+            <div {{#if (eq status "Valid")}} class="card l-bg-blue-dark" {{else}} class="card l-bg-green-dark text-warning"  {{/if}}>
                 <div class="card-statistic-3 p-4">
                     <h5>{{coupon}}</h5>
                     <div class="mb-4">
                        {{#if (eq disType 'percentage')}} <h6>{{discount}}% Off</h6>{{else}} <h6> ₹{{discount}} instant Discount</h6>{{/if}}
+                   {{#if (eq status "Valid")}}
                    <h6>Expiry Date : {{expiry}}</h6>
+                   {{else}}
+                   
+                   <h6 class="text-danger">Coupon Expired</h6>
+                   {{/if}}
                     </div>
                     
                     <a href="/admin/delete-coupon/{{_id}}"><i class="fa-solid fa-trash float-end text-white"></i></a>
@@ -48,7 +53,7 @@
 }
 
 .l-bg-green-dark {
-    background: linear-gradient(to right, #0a504a, #38ef7d) !important;
+    background: linear-gradient(to right, #636363, #858987) !important;
     color: #fff;
 }
 
