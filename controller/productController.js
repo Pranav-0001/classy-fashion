@@ -527,6 +527,7 @@ module.exports={
             option:option
         }
         req.session.filter=filObj
+        req.session.pagination=null
         res.redirect('/shop')
     },
     disableFilter:(req,res)=>{
