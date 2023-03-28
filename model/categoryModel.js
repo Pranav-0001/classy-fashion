@@ -4,6 +4,10 @@ const categorySchema=new mongoose.Schema({
     category:{
         type:String,
         required:true
+    },
+    status:{
+        type:Boolean,
+        required:true
     }
 })
 

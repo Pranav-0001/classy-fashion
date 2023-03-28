@@ -104,12 +104,17 @@ module.exports={
             next(err)
         }
     },
-    updateCategory:(req,res,next)=>{
+    updateCategory:async(req,res,next)=>{
         try{
             let cateId = req.params.id
+            let category = await categoryCollection.findOne({ _id: ObjectId(cateId) })
+            
+            let cateData=category.category
+            console.log(cateData);
         let cate = req.body
         let regx = /^(\w)([A-Za-z ]){1,20}/gm
         categoryCollection.updateOne({ _id: ObjectId(cateId) }, { $set: { category: cate.category } })
+        productCollection.updateMany({category:cateData},{$set:{category:cate.category}})
        
         res.redirect('/admin/categories')
         }
