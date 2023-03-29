@@ -208,6 +208,7 @@ module.exports={
         ]).toArray()
         console.log("rate:",rating[0]);
         let ratingData=rating[0]
+        ratingData.avg=ratingData.avg.toPrecision(2)
         let product= await productCollection.findOne({_id:ObjectId(proId)})
         
         res.render('user/single-product', { product, user, cartCount,review,ratingData })
