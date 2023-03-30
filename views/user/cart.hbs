@@ -144,12 +144,12 @@
             },
             method:'post',
             success:(response)=>{
-                
+                console.log(response)
                 if(response.delete){
                     alert("Product Removed From The Cart")
                     location.reload()
                 }else{
-                     document.getElementById(product+size).innerHTML = quantity + count
+                     document.getElementById(product+size).innerHTML = response.quantity
                      document.getElementById('subT').innerHTML= response.total.total
                      document.getElementById('disT').innerHTML= response.total.disTotal
                      document.getElementById('disc').innerHTML= response.disc

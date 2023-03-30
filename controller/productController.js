@@ -37,6 +37,7 @@ module.exports={
 
         let page=req.session.pagination
         if(page) skip=(page-1)*limit;
+        else page=1
        
         
         
@@ -165,7 +166,7 @@ module.exports={
         console.log(pageArr);
         
     
-        res.render('user/shop', { products, user, category, brands, cartCount ,sort,option ,pageArr })
+        res.render('user/shop', { products, user, category, brands, cartCount ,sort,option ,pageArr,page })
         }
         catch(err){
             next(err)
@@ -206,9 +207,12 @@ module.exports={
                 $group:{_id:"$product",avg:{$avg:"$review.rating"},count:{$sum:1}}
             }
         ]).toArray()
-        console.log("rate:",rating[0]);
         let ratingData=rating[0]
+        if(rating?.avg){
+            console.log("rate:",rating[0]);
+        
         ratingData.avg=ratingData.avg.toPrecision(2)
+        }
         let product= await productCollection.findOne({_id:ObjectId(proId)})
         
         res.render('user/single-product', { product, user, cartCount,review,ratingData })

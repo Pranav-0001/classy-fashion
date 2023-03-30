@@ -5,7 +5,8 @@ const mongoose=require('mongoose')
 const {ObjectId}=mongoose.Types
 
 function CartCount(userId){
-    return new Promise(async(resolve, reject) => {
+    try{
+      return new Promise(async(resolve, reject) => {
         let cartData=await cartCollection.findOne({user:ObjectId(userId)})
         if(cartData){
             var  count=cartData.products.length
@@ -14,7 +15,12 @@ function CartCount(userId){
             var count=0
             resolve(count)
         }
-    })
+    })  
+    }
+    catch(err){
+        next(err)
+    }
+    
 }
 
 function getCartTotal(userId){
@@ -181,13 +187,20 @@ module.exports={
             })
 
 
-        }else{
+        }
+        else{
+            let cart=await cartCollection.findOne({_id:ObjectId(details.cartId)})
+            let qty=cart.products[index].quantity
+            
+
             
             cartCollection.updateOne({_id:ObjectId(details.cartId),'products.item':ObjectId(details.proId),'products.size':details.size},
             {
                 $inc:{[key]:details.count}
             }).then(async()=>{
                 let response={status:true}
+                let cart=await cartCollection.findOne({_id:ObjectId(details.cartId)})
+                response.quantity=cart.products[index].quantity
                 let cartCount=await CartCount(req.session.user._id)
                 let total=await getCartTotal(req.session.user._id)
                 if(cartCount>0){

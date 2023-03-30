@@ -77,7 +77,7 @@ function userSignUp(){
     let gender=document.signup.gender.value
     let password=document.signup.password.value
     let repassword=document.signup.repassword.value
-    let emailRegx = /^(\w){3,16}@([A-Za-z]){5,8}.([A-Za-z]){2,3}$/gm
+    let emailRegx = /^(\w){3,30}@([A-Za-z]){5,8}.([A-Za-z]){2,3}$/gm
     let passwordRegx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\W]{8,16}$/gm
     let usernameRegx = /^([A-Za-z_]){4,12}$/gm
     let phoneRegx = /^([0-9]){10}$/gm
