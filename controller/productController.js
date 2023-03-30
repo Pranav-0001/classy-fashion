@@ -208,7 +208,7 @@ module.exports={
             }
         ]).toArray()
         let ratingData=rating[0]
-        if(rating?.avg){
+        if(ratingData?.avg){
             console.log("rate:",rating[0]);
         
         ratingData.avg=ratingData.avg.toPrecision(2)
