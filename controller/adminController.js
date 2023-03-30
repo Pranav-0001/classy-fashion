@@ -180,6 +180,7 @@ module.exports = {
                 productData.offerPrice = parseInt(offerPrice)
                 productData.savings = parseInt(offer)
                 productData.size = size
+                productData.status=true
 
 
 
