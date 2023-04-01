@@ -4,6 +4,7 @@
 </div>
 <section>
     <div class="container mt-3 ">
+        {{#if orderData}}
         <div class="row pt-4 pb-4">
             <div class="col-md-12">
                 {{#each orderData}}
@@ -17,11 +18,12 @@
                         <h6 class="ms-2 pt-2 text-success">{{orderStatus}}</h6>
                         {{/if}}
                         {{/if}}
-                        
+
                         <div class="col-md-4">
                             {{#each products}}
                             <div class="ps-2 pb-2">
-                                <img class="pb-1 pt-1 pe-2" src="/product-images/{{product.Images.[0]}}.jpg" alt="" width="70px">{{product.product}} ({{quantity}})
+                                <img class="pb-1 pt-1 pe-2" src="/product-images/{{product.Images.[0]}}.jpg" alt=""
+                                    width="70px">{{product.product}} ({{quantity}})
                             </div>
                             {{/each}}
                         </div>
@@ -36,8 +38,18 @@
                         </div>
 
                     </div>
-                    
+
                 </div>{{/each}}
             </div>
+            
         </div>
+        {{else}}
+<h3 class="text-center mb-0 pb-0">No orders found!!</h3>
+        <div class="d-flex justify-content-center align-items-center">
+            <img src="/images/addEmpty.gif" alt="" width="60%">
+            
+        </div>
+        
+        {{/if}}
+    </div>
 </section>
