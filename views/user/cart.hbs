@@ -33,7 +33,7 @@
                                             <ul class="pagination justify-content-end set_quantity">
                                                <p  id="" class="{{@index}}" value="" hidden>{{product.stock}}</p>
                                                 <li class="page-item">  
-                                                    <button class="page-link" id="" onclick="changeQuantity('{{_id}}','{{product._id}}',-1,'{{@index}}','{{product.product}}','{{size}}')"><i class="fa-solid fa-minus"></i></button>
+                                                    <button class="page-link" id="{{@index}}{{product._id}}" onclick="changeQuantity('{{_id}}','{{product._id}}',-1,'{{@index}}','{{product.product}}','{{size}}')"><i class="fa-solid fa-minus"></i></button>
                                                 </li>
                                                 <li class="page-item">
                                                     <button class="page-link"  id="{{product._id}}{{size}}" >{{quantity}}</button>
@@ -119,7 +119,8 @@
             let  stock=document.getElementsByClassName(index)[0].innerHTML
             
         
-        
+        document.getElementById(index).disabled = true;
+        document.getElementById(index+product).disabled = true; 
 
         
         if(count==1&&quantity>=10){
@@ -149,6 +150,8 @@
                     alert("Product Removed From The Cart")
                     location.reload()
                 }else{
+                     document.getElementById(index).disabled = false;
+                     document.getElementById(index+product).disabled = false;
                      document.getElementById(product+size).innerHTML = response.quantity
                      document.getElementById('subT').innerHTML= response.total.total
                      document.getElementById('disT').innerHTML= response.total.disTotal
