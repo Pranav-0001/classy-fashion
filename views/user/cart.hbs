@@ -125,6 +125,7 @@
         
         if(count==1&&quantity>=10){
             document.getElementById(index).style.visibility='hidden'
+            document.getElementById(index+product).disabled = false;
             document.getElementById('msg').innerHTML="One customer can only purchase 10 quantity"
         }else if(stock-quantity<=0 && count==1){
             document.getElementById(index).style.visibility='hidden'
